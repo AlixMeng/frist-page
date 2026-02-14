@@ -2662,7 +2662,7 @@
         }
 
         // 更换图标
-        function changeIcon(type, index) {
+        window.changeIcon = function(type, index) {
             currentIconEditType = type;
             currentIconEditIndex = index;
             document.getElementById('icon-library-modal').classList.add('show');
@@ -2670,7 +2670,7 @@
         }
 
         // 上传图标
-        function uploadIcon(type, index) {
+        window.uploadIcon = function(type, index) {
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = 'image/*';
@@ -2693,10 +2693,14 @@
                         config.apps[index].icon = '';
                         config.apps[index].iconUrl = dataUrl;
                         document.getElementById(`app-icon-${index}`).innerHTML = `<img src="${dataUrl}">`;
+                        saveConfig(config);
+                        renderApps();
                     } else {
                         config.favorites[index].icon = '';
                         config.favorites[index].iconUrl = dataUrl;
                         document.getElementById(`fav-icon-${index}`).innerHTML = `<img src="${dataUrl}">`;
+                        saveConfig(config);
+                        renderFavorites();
                     }
                 };
                 reader.readAsDataURL(file);
@@ -2705,17 +2709,21 @@
         }
 
         // 从图标库选择
-        function selectIconFromLibrary(iconId, iconEmoji) {
+        window.selectIconFromLibrary = function(iconId, iconEmoji) {
             if (currentIconEditType === null || currentIconEditIndex === null) return;
             
             if (currentIconEditType === 'app') {
                 config.apps[currentIconEditIndex].icon = iconEmoji;
                 config.apps[currentIconEditIndex].iconUrl = '';
                 document.getElementById(`app-icon-${currentIconEditIndex}`).textContent = iconEmoji;
+                saveConfig(config);
+                renderApps();
             } else {
                 config.favorites[currentIconEditIndex].icon = iconEmoji;
                 config.favorites[currentIconEditIndex].iconUrl = '';
                 document.getElementById(`fav-icon-${currentIconEditIndex}`).textContent = iconEmoji;
+                saveConfig(config);
+                renderFavorites();
             }
             
             closeIconLibrary();
@@ -3104,7 +3112,7 @@
         });
 
         // 自动保存单个导航项
-        function saveNavItem(type, index, field, value) {
+        window.saveNavItem = function(type, index, field, value) {
             if (type === 'app') {
                 config.apps[index][field] = value;
             } else {
