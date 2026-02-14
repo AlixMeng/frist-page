@@ -43,40 +43,54 @@
             z-index: -2;
         }
 
-        /* 顶部状态栏 */
+        /* 顶部状态栏 - 左上角 */
         .top-status-bar {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
+            top: 20px;
+            left: 20px;
             z-index: 1000;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 60px;
-            padding: 0 40px;
+            gap: 16px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.15), rgba(0, 212, 255, 0.1));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 122, 255, 0.3);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 122, 255, 0.2), 0 0 20px rgba(0, 122, 255, 0.1);
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 4px 30px rgba(0, 122, 255, 0.2), 0 0 20px rgba(0, 122, 255, 0.1); }
+            50% { box-shadow: 0 4px 40px rgba(0, 122, 255, 0.35), 0 0 30px rgba(0, 212, 255, 0.2); }
         }
 
         .top-status-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 15px;
+            gap: 8px;
+            font-size: 14px;
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .top-status-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
         }
 
         .top-status-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.2), rgba(0, 212, 255, 0.2));
-            border-radius: 10px;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.3), rgba(0, 212, 255, 0.2));
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 14px;
         }
 
         .top-status-content {
@@ -85,14 +99,14 @@
         }
 
         .top-status-label {
-            font-size: 11px;
+            font-size: 9px;
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .top-status-value {
-            font-size: 17px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--text-primary);
             font-variant-numeric: tabular-nums;
@@ -100,16 +114,11 @@
 
         .top-status-weather {
             cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        .top-status-weather:hover {
-            opacity: 0.8;
         }
 
         /* 主内容区 */
         .main-content {
-            padding: 100px 20px 40px;
+            padding: 80px 10px 40px;
             max-width: 100%;
             margin: 0 auto;
         }
@@ -227,6 +236,8 @@
         /* 摄影作品 */
         .gallery-section {
             margin-bottom: 60px;
+            margin-left: -10px;
+            margin-right: -10px;
         }
 
         .section-header {
@@ -293,11 +304,17 @@
             }
             
             .top-status-bar {
-                gap: 30px;
-                padding: 0 20px;
+                top: 10px;
+                left: 10px;
+                padding: 10px 14px;
+                gap: 10px;
             }
             
-            .top-status-item span:not(.top-status-value):not(.top-status-icon) {
+            .top-status-item {
+                padding: 4px 8px;
+            }
+            
+            .top-status-label {
                 display: none;
             }
         }
