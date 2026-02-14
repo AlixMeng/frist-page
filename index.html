@@ -1683,6 +1683,279 @@
                 transform: translateY(0);
             }
         }
+
+        /* 简化的导航项行 */
+        .nav-item-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item-row:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 122, 255, 0.2);
+        }
+
+        .nav-item-row .nav-name {
+            width: 120px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .nav-item-row .nav-name:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .nav-item-row .nav-icon-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-item-row .nav-icon-display {
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 122, 255, 0.1);
+            border: 1px solid rgba(0, 122, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item-row .nav-icon-display:hover {
+            background: rgba(0, 122, 255, 0.2);
+            border-color: rgba(0, 122, 255, 0.4);
+        }
+
+        .nav-item-row .nav-icon-display img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+
+        .nav-item-row .icon-action-btn {
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-item-row .icon-action-btn:hover {
+            background: rgba(0, 122, 255, 0.1);
+            border-color: rgba(0, 122, 255, 0.3);
+        }
+
+        .nav-item-row .icon-action-btn.upload:hover {
+            background: rgba(52, 199, 89, 0.1);
+            border-color: rgba(52, 199, 89, 0.3);
+        }
+
+        .nav-item-row .nav-url {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+
+        .nav-item-row .nav-url:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .nav-item-row .nav-desc {
+            width: 100px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+
+        .nav-item-row .nav-desc:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .nav-item-row .delete-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 55, 95, 0.1);
+            border: 1px solid rgba(255, 55, 95, 0.2);
+            border-radius: 6px;
+            color: #FF375F;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item-row .delete-btn:hover {
+            background: rgba(255, 55, 95, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .nav-item-row {
+                flex-wrap: wrap;
+            }
+
+            .nav-item-row .nav-name,
+            .nav-item-row .nav-desc {
+                width: calc(50% - 6px);
+            }
+
+            .nav-item-row .nav-url {
+                width: 100%;
+                order: 3;
+            }
+        }
+
+        /* 图标库弹窗 */
+        .icon-library-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .icon-library-modal.show {
+            display: flex;
+        }
+
+        .icon-library-panel {
+            background: linear-gradient(135deg, rgba(30, 30, 40, 0.98), rgba(20, 20, 30, 0.98));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .icon-library-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .icon-library-header h3 {
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-search {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .icon-search input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .icon-search input:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .icon-library-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .icon-category {
+            margin-bottom: 20px;
+        }
+
+        .icon-category-title {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 8px;
+        }
+
+        .icon-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 12px 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .icon-option:hover {
+            background: rgba(0, 122, 255, 0.1);
+            border-color: rgba(0, 122, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .icon-option-emoji {
+            font-size: 28px;
+            line-height: 1;
+        }
+
+        .icon-option-name {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -1831,6 +2104,22 @@
                 <button class="reset-btn" id="reset-admin">🔄 恢复默认</button>
                 <button class="cancel-btn" id="cancel-admin">取消</button>
                 <button class="save-btn" id="save-admin">💾 保存配置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图标库弹窗 -->
+    <div class="icon-library-modal" id="icon-library-modal">
+        <div class="icon-library-panel">
+            <div class="icon-library-header">
+                <h3>🎨 选择图标</h3>
+                <button class="modal-close" onclick="closeIconLibrary()">×</button>
+            </div>
+            <div class="icon-search">
+                <input type="text" id="icon-search-input" placeholder="搜索图标..." oninput="filterIcons(this.value)">
+            </div>
+            <div class="icon-library-content" id="icon-library-content">
+                <!-- 图标列表 -->
             </div>
         </div>
     </div>
@@ -2253,33 +2542,33 @@
             if (!config.music) config.music = [];
             if (!config.quotes) config.quotes = [];
             
-            // 渲染应用导航编辑器
+            // 渲染应用导航编辑器（简化版）
             const appsEditor = document.getElementById('apps-editor');
             appsEditor.innerHTML = config.apps.map((app, index) => `
-                <div class="admin-item" data-index="${index}">
-                    <div class="icon-selector">
-                        <input type="text" class="icon-input app-icon-emoji" value="${app.icon || ''}" placeholder="📱" title="输入Emoji">
-                        <input type="text" class="icon-url-input app-icon-url" value="${app.iconUrl || ''}" placeholder="或输入图片URL">
-                        <div class="icon-preview">${app.icon || (app.iconUrl ? `<img src="${app.iconUrl}">` : '📱')}</div>
+                <div class="nav-item-row" data-index="${index}" data-type="app">
+                    <input type="text" class="nav-name" value="${app.name || ''}" placeholder="应用名称">
+                    <div class="nav-icon-box">
+                        <div class="nav-icon-display" id="app-icon-${index}">${app.icon || (app.iconUrl ? `<img src="${app.iconUrl}">` : '📱')}</div>
+                        <button class="icon-action-btn" onclick="changeIcon('app', ${index})">🎨</button>
+                        <button class="icon-action-btn upload" onclick="uploadIcon('app', ${index})">📤</button>
                     </div>
-                    <input type="text" class="app-name-input" value="${app.name || ''}" placeholder="名称">
-                    <input type="text" class="app-desc-input" value="${app.desc || ''}" placeholder="描述">
-                    <input type="text" class="app-url-input" value="${app.url || ''}" placeholder="链接">
+                    <input type="text" class="nav-url" value="${app.url || ''}" placeholder="http://localhost:3000">
+                    <input type="text" class="nav-desc" value="${app.desc || ''}" placeholder="描述（可选）">
                     <button class="delete-btn" onclick="deleteApp(${index})">🗑️</button>
                 </div>
             `).join('');
             
-            // 渲染底部导航编辑器
+            // 渲染底部导航编辑器（简化版）
             const favoritesEditor = document.getElementById('favorites-editor');
             favoritesEditor.innerHTML = config.favorites.map((fav, index) => `
-                <div class="admin-item" data-index="${index}">
-                    <div class="icon-selector">
-                        <input type="text" class="icon-input fav-icon-emoji" value="${fav.icon || ''}" placeholder="🔗" title="输入Emoji">
-                        <input type="text" class="icon-url-input fav-icon-url" value="${fav.iconUrl || ''}" placeholder="或输入图片URL">
-                        <div class="icon-preview">${fav.icon || (fav.iconUrl ? `<img src="${fav.iconUrl}">` : '🔗')}</div>
+                <div class="nav-item-row" data-index="${index}" data-type="favorite">
+                    <input type="text" class="nav-name" value="${fav.name || ''}" placeholder="网站名称">
+                    <div class="nav-icon-box">
+                        <div class="nav-icon-display" id="fav-icon-${index}">${fav.icon || (fav.iconUrl ? `<img src="${fav.iconUrl}">` : '🔗')}</div>
+                        <button class="icon-action-btn" onclick="changeIcon('favorite', ${index})">🎨</button>
+                        <button class="icon-action-btn upload" onclick="uploadIcon('favorite', ${index})">📤</button>
                     </div>
-                    <input type="text" class="fav-name-input" value="${fav.name || ''}" placeholder="网站名称（鼠标悬停显示）">
-                    <input type="text" class="fav-url-input" value="${fav.url || ''}" placeholder="链接">
+                    <input type="text" class="nav-url" value="${fav.url || ''}" placeholder="https://example.com">
                     <button class="delete-btn" onclick="deleteFavorite(${index})">🗑️</button>
                 </div>
             `).join('');
@@ -2289,29 +2578,118 @@
             
             // 渲染每日一言列表
             renderQuoteList();
-            
-            // 绑定图标预览事件
-            bindIconPreviewEvents();
         }
-        
-        // 绑定图标预览事件
-        function bindIconPreviewEvents() {
-            document.querySelectorAll('.icon-input, .icon-url-input').forEach(input => {
-                input.addEventListener('input', function() {
-                    const row = this.closest('.admin-item');
-                    const preview = row.querySelector('.icon-preview');
-                    const emoji = row.querySelector('.icon-input').value;
-                    const url = row.querySelector('.icon-url-input').value;
-                    
-                    if (emoji) {
-                        preview.textContent = emoji;
-                    } else if (url) {
-                        preview.innerHTML = `<img src="${url}" onerror="this.parentElement.textContent='❓'">`;
+
+        // 图标库数据
+        const ICON_CATEGORIES = {
+            '常用': ['📱', '💻', '🖥️', '📊', '📈', '📉', '📁', '📂', '🗂️', '📄', '📝', '📋', '✅', '❌', '⚠️', '❓', '❗', '💡', '🔔', '🔕'],
+            '媒体': ['🎵', '🎶', '🎬', '🎮', '🎯', '🎲', '🎰', '🎳', '🎸', '🎺', '🎻', '🎹', '🎤', '🎧', '🎨', '🎭', '🎪', '🎫', '🎟️', '🎗️'],
+            '社交媒体': ['💬', '📢', '📣', '📤', '📥', '📨', '📩', '📮', '📯', '📰', '🗞️', '📑', '📃', '📜', '📄', '📊', '📈', '📉', '📆', '📅'],
+            '工具': ['🔧', '🔨', '⚒️', '🛠️', '⛏️', '🔩', '⚙️', '🗜️', '⚗️', '⚖️', '🔗', '⛓️', '🧰', '🧲', '🧪', '🧫', '🧬', '🔬', '🔭', '📡'],
+            '云服务': ['☁️', '⚡', '🔥', '💧', '❄️', '🌊', '🌀', '🌈', '☀️', '🌤️', '⛅', '🌥️', '☁️', '🌦️', '🌧️', '⛈️', '🌩️', '🌨️', '❄️', '☃️'],
+            '开发': ['⚡', '🔌', '💻', '🖥️', '🖨️', '⌨️', '🖱️', '🖲️', '💽', '💾', '💿', '📀', '🧮', '🎥', '🎦', '📽️', '🎬', '📺', '📷', '📸']
+        };
+
+        // 渲染图标库
+        function renderIconLibrary(filter = '') {
+            const content = document.getElementById('icon-library-content');
+            let html = '';
+            
+            for (const [category, icons] of Object.entries(ICON_CATEGORIES)) {
+                const filteredIcons = filter 
+                    ? icons.filter(icon => icon.includes(filter))
+                    : icons;
+                
+                if (filteredIcons.length === 0) continue;
+                
+                html += `
+                    <div class="icon-category">
+                        <div class="icon-category-title">${category}</div>
+                        <div class="icon-grid">
+                            ${filteredIcons.map(icon => `
+                                <div class="icon-option" onclick="selectIconFromLibrary('', '${icon}')">
+                                    <span class="icon-option-emoji">${icon}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            content.innerHTML = html || '<div style="text-align: center; padding: 40px; color: rgba(255,255,255,0.5);">没有找到匹配的图标</div>';
+        }
+
+        // 过滤图标
+        function filterIcons(query) {
+            renderIconLibrary(query);
+        }
+
+        // 关闭图标库
+        function closeIconLibrary() {
+            document.getElementById('icon-library-modal').classList.remove('show');
+            document.getElementById('icon-search-input').value = '';
+            currentIconEditType = null;
+            currentIconEditIndex = null;
+        }
+
+        // 更换图标
+        function changeIcon(type, index) {
+            currentIconEditType = type;
+            currentIconEditIndex = index;
+            document.getElementById('icon-library-modal').classList.add('show');
+            renderIconLibrary();
+        }
+
+        // 上传图标
+        function uploadIcon(type, index) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                if (!file.type.startsWith('image/')) {
+                    alert('请选择图片文件');
+                    return;
+                }
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('图片不能超过2MB');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const dataUrl = event.target.result;
+                    if (type === 'app') {
+                        config.apps[index].icon = '';
+                        config.apps[index].iconUrl = dataUrl;
+                        document.getElementById(`app-icon-${index}`).innerHTML = `<img src="${dataUrl}">`;
                     } else {
-                        preview.textContent = '📱';
+                        config.favorites[index].icon = '';
+                        config.favorites[index].iconUrl = dataUrl;
+                        document.getElementById(`fav-icon-${index}`).innerHTML = `<img src="${dataUrl}">`;
                     }
-                });
-            });
+                };
+                reader.readAsDataURL(file);
+            };
+            input.click();
+        }
+
+        // 从图标库选择
+        function selectIconFromLibrary(iconId, iconEmoji) {
+            if (currentIconEditType === null || currentIconEditIndex === null) return;
+            
+            if (currentIconEditType === 'app') {
+                config.apps[currentIconEditIndex].icon = iconEmoji;
+                config.apps[currentIconEditIndex].iconUrl = '';
+                document.getElementById(`app-icon-${currentIconEditIndex}`).textContent = iconEmoji;
+            } else {
+                config.favorites[currentIconEditIndex].icon = iconEmoji;
+                config.favorites[currentIconEditIndex].iconUrl = '';
+                document.getElementById(`fav-icon-${currentIconEditIndex}`).textContent = iconEmoji;
+            }
+            
+            closeIconLibrary();
         }
         
         // 渲染音乐列表
@@ -2678,30 +3056,32 @@
         
         // 保存配置
         document.getElementById('save-admin').addEventListener('click', () => {
-            // 收集应用导航数据
-            const appItems = document.querySelectorAll('#apps-editor .admin-item');
+            // 收集应用导航数据（新格式）
+            const appItems = document.querySelectorAll('#apps-editor .nav-item-row');
             config.apps = Array.from(appItems).map(item => {
-                const iconEmoji = item.querySelector('.app-icon-emoji').value;
-                const iconUrl = item.querySelector('.app-icon-url').value;
+                const index = item.dataset.index;
+                const iconEl = document.getElementById(`app-icon-${index}`);
+                const iconImg = iconEl.querySelector('img');
                 return {
-                    icon: iconEmoji,
-                    iconUrl: iconUrl,
-                    name: item.querySelector('.app-name-input').value,
-                    desc: item.querySelector('.app-desc-input').value,
-                    url: item.querySelector('.app-url-input').value
+                    name: item.querySelector('.nav-name').value,
+                    icon: iconImg ? '' : iconEl.textContent,
+                    iconUrl: iconImg ? iconImg.src : '',
+                    url: item.querySelector('.nav-url').value,
+                    desc: item.querySelector('.nav-desc')?.value || ''
                 };
             });
             
-            // 收集底部导航数据
-            const favItems = document.querySelectorAll('#favorites-editor .admin-item');
+            // 收集底部导航数据（新格式）
+            const favItems = document.querySelectorAll('#favorites-editor .nav-item-row');
             config.favorites = Array.from(favItems).map(item => {
-                const iconEmoji = item.querySelector('.fav-icon-emoji').value;
-                const iconUrl = item.querySelector('.fav-icon-url').value;
+                const index = item.dataset.index;
+                const iconEl = document.getElementById(`fav-icon-${index}`);
+                const iconImg = iconEl.querySelector('img');
                 return {
-                    icon: iconEmoji,
-                    iconUrl: iconUrl,
-                    name: item.querySelector('.fav-name-input').value,
-                    url: item.querySelector('.fav-url-input').value
+                    name: item.querySelector('.nav-name').value,
+                    icon: iconImg ? '' : iconEl.textContent,
+                    iconUrl: iconImg ? iconImg.src : '',
+                    url: item.querySelector('.nav-url').value
                 };
             });
             
