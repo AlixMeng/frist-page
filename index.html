@@ -109,8 +109,8 @@
 
         /* 主内容区 */
         .main-content {
-            padding: 100px 40px 40px;
-            max-width: 1200px;
+            padding: 100px 20px 40px;
+            max-width: 100%;
             margin: 0 auto;
         }
 
@@ -218,9 +218,10 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-blue), #00D4FF);
+            height: 2px;
+            background: linear-gradient(90deg, rgba(0,122,255,0.4), rgba(0,212,255,0.3));
             transition: width 0.1s linear;
+            opacity: 0.5;
         }
 
         /* 摄影作品 */
@@ -582,83 +583,66 @@
         <!-- 应用导航 -->
         <section id="apps" class="apps-section">
             <h2 class="section-title">应用导航</h2>
-            <div class="apps-grid">
-                <a href="http://localhost:3000" class="app-item">
-                    <div class="app-icon">📊</div>
-                    <div class="app-name">Grafana</div>
-                    <div class="app-desc">监控面板</div>
-                </a>
-                <a href="http://localhost:9000" class="app-item">
-                    <div class="app-icon">🐳</div>
-                    <div class="app-name">Portainer</div>
-                    <div class="app-desc">容器管理</div>
-                </a>
-                <a href="http://localhost:8096" class="app-item">
-                    <div class="app-icon">🎬</div>
-                    <div class="app-name">Jellyfin</div>
-                    <div class="app-desc">媒体中心</div>
-                </a>
-                <a href="http://localhost:5244" class="app-item">
-                    <div class="app-icon">☁️</div>
-                    <div class="app-name">AList</div>
-                    <div class="app-desc">网盘管理</div>
-                </a>
-                <a href="http://localhost:5700" class="app-item">
-                    <div class="app-icon">🤖</div>
-                    <div class="app-name">青龙</div>
-                    <div class="app-desc">定时任务</div>
-                </a>
-                <a href="http://localhost:4533" class="app-item">
-                    <div class="app-icon">🎵</div>
-                    <div class="app-name">Navidrome</div>
-                    <div class="app-desc">音乐服务</div>
-                </a>
-                <a href="http://localhost:8384" class="app-item">
-                    <div class="app-icon">🔄</div>
-                    <div class="app-name">Syncthing</div>
-                    <div class="app-desc">文件同步</div>
-                </a>
-            </div>
+            <div class="apps-grid"></div>
         </section>
     </main>
 
     <!-- 底部浮动常用网址 -->
-    <div class="bottom-favorites">
-        <a href="https://github.com" class="bottom-favorite-item" target="_blank">
-            <div class="bottom-favorite-icon">🐙</div>
-            <span>GitHub</span>
-        </a>
-        <a href="https://stackoverflow.com" class="bottom-favorite-item" target="_blank">
-            <div class="bottom-favorite-icon">💻</div>
-            <span>Stack</span>
-        </a>
-        <a href="https://www.v2ex.com" class="bottom-favorite-item" target="_blank">
-            <div class="bottom-favorite-icon">🗣️</div>
-            <span>V2EX</span>
-        </a>
-        <a href="https://www.zhihu.com" class="bottom-favorite-item" target="_blank">
-            <div class="bottom-favorite-icon">❓</div>
-            <span>知乎</span>
-        </a>
-        <a href="https://sspai.com" class="bottom-favorite-item" target="_blank">
-            <div class="bottom-favorite-icon">📱</div>
-            <span>少数派</span>
-        </a>
-        <a href="https://www.bilibili.com" class="bottom-favorite-item" target="_blank">
-            <div class="bottom-favorite-icon">📺</div>
-            <span>B站</span>
-        </a>
-        <a href="https://www.google.com" class="bottom-favorite-item" target="_blank">
-            <div class="bottom-favorite-icon">🔍</div>
-            <span>Google</span>
-        </a>
-        <a href="https://www.youtube.com" class="bottom-favorite-item" target="_blank">
-            <div class="bottom-favorite-icon">▶️</div>
-            <span>YouTube</span>
-        </a>
-    </div>
+    <div class="bottom-favorites"></div>
 
     <script>
+        // ==================== 配置区域 - 可在此处修改应用和网址 ====================
+        const config = {
+            // 应用导航配置
+            apps: [
+                { icon: '📊', name: 'Grafana', desc: '监控面板', url: 'http://localhost:3000' },
+                { icon: '🐳', name: 'Portainer', desc: '容器管理', url: 'http://localhost:9000' },
+                { icon: '🎬', name: 'Jellyfin', desc: '媒体中心', url: 'http://localhost:8096' },
+                { icon: '☁️', name: 'AList', desc: '网盘管理', url: 'http://localhost:5244' },
+                { icon: '🤖', name: '青龙', desc: '定时任务', url: 'http://localhost:5700' },
+                { icon: '🎵', name: 'Navidrome', desc: '音乐服务', url: 'http://localhost:4533' },
+                { icon: '🔄', name: 'Syncthing', desc: '文件同步', url: 'http://localhost:8384' }
+            ],
+            // 底部常用网址配置
+            favorites: [
+                { icon: '🐙', name: 'GitHub', url: 'https://github.com' },
+                { icon: '💻', name: 'Stack', url: 'https://stackoverflow.com' },
+                { icon: '🗣️', name: 'V2EX', url: 'https://www.v2ex.com' },
+                { icon: '❓', name: '知乎', url: 'https://www.zhihu.com' },
+                { icon: '📱', name: '少数派', url: 'https://sspai.com' },
+                { icon: '📺', name: 'B站', url: 'https://www.bilibili.com' },
+                { icon: '🔍', name: 'Google', url: 'https://www.google.com' },
+                { icon: '▶️', name: 'YouTube', url: 'https://www.youtube.com' }
+            ]
+        };
+
+        // 渲染应用导航
+        function renderApps() {
+            const appsGrid = document.querySelector('.apps-grid');
+            appsGrid.innerHTML = config.apps.map(app => `
+                <a href="${app.url}" class="app-item" target="_blank">
+                    <div class="app-icon">${app.icon}</div>
+                    <div class="app-name">${app.name}</div>
+                    <div class="app-desc">${app.desc}</div>
+                </a>
+            `).join('');
+        }
+
+        // 渲染底部收藏
+        function renderFavorites() {
+            const bottomFavorites = document.querySelector('.bottom-favorites');
+            bottomFavorites.innerHTML = config.favorites.map(fav => `
+                <a href="${fav.url}" class="bottom-favorite-item" target="_blank">
+                    <div class="bottom-favorite-icon">${fav.icon}</div>
+                    <span>${fav.name}</span>
+                </a>
+            `).join('');
+        }
+
+        // 初始化渲染
+        renderApps();
+        renderFavorites();
+
         // 更新时间
         function updateDateTime() {
             const now = new Date();
@@ -845,7 +829,7 @@
                     showQuote(currentQuoteIndex);
                 }
                 progress.style.width = width + '%';
-            }, 100);
+            }, 160);
         }
 
         function resetProgress() {
