@@ -2527,6 +2527,21 @@
         function openAdminPanel() {
             document.getElementById('admin-modal').classList.add('show');
             renderAdminEditors();
+            
+            // 检查当前标签页，应用导航和网址导航不需要保存按钮
+            const activeTab = document.querySelector('.admin-tab.active');
+            if (activeTab) {
+                const currentTab = activeTab.dataset.tab;
+                const resetBtn = document.getElementById('reset-admin');
+                const saveBtn = document.getElementById('save-admin');
+                if (currentTab === 'apps' || currentTab === 'favorites') {
+                    resetBtn.style.display = 'none';
+                    saveBtn.style.display = 'none';
+                } else {
+                    resetBtn.style.display = 'inline-block';
+                    saveBtn.style.display = 'inline-block';
+                }
+            }
         }
         
         // 关闭管理面板
@@ -2551,9 +2566,8 @@
                         <button class="icon-action-btn" onclick="changeIcon('app', ${index})" title="从图标库选择">🎨</button>
                         <button class="icon-action-btn upload" onclick="uploadIcon('app', ${index})" title="上传自定义图标">⬆️</button>
                     </div>
-                    <input type="text" class="nav-name" value="${app.name || ''}" placeholder="应用名称">
-                    <input type="text" class="nav-url" value="${app.url || ''}" placeholder="http://localhost:3000">
-                    <input type="text" class="nav-desc" value="${app.desc || ''}" placeholder="描述（可选）">
+                    <input type="text" class="nav-name" value="${app.name || ''}" placeholder="应用名称" onchange="saveNavItem('app', ${index}, 'name', this.value)">
+                    <input type="text" class="nav-url" value="${app.url || ''}" placeholder="http://localhost:3000" onchange="saveNavItem('app', ${index}, 'url', this.value)">
                     <button class="delete-btn" onclick="deleteApp(${index})">🗑️</button>
                 </div>
             `).join('');
@@ -2567,8 +2581,8 @@
                         <button class="icon-action-btn" onclick="changeIcon('favorite', ${index})" title="从图标库选择">🎨</button>
                         <button class="icon-action-btn upload" onclick="uploadIcon('favorite', ${index})" title="上传自定义图标">⬆️</button>
                     </div>
-                    <input type="text" class="nav-name" value="${fav.name || ''}" placeholder="网站名称">
-                    <input type="text" class="nav-url" value="${fav.url || ''}" placeholder="https://example.com">
+                    <input type="text" class="nav-name" value="${fav.name || ''}" placeholder="网站名称" onchange="saveNavItem('favorite', ${index}, 'name', this.value)">
+                    <input type="text" class="nav-url" value="${fav.url || ''}" placeholder="https://example.com" onchange="saveNavItem('favorite', ${index}, 'url', this.value)">
                     <button class="delete-btn" onclick="deleteFavorite(${index})">🗑️</button>
                 </div>
             `).join('');
@@ -3042,6 +3056,18 @@
                 
                 tab.classList.add('active');
                 document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+                
+                // 应用导航和网址导航即时生效，不需要保存按钮
+                const currentTab = tab.dataset.tab;
+                const resetBtn = document.getElementById('reset-admin');
+                const saveBtn = document.getElementById('save-admin');
+                if (currentTab === 'apps' || currentTab === 'favorites') {
+                    resetBtn.style.display = 'none';
+                    saveBtn.style.display = 'none';
+                } else {
+                    resetBtn.style.display = 'inline-block';
+                    saveBtn.style.display = 'inline-block';
+                }
             });
         });
         
@@ -3053,8 +3079,23 @@
                 location.reload();
             }
         });
+
+        // 自动保存单个导航项
+        function saveNavItem(type, index, field, value) {
+            if (type === 'app') {
+                config.apps[index][field] = value;
+            } else {
+                config.favorites[index][field] = value;
+            }
+            saveConfig(config);
+            if (type === 'app') {
+                renderApps();
+            } else {
+                renderFavorites();
+            }
+        }
         
-        // 保存配置
+        // 保存配置（其他标签页使用）
         document.getElementById('save-admin').addEventListener('click', () => {
             // 收集应用导航数据（新格式）
             const appItems = document.querySelectorAll('#apps-editor .nav-item-row');
