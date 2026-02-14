@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alix go - 个人服务器</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@300;400;500;600;700&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-blue: #007AFF;
@@ -30,6 +30,7 @@
             padding-bottom: 80px;
         }
 
+        /* 背景 */
         .bg-gradient {
             position: fixed;
             top: 0;
@@ -37,40 +38,54 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(ellipse at 20% 0%, rgba(0, 122, 255, 0.12) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 100%, rgba(0, 150, 255, 0.08) 0%, transparent 50%);
+                radial-gradient(ellipse at 20% 0%, rgba(0, 122, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(0, 150, 255, 0.1) 0%, transparent 50%);
             z-index: -2;
         }
 
-        /* 左上角状态栏 */
-        .top-left-status {
+        /* 顶部状态栏 - 左上角 */
+        .top-status-bar {
             position: fixed;
             top: 20px;
             left: 20px;
-            z-index: 1001;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 16px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            min-width: 140px;
-        }
-
-        .status-row {
+            z-index: 1000;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            color: var(--text-secondary);
+            gap: 16px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.15), rgba(0, 212, 255, 0.1));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 122, 255, 0.3);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 122, 255, 0.2), 0 0 20px rgba(0, 122, 255, 0.1);
+            animation: glowPulse 3s ease-in-out infinite;
         }
 
-        .status-icon {
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 4px 30px rgba(0, 122, 255, 0.2), 0 0 20px rgba(0, 122, 255, 0.1); }
+            50% { box-shadow: 0 4px 40px rgba(0, 122, 255, 0.35), 0 0 30px rgba(0, 212, 255, 0.2); }
+        }
+
+        .top-status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .top-status-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .top-status-icon {
             width: 28px;
             height: 28px;
-            background: rgba(0, 122, 255, 0.15);
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.3), rgba(0, 212, 255, 0.2));
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -78,28 +93,27 @@
             font-size: 14px;
         }
 
-        .status-text {
+        .top-status-content {
             display: flex;
             flex-direction: column;
         }
 
-        .status-label {
-            font-size: 10px;
+        .top-status-label {
+            font-size: 9px;
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 1px;
         }
 
-        .status-value {
-            font-size: 15px;
+        .top-status-value {
+            font-size: 13px;
             font-weight: 600;
             color: var(--text-primary);
             font-variant-numeric: tabular-nums;
         }
 
-        .status-weather {
+        .top-status-weather {
             cursor: pointer;
-            transition: opacity 0.3s;
         }
 
         /* 右上角音乐控制 */
@@ -167,164 +181,405 @@
             content: '点击暂停音乐';
         }
 
+        /* 主内容区 - 全屏滚动 */
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            scroll-behavior: smooth;
+        }
+
         .main-content {
-            padding: 40px 5% 40px;
-            max-width: 1400px;
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .section-full {
+            height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 15px 40px;
+            max-width: 1200px;
             margin: 0 auto;
+            position: relative;
         }
 
-        .hero {
+        .section-full:last-child {
+            margin-bottom: 80px;
+        }
+
+        /* 滚动提示 */
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
             text-align: center;
-            margin-bottom: 50px;
-            padding-top: 20px;
-        }
-
-        .hero h1 {
-            font-size: 72px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, #FFFFFF 0%, #007AFF 50%, #00D4FF 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -2px;
-        }
-
-        .hero p {
-            font-size: 18px;
             color: var(--text-secondary);
-            font-weight: 300;
+            font-size: 13px;
+            animation: bounce 2s infinite;
+            cursor: pointer;
         }
 
+        .scroll-hint span {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .scroll-arrow {
+            font-size: 20px;
+            animation: bounceArrow 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        @keyframes bounceArrow {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(10px); }
+            60% { transform: translateY(5px); }
+        }
+
+        /* 名言轮播 - 全屏居中 - 超大边框炫酷设计 */
         .quote-section {
-            margin-bottom: 60px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 0;
+            padding: 0 30px;
         }
 
         .quote-container {
-            max-width: 1000px;
+            max-width: 900px;
+            width: 100%;
             margin: 0 auto;
-            padding: 60px 80px;
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.08), rgba(0, 212, 255, 0.04));
-            border: 1px solid rgba(0, 122, 255, 0.15);
-            border-radius: 28px;
+            padding: 80px 60px;
+            background: 
+                linear-gradient(135deg, rgba(0, 122, 255, 0.05) 0%, rgba(0, 212, 255, 0.02) 50%, rgba(255, 255, 255, 0.02) 100%);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 40px;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             text-align: center;
+            backdrop-filter: blur(30px);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                0 0 100px rgba(0, 122, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .quote-container::before,
-        .quote-container::after {
-            content: '"';
-            position: absolute;
-            font-size: 140px;
-            color: rgba(0, 122, 255, 0.08);
-            font-family: Georgia, serif;
-            line-height: 1;
+        .quote-container:hover {
+            transform: scale(1.01);
+            box-shadow: 
+                0 25px 70px rgba(0, 0, 0, 0.45),
+                0 0 120px rgba(0, 122, 255, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
+        /* 多层发光边框效果 */
         .quote-container::before {
-            top: 20px;
-            left: 40px;
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 44px;
+            padding: 2px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.5), rgba(0, 212, 255, 0.3), rgba(255, 255, 255, 0.2), rgba(0, 122, 255, 0.4));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
         }
 
         .quote-container::after {
-            bottom: 20px;
-            right: 40px;
-            transform: rotate(180deg);
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 48px;
+            border: 1px solid rgba(0, 122, 255, 0.1);
+            pointer-events: none;
         }
 
+        /* 角落装饰 */
+        .quote-corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(0, 122, 255, 0.3);
+            pointer-events: none;
+        }
+
+        .quote-corner.top-left {
+            top: 20px;
+            left: 20px;
+            border-right: none;
+            border-bottom: none;
+            border-radius: 20px 0 0 0;
+        }
+
+        .quote-corner.top-right {
+            top: 20px;
+            right: 20px;
+            border-left: none;
+            border-bottom: none;
+            border-radius: 0 20px 0 0;
+        }
+
+        .quote-corner.bottom-left {
+            bottom: 20px;
+            left: 20px;
+            border-right: none;
+            border-top: none;
+            border-radius: 0 0 0 20px;
+        }
+
+        .quote-corner.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            border-left: none;
+            border-top: none;
+            border-radius: 0 0 20px 0;
+        }
+
+        .quote-icon {
+            font-size: 60px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.8), rgba(0, 212, 255, 0.6));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            line-height: 1;
+            opacity: 0.8;
+        }
+
+        /* 多种字体样式 - 包含中文字体 */
         .quote-text {
-            font-size: 28px;
-            font-weight: 300;
-            line-height: 1.8;
-            margin-bottom: 24px;
-            min-height: 100px;
+            font-size: 40px;
+            font-weight: 500;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            min-height: 130px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.5s ease;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #FFFFFF;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 20px rgba(0, 122, 255, 0.3);
+        }
+
+        /* 亮色系颜色类 - 确保与黑色背景反差大 */
+        .quote-text.color-1 { color: #FFFFFF; text-shadow: 0 2px 20px rgba(255, 255, 255, 0.3); } /* 纯白 */
+        .quote-text.color-2 { color: #00D4FF; text-shadow: 0 2px 20px rgba(0, 212, 255, 0.4); } /* 青色 */
+        .quote-text.color-3 { color: #5AC8FA; text-shadow: 0 2px 20px rgba(90, 200, 250, 0.4); } /* 天蓝 */
+        .quote-text.color-4 { color: #34C759; text-shadow: 0 2px 20px rgba(52, 199, 89, 0.4); } /* 绿色 */
+        .quote-text.color-5 { color: #FF375F; text-shadow: 0 2px 20px rgba(255, 55, 95, 0.4); } /* 粉红 */
+        .quote-text.color-6 { color: #FF9500; text-shadow: 0 2px 20px rgba(255, 149, 0, 0.4); } /* 橙色 */
+        .quote-text.color-7 { color: #FFD60A; text-shadow: 0 2px 20px rgba(255, 214, 10, 0.4); } /* 黄色 */
+        .quote-text.color-8 { color: #BF5AF2; text-shadow: 0 2px 20px rgba(191, 90, 242, 0.4); } /* 紫色 */
+        .quote-text.color-9 { color: #64D2FF; text-shadow: 0 2px 20px rgba(100, 210, 255, 0.4); } /* 浅蓝 */
+        .quote-text.color-10 { color: #FF6B35; text-shadow: 0 2px 20px rgba(255, 107, 53, 0.4); } /* 珊瑚橙 */
+
+        /* 字体风格 1: 宋体（衬线）- Noto Serif SC */
+        .quote-text.style-1 {
+            font-family: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif;
+            font-weight: 500;
+            letter-spacing: 4px;
+        }
+
+        /* 字体风格 2: 楷体 */
+        .quote-text.style-2 {
+            font-family: 'KaiTi', 'STKaiti', '楷体', 'Noto Serif SC', serif;
+            font-weight: 500;
+            letter-spacing: 5px;
+            font-size: 44px;
+        }
+
+        /* 字体风格 3: 马善政书法（书法风格） */
+        .quote-text.style-3 {
+            font-family: 'Ma Shan Zheng', 'STXingkai', 'Xingkai SC', cursive;
+            font-weight: 400;
+            letter-spacing: 6px;
+            font-size: 46px;
+            line-height: 1.5;
+        }
+
+        /* 字体风格 4: 小薇体（手写体） */
+        .quote-text.style-4 {
+            font-family: 'ZCOOL XiaoWei', 'STXingkai', 'Xingkai SC', serif;
+            font-weight: 400;
+            letter-spacing: 4px;
+            font-size: 42px;
+        }
+
+        /* 字体风格 5: 快乐体（艺术体） */
+        .quote-text.style-5 {
+            font-family: 'ZCOOL KuaiLe', 'STHeiti', 'SimHei', sans-serif;
+            font-weight: 400;
+            letter-spacing: 3px;
+            font-size: 42px;
+        }
+
+        /* 字体风格 6: 隶书风格 */
+        .quote-text.style-6 {
+            font-family: 'LiSu', 'STLiti', '隶书', 'Noto Serif SC', serif;
+            font-weight: 500;
+            letter-spacing: 5px;
+            font-size: 44px;
+        }
+
+        /* 字体风格 7: 仿宋 */
+        .quote-text.style-7 {
+            font-family: 'FangSong', 'STFangsong', '仿宋', 'Noto Serif SC', serif;
+            font-weight: 500;
+            letter-spacing: 4px;
+            font-size: 42px;
+        }
+
+        /* 字体风格 8: 黑体（现代） */
+        .quote-text.style-8 {
+            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', '黑体', sans-serif;
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 38px;
+        }
+
+        /* 字体风格 9: 渐变科技感 */
+        .quote-text.style-9 {
+            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-size: 36px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #00D4FF 50%, #007AFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+        }
+
+        /* 字体风格 10: 金色华丽 */
+        .quote-text.style-10 {
+            font-family: 'Noto Serif SC', 'Songti SC', serif;
+            font-weight: 600;
+            letter-spacing: 4px;
+            font-size: 40px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+        }
+
+        /* 点击切换提示 */
+        .quote-hint {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.3);
+            margin-top: 25px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .quote-container:hover .quote-hint {
+            opacity: 1;
         }
 
         .quote-author {
-            font-size: 16px;
-            color: var(--primary-blue);
+            font-size: 14px;
+            color: rgba(0, 122, 255, 0.8);
             font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+            padding: 0 20px;
+        }
+
+        .quote-author::before,
+        .quote-author::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 122, 255, 0.4));
+        }
+
+        .quote-author::before {
+            right: 100%;
+        }
+
+        .quote-author::after {
+            left: 100%;
+            background: linear-gradient(90deg, rgba(0, 122, 255, 0.4), transparent);
         }
 
         .quote-dots {
             display: flex;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             margin-top: 28px;
         }
 
-        .quote-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+        /* 摄影作品 - 全屏布局 */
 
-        .quote-dot.active {
-            background: var(--primary-blue);
-            width: 24px;
-            border-radius: 4px;
-        }
-
-        .quote-progress {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 2px;
-            background: linear-gradient(90deg, rgba(0, 122, 255, 0.3), rgba(0, 212, 255, 0.3));
-            box-shadow: 0 0 10px rgba(0, 122, 255, 0.2);
-            transition: width 0.1s linear;
-            opacity: 0.5;
-        }
-
+        /* 摄影作品 - 全屏布局 */
         .gallery-section {
-            margin-bottom: 60px;
+            margin-bottom: 0;
+            justify-content: center;
+            padding: 80px 15px 40px;
         }
 
         .section-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            padding: 0 5px;
         }
 
         .section-title {
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .section-title::before {
             content: '';
             width: 4px;
-            height: 26px;
+            height: 22px;
             background: linear-gradient(180deg, var(--primary-blue), #00D4FF);
             border-radius: 2px;
         }
 
         .gallery-tabs {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .gallery-tab {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
-            padding: 10px 20px;
-            color: var(--text-secondary);
-            font-size: 14px;
+            padding: 6px 14px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
+            border: none;
         }
 
         .gallery-tab:hover {
@@ -334,20 +589,34 @@
 
         .gallery-tab.active {
             background: linear-gradient(135deg, var(--primary-blue), #00D4FF);
-            border-color: transparent;
             color: white;
         }
 
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-bottom: 28px;
+            gap: 16px;
+            margin-bottom: 20px;
         }
 
-        @media (max-width: 1000px) {
+        @media (max-width: 900px) {
             .gallery-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .top-status-bar {
+                top: 10px;
+                left: 10px;
+                padding: 10px 14px;
+                gap: 10px;
+            }
+            
+            .top-status-item {
+                padding: 4px 8px;
+            }
+            
+            .top-status-label {
+                display: none;
             }
         }
 
@@ -355,40 +624,42 @@
             .gallery-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .hero h1 {
-                font-size: 48px;
-            }
-            
-            .quote-container {
-                padding: 40px 30px;
-            }
-            
-            .quote-text {
-                font-size: 20px;
-            }
         }
 
         .gallery-item {
             position: relative;
-            border-radius: 20px;
+            border-radius: 12px;
             overflow: hidden;
             aspect-ratio: 4/5;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             background: linear-gradient(135deg, #1a1a2e, #16213e);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .gallery-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px rgba(0, 122, 255, 0.2);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 122, 255, 0.25);
         }
 
         .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.5s ease, opacity 0.8s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .gallery-item img.fade-out {
+            opacity: 0;
+            transform: scale(1.05);
+        }
+
+        .gallery-item img.fade-in {
+            opacity: 1;
+            transform: scale(1);
         }
 
         .gallery-item:hover img {
@@ -400,42 +671,46 @@
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 35px 24px 24px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            padding: 25px 16px 16px;
+            background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.9) 100%);
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .gallery-item:hover .gallery-overlay {
             opacity: 1;
+            transform: translateY(0);
         }
 
         .gallery-title {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 600;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
+            color: rgba(255, 255, 255, 0.95);
         }
 
         .gallery-desc {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .gallery-more {
             text-align: center;
+            margin-top: 5px;
         }
 
         .gallery-more-link {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             color: var(--primary-blue);
             text-decoration: none;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
-            padding: 12px 28px;
+            padding: 10px 24px;
             border: 1px solid var(--primary-blue);
-            border-radius: 24px;
+            border-radius: 20px;
             transition: all 0.3s ease;
         }
 
@@ -444,122 +719,173 @@
             color: white;
         }
 
+        /* 应用导航 - 全屏布局 */
         .apps-section {
-            margin-bottom: 50px;
+            margin-bottom: 0;
+            justify-content: center;
         }
 
         .apps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 700px) {
+            .apps-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .apps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .app-item {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 18px;
-            padding: 28px 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px 12px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
             color: inherit;
             display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0, 122, 255, 0.5), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .app-item:hover {
-            transform: translateY(-5px);
-            background: rgba(0, 122, 255, 0.1);
-            border-color: rgba(0, 122, 255, 0.3);
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1) 0%, rgba(0, 122, 255, 0.05) 100%);
+            border-color: rgba(0, 122, 255, 0.2);
+            box-shadow: 0 8px 30px rgba(0, 122, 255, 0.15);
+        }
+
+        .app-item:hover::before {
+            opacity: 1;
         }
 
         .app-icon {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, var(--primary-blue), #00D4FF);
-            border-radius: 16px;
-            margin: 0 auto 16px;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.8), rgba(0, 212, 255, 0.8));
+            border-radius: 12px;
+            margin: 0 auto 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .app-item:hover .app-icon {
+            transform: scale(1.1);
         }
 
         .app-name {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 2px;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .app-desc {
-            font-size: 12px;
-            color: var(--text-secondary);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
         }
 
-        .bottom-nav {
+        /* 底部浮动常用网址 - 精致胶囊设计 */
+        .bottom-favorites {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 70px;
-            background: rgba(0, 0, 0, 0.85);
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 56px;
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(20px);
-            border-top: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            padding: 0 20px;
+            gap: 4px;
+            padding: 0 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
 
-        .bottom-nav-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
-            border-radius: 12px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .bottom-nav-item:hover {
-            background: var(--glass-bg);
-            color: var(--text-primary);
-            transform: translateY(-2px);
-        }
-
-        .bottom-nav-icon {
-            width: 28px;
-            height: 28px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+        .bottom-favorite-item {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
-        @media (max-width: 900px) {
-            .bottom-nav-item span {
+        .bottom-favorite-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.95);
+            transform: translateY(-2px) scale(1.1);
+        }
+
+        .bottom-favorite-item span {
+            display: none;
+        }
+
+        .bottom-favorite-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .bottom-favorites {
+                padding: 0 8px;
+                gap: 2px;
+            }
+            
+            .bottom-favorite-item {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .bottom-favorite-icon {
+                font-size: 18px;
+            }
+        }
+            
+            .bottom-favorite-item span:last-child {
                 display: none;
             }
-            
-            .top-left-status {
-                top: 10px;
-                left: 10px;
-                padding: 12px 16px;
-                min-width: 120px;
-            }
-            
-            .main-content {
-                padding: 100px 20px 40px;
-            }
         }
 
+        /* 动画 */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -575,26 +901,27 @@
 <body>
     <div class="bg-gradient"></div>
 
-    <div class="top-left-status">
-        <div class="status-row">
-            <div class="status-icon">⏰</div>
-            <div class="status-text">
-                <div class="status-label">时间</div>
-                <div class="status-value" id="current-time">--:--</div>
+    <!-- 顶部状态栏 -->
+    <div class="top-status-bar">
+        <div class="top-status-item">
+            <div class="top-status-icon">📅</div>
+            <div class="top-status-content">
+                <span class="top-status-label">日期</span>
+                <span class="top-status-value" id="current-date">--/--</span>
             </div>
         </div>
-        <div class="status-row">
-            <div class="status-icon">📅</div>
-            <div class="status-text">
-                <div class="status-label">日期</div>
-                <div class="status-value" id="current-date">--/--</div>
+        <div class="top-status-item">
+            <div class="top-status-icon">⏰</div>
+            <div class="top-status-content">
+                <span class="top-status-label">时间</span>
+                <span class="top-status-value" id="current-time">--:--</span>
             </div>
         </div>
-        <div class="status-row status-weather" id="weather-item" title="点击刷新">
-            <div class="status-icon">🌤️</div>
-            <div class="status-text">
-                <div class="status-label">天气</div>
-                <div class="status-value" id="weather-info">--°C</div>
+        <div class="top-status-item top-status-weather" id="weather-item" title="点击刷新">
+            <div class="top-status-icon">🌤️</div>
+            <div class="top-status-content">
+                <span class="top-status-label">天气</span>
+                <span class="top-status-value" id="weather-info">--°C</span>
             </div>
         </div>
     </div>
@@ -603,22 +930,32 @@
         🎵
     </div>
 
+    <!-- 主内容 -->
     <main class="main-content">
-        <section class="hero">
-            <h1>Alix go</h1>
-            <p>探索技术的边界，记录生活的美好</p>
-        </section>
-
-        <section class="quote-section">
-            <div class="quote-container">
-                <div class="quote-text" id="quote-text">生活中不缺少美，只是缺少发现美的眼睛。</div>
-                <div class="quote-author" id="quote-author">— 罗丹</div>
-                <div class="quote-progress" id="quote-progress"></div>
+        <!-- 第一屏：每日一言 -->
+        <section class="section-full">
+            <!-- 名言轮播 -->
+            <div class="quote-section">
+                <div class="quote-container">
+                    <div class="quote-corner top-left"></div>
+                    <div class="quote-corner top-right"></div>
+                    <div class="quote-corner bottom-left"></div>
+                    <div class="quote-corner bottom-right"></div>
+                    <div class="quote-icon">❝</div>
+                    <div class="quote-text" id="quote-text">生活中不缺少美，只是缺少发现美的眼睛。</div>
+                    <div class="quote-author" id="quote-author">罗丹</div>
+                    <div class="quote-hint">点击切换名言</div>
+                </div>
             </div>
-            <div class="quote-dots" id="quote-dots"></div>
+            <!-- 滚动提示 -->
+            <div class="scroll-hint">
+                <span>向下滚动</span>
+                <div class="scroll-arrow">↓</div>
+            </div>
         </section>
 
-        <section id="gallery" class="gallery-section">
+        <!-- 第二屏：摄影作品 -->
+        <section id="gallery" class="gallery-section section-full">
             <div class="section-header">
                 <h2 class="section-title">摄影作品</h2>
                 <div class="gallery-tabs">
@@ -630,60 +967,51 @@
             </div>
             <div class="gallery-grid" id="gallery-grid"></div>
             <div class="gallery-more">
-                <a href="https://500px.com" class="gallery-more-link" target="_blank">查看更多 →</a>
+                <a href="#" class="gallery-more-link">查看更多 →</a>
             </div>
         </section>
 
-        <section id="apps" class="apps-section">
+        <!-- 第三屏：应用导航 -->
+        <section id="apps" class="apps-section section-full">
             <h2 class="section-title">应用导航</h2>
-            <div class="apps-grid" id="apps-grid"></div>
+            <div class="apps-grid"></div>
         </section>
     </main>
 
-    <div class="bottom-nav" id="bottom-nav"></div>
+    <!-- 底部浮动常用网址 -->
+    <div class="bottom-favorites"></div>
 
     <script>
-        // ==================== 配置区域 - 可自定义 ====================
-        
-        // 应用导航配置
-        const appsConfig = [
-            { icon: '📊', name: 'Grafana', desc: '监控面板', url: 'http://localhost:3000' },
-            { icon: '🐳', name: 'Portainer', desc: '容器管理', url: 'http://localhost:9000' },
-            { icon: '🎬', name: 'Jellyfin', desc: '媒体中心', url: 'http://localhost:8096' },
-            { icon: '☁️', name: 'AList', desc: '网盘管理', url: 'http://localhost:5244' },
-            { icon: '🤖', name: '青龙', desc: '定时任务', url: 'http://localhost:5700' },
-            { icon: '🎵', name: 'Navidrome', desc: '音乐服务', url: 'http://localhost:4533' },
-            { icon: '🔄', name: 'Syncthing', desc: '文件同步', url: 'http://localhost:8384' },
-            { icon: '📁', name: 'FileBrowser', desc: '文件管理', url: 'http://localhost:8081' }
-        ];
-
-        // 底部导航配置
-        const bottomNavConfig = [
-            { icon: '🐙', name: 'GitHub', url: 'https://github.com' },
-            { icon: '💻', name: 'Stack', url: 'https://stackoverflow.com' },
-            { icon: '🗣️', name: 'V2EX', url: 'https://www.v2ex.com' },
-            { icon: '❓', name: '知乎', url: 'https://www.zhihu.com' },
-            { icon: '📱', name: '少数派', url: 'https://sspai.com' },
-            { icon: '📺', name: 'B站', url: 'https://www.bilibili.com' },
-            { icon: '🔍', name: 'Google', url: 'https://www.google.com' },
-            { icon: '▶️', name: 'YouTube', url: 'https://www.youtube.com' }
-        ];
-
-        // 查看更多链接配置
-        const galleryMoreLinks = {
-            landscape: 'https://500px.com/popular?category=landscapes',
-            portrait: 'https://500px.com/popular?category=people',
-            humanity: 'https://500px.com/popular?category=travel',
-            other: 'https://500px.com/popular'
+        // ==================== 配置区域 - 可在此处修改应用和网址 ====================
+        const config = {
+            // 应用导航配置
+            apps: [
+                { icon: '📊', name: 'Grafana', desc: '监控面板', url: 'http://localhost:3000' },
+                { icon: '🐳', name: 'Portainer', desc: '容器管理', url: 'http://localhost:9000' },
+                { icon: '🎬', name: 'Jellyfin', desc: '媒体中心', url: 'http://localhost:8096' },
+                { icon: '☁️', name: 'AList', desc: '网盘管理', url: 'http://localhost:5244' },
+                { icon: '🤖', name: '青龙', desc: '定时任务', url: 'http://localhost:5700' },
+                { icon: '🎵', name: 'Navidrome', desc: '音乐服务', url: 'http://localhost:4533' },
+                { icon: '🔄', name: 'Syncthing', desc: '文件同步', url: 'http://localhost:8384' }
+            ],
+            // 底部常用网址配置
+            favorites: [
+                { icon: '🐙', name: 'GitHub', url: 'https://github.com' },
+                { icon: '💻', name: 'Stack', url: 'https://stackoverflow.com' },
+                { icon: '🗣️', name: 'V2EX', url: 'https://www.v2ex.com' },
+                { icon: '❓', name: '知乎', url: 'https://www.zhihu.com' },
+                { icon: '📱', name: '少数派', url: 'https://sspai.com' },
+                { icon: '📺', name: 'B站', url: 'https://www.bilibili.com' },
+                { icon: '🔍', name: 'Google', url: 'https://www.google.com' },
+                { icon: '▶️', name: 'YouTube', url: 'https://www.youtube.com' }
+            ]
         };
-
-        // ==================== 功能代码 ====================
 
         // 渲染应用导航
         function renderApps() {
-            const grid = document.getElementById('apps-grid');
-            grid.innerHTML = appsConfig.map((app, index) => `
-                <a href="${app.url}" class="app-item" target="_blank" style="animation: fadeInUp 0.5s ease ${index * 0.05}s both;">
+            const appsGrid = document.querySelector('.apps-grid');
+            appsGrid.innerHTML = config.apps.map(app => `
+                <a href="${app.url}" class="app-item" target="_blank">
                     <div class="app-icon">${app.icon}</div>
                     <div class="app-name">${app.name}</div>
                     <div class="app-desc">${app.desc}</div>
@@ -691,16 +1019,20 @@
             `).join('');
         }
 
-        // 渲染底部导航
-        function renderBottomNav() {
-            const nav = document.getElementById('bottom-nav');
-            nav.innerHTML = bottomNavConfig.map(item => `
-                <a href="${item.url}" class="bottom-nav-item" target="_blank">
-                    <div class="bottom-nav-icon">${item.icon}</div>
-                    <span>${item.name}</span>
+        // 渲染底部收藏
+        function renderFavorites() {
+            const bottomFavorites = document.querySelector('.bottom-favorites');
+            bottomFavorites.innerHTML = config.favorites.map(fav => `
+                <a href="${fav.url}" class="bottom-favorite-item" target="_blank">
+                    <div class="bottom-favorite-icon">${fav.icon}</div>
+                    <span>${fav.name}</span>
                 </a>
             `).join('');
         }
+
+        // 初始化渲染
+        renderApps();
+        renderFavorites();
 
         // 更新时间
         function updateDateTime() {
@@ -734,214 +1066,281 @@
         document.getElementById('weather-item').addEventListener('click', getWeather);
         getWeather();
 
-        // 100句名言轮播 - 8秒
-        const quotes = [
-            { text: "生活中不缺少美，只是缺少发现美的眼睛。", author: "罗丹" },
-            { text: "Stay hungry, stay foolish.", author: "Steve Jobs" },
-            { text: "未经审视的人生不值得过。", author: "苏格拉底" },
-            { text: "千里之行，始于足下。", author: "老子" },
-            { text: "知之者不如好之者，好之者不如乐之者。", author: "孔子" },
-            { text: "简单是终极的复杂。", author: "达芬奇" },
-            { text: "代码是写给人看的，只是顺便能让机器运行。", author: "Donald Knuth" },
-            { text: "学而时习之，不亦说乎？", author: "孔子" },
-            { text: "To be or not to be, that is the question.", author: "莎士比亚" },
-            { text: "己所不欲，勿施于人。", author: "孔子" },
-            { text: "I think, therefore I am.", author: "笛卡尔" },
-            { text: "天行健，君子以自强不息。", author: "《周易》" },
-            { text: "路漫漫其修远兮，吾将上下而求索。", author: "屈原" },
-            { text: "不积跬步，无以至千里。", author: "荀子" },
-            { text: "纸上得来终觉浅，绝知此事要躬行。", author: "陆游" },
-            { text: "宝剑锋从磨砺出，梅花香自苦寒来。", author: "古诗" },
-            { text: "海纳百川，有容乃大。", author: "林则徐" },
-            { text: "业精于勤，荒于嬉。", author: "韩愈" },
-            { text: "非淡泊无以明志，非宁静无以致远。", author: "诸葛亮" },
-            { text: "工欲善其事，必先利其器。", author: "孔子" },
-            { text: "三人行，必有我师焉。", author: "孔子" },
-            { text: "学而不思则罔，思而不学则殆。", author: "孔子" },
-            { text: "温故而知新，可以为师矣。", author: "孔子" },
-            { text: "逝者如斯夫，不舍昼夜。", author: "孔子" },
-            { text: "君子坦荡荡，小人长戚戚。", author: "孔子" },
-            { text: "吾生也有涯，而知也无涯。", author: "庄子" },
-            { text: "穷则独善其身，达则兼济天下。", author: "孟子" },
-            { text: "生于忧患，死于安乐。", author: "孟子" },
-            { text: "得道者多助，失道者寡助。", author: "孟子" },
-            { text: "天时不如地利，地利不如人和。", author: "孟子" },
-            { text: "富贵不能淫，贫贱不能移。", author: "孟子" },
-            { text: "老吾老以及人之老。", author: "孟子" },
-            { text: "居安思危，思则有备。", author: "《左传》" },
-            { text: "人谁无过？过而能改，善莫大焉。", author: "《左传》" },
-            { text: "多行不义必自毙。", author: "《左传》" },
-            { text: "皮之不存，毛将焉附？", author: "《左传》" },
-            { text: "辅车相依，唇亡齿寒。", author: "《左传》" },
-            { text: "一鼓作气，再而衰，三而竭。", author: "《左传》" },
-            { text: "流水不腐，户枢不蠹。", author: "《吕氏春秋》" },
-            { text: "察己则可以知人。", author: "《吕氏春秋》" },
-            { text: "胜人者有力，自胜者强。", author: "老子" },
-            { text: "大直若屈，大巧若拙。", author: "老子" },
-            { text: "祸兮福之所倚，福兮祸之所伏。", author: "老子" },
-            { text: "合抱之木，生于毫末。", author: "老子" },
-            { text: "上善若水，水善利万物而不争。", author: "老子" },
-            { text: "知人者智，自知者明。", author: "老子" },
-            { text: "天下难事，必作于易。", author: "老子" },
-            { text: "慎终如始，则无败事。", author: "老子" },
-            { text: "相濡以沫，不如相忘于江湖。", author: "庄子" },
-            { text: "夏虫不可语冰。", author: "庄子" },
-            { text: "人生天地之间，若白驹过隙。", author: "庄子" },
-            { text: "君子之交淡若水。", author: "庄子" },
-            { text: "天地与我并生。", author: "庄子" },
-            { text: "至人无己，神人无功。", author: "庄子" },
-            { text: "临渊羡鱼，不如退而结网。", author: "《汉书》" },
-            { text: "绳锯木断，水滴石穿。", author: "《汉书》" },
-            { text: "水至清则无鱼。", author: "《汉书》" },
-            { text: "前车之覆，后车之鉴。", author: "《汉书》" },
-            { text: "百闻不如一见。", author: "《汉书》" },
-            { text: "失之毫厘，谬以千里。", author: "《汉书》" },
-            { text: "不入虎穴，焉得虎子。", author: "《汉书》" },
-            { text: "天下熙熙，皆为利来。", author: "《史记》" },
-            { text: "桃李不言，下自成蹊。", author: "《史记》" },
-            { text: "智者千虑，必有一失。", author: "《史记》" },
-            { text: "项庄舞剑，意在沛公。", author: "《史记》" },
-            { text: "人为刀俎，我为鱼肉。", author: "《史记》" },
-            { text: "运筹帷幄之中，决胜千里之外。", author: "《史记》" },
-            { text: "忠言逆耳利于行。", author: "《史记》" },
-            { text: "山重水复疑无路，柳暗花明又一村。", author: "陆游" },
-            { text: "问渠那得清如许？为有源头活水来。", author: "朱熹" },
-            { text: "少年易老学难成，一寸光阴不可轻。", author: "朱熹" },
-            { text: "读书破万卷，下笔如有神。", author: "杜甫" },
-            { text: "会当凌绝顶，一览众山小。", author: "杜甫" },
-            { text: "星垂平野阔，月涌大江流。", author: "杜甫" },
-            { text: "无边落木萧萧下，不尽长江滚滚来。", author: "杜甫" },
-            { text: "白日放歌须纵酒，青春作伴好还乡。", author: "杜甫" },
-            { text: "两个黄鹂鸣翠柳，一行白鹭上青天。", author: "杜甫" },
-            { text: "春江潮水连海平，海上明月共潮生。", author: "张若虚" },
-            { text: "人生代代无穷已，江月年年只相似。", author: "张若虚" },
-            { text: "海内存知己，天涯若比邻。", author: "王勃" },
-            { text: "落霞与孤鹜齐飞，秋水共长天一色。", author: "王勃" },
-            { text: "欲穷千里目，更上一层楼。", author: "王之涣" },
-            { text: "羌笛何须怨杨柳，春风不度玉门关。", author: "王之涣" },
-            { text: "采菊东篱下，悠然见南山。", author: "陶渊明" },
-            { text: "晨兴理荒秽，带月荷锄归。", author: "陶渊明" },
-            { text: "盛年不重来，一日难再晨。", author: "陶渊明" },
-            { text: "大江东去，浪淘尽，千古风流人物。", author: "苏轼" },
-            { text: "但愿人长久，千里共婵娟。", author: "苏轼" },
-            { text: "不识庐山真面目，只缘身在此山中。", author: "苏轼" },
-            { text: "竹外桃花三两枝，春江水暖鸭先知。", author: "苏轼" },
-            { text: "横看成岭侧成峰，远近高低各不同。", author: "苏轼" },
-            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
-            { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
-            { text: "Life is what happens when you're busy making other plans.", author: "John Lennon" },
-            { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" }
-        ];
+        // 名言随机显示 - 从quotes.txt文件加载
+        let quotes = [];
+        let quoteInterval = null;
+        const QUOTE_SWITCH_INTERVAL = 8000; // 8秒切换一次
 
-        let currentQuoteIndex = 0;
-        let progressInterval;
-        const QUOTE_INTERVAL = 8000; // 8秒
+        // 字体风格配置（10种中文字体）
+        const FONT_STYLES = ['style-1', 'style-2', 'style-3', 'style-4', 'style-5', 'style-6', 'style-7', 'style-8', 'style-9', 'style-10'];
+        
+        // 颜色配置（10种亮色系，确保与黑色背景反差大）
+        const COLORS = ['color-1', 'color-2', 'color-3', 'color-4', 'color-5', 'color-6', 'color-7', 'color-8', 'color-9', 'color-10'];
 
-        function initQuoteDots() {
-            const dotsContainer = document.getElementById('quote-dots');
-            dotsContainer.innerHTML = '';
-            for (let i = 0; i < 5; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'quote-dot' + (i === 0 ? ' active' : '');
-                dot.addEventListener('click', () => {
-                    currentQuoteIndex = Math.floor(Math.random() * quotes.length);
-                    showQuote(currentQuoteIndex);
-                    resetProgress();
-                });
-                dotsContainer.appendChild(dot);
+        // 从文本文件加载名言
+        async function loadQuotes() {
+            try {
+                const response = await fetch('quotes.txt');
+                if (!response.ok) {
+                    throw new Error('无法加载名言文件');
+                }
+                const text = await response.text();
+                // 解析每行：名言内容|作者名
+                quotes = text.trim().split('\n').map(line => {
+                    const parts = line.split('|');
+                    return {
+                        text: parts[0].trim(),
+                        author: parts[1] ? parts[1].trim() : '佚名'
+                    };
+                }).filter(q => q.text);
+                
+                // 加载完成后初始化
+                showRandomQuote();
+                startQuoteRotation();
+            } catch (error) {
+                console.error('加载名言失败:', error);
+                // 使用默认名言作为备用
+                quotes = [
+                    { text: "生活中不缺少美，只是缺少发现美的眼睛。", author: "罗丹" },
+                    { text: "千里之行，始于足下。", author: "老子" },
+                    { text: "学而时习之，不亦说乎？", author: "孔子" }
+                ];
+                showRandomQuote();
+                startQuoteRotation();
             }
         }
 
-        function showQuote(index) {
+        // 获取随机字体风格
+        function getRandomFontStyle() {
+            return FONT_STYLES[Math.floor(Math.random() * FONT_STYLES.length)];
+        }
+
+        // 获取随机颜色
+        function getRandomColor() {
+            return COLORS[Math.floor(Math.random() * COLORS.length)];
+        }
+
+        // 显示随机名言
+        function showRandomQuote() {
+            if (quotes.length === 0) return;
+            
             const quoteText = document.getElementById('quote-text');
             const quoteAuthor = document.getElementById('quote-author');
-            const dots = document.querySelectorAll('.quote-dot');
             
+            // 随机选择一个名言
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            const quote = quotes[randomIndex];
+            const fontStyle = getRandomFontStyle();
+            const color = getRandomColor();
+            
+            // 移除所有字体风格类和颜色类
+            FONT_STYLES.forEach(style => quoteText.classList.remove(style));
+            COLORS.forEach(c => quoteText.classList.remove(c));
+            
+            // 淡出动画
             quoteText.style.opacity = '0';
+            quoteText.style.transform = 'translateY(20px) scale(0.95)';
             quoteAuthor.style.opacity = '0';
+            quoteAuthor.style.transform = 'translateY(10px)';
             
             setTimeout(() => {
-                const quote = quotes[index];
+                // 更新内容
                 quoteText.textContent = quote.text;
                 quoteAuthor.textContent = `— ${quote.author}`;
                 
-                quoteText.style.opacity = '1';
-                quoteAuthor.style.opacity = '1';
+                // 添加随机字体风格和颜色
+                quoteText.classList.add(fontStyle);
+                quoteText.classList.add(color);
                 
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === index % 5);
-                });
-            }, 300);
+                // 淡入动画
+                quoteText.style.opacity = '1';
+                quoteText.style.transform = 'translateY(0) scale(1)';
+                quoteAuthor.style.opacity = '1';
+                quoteAuthor.style.transform = 'translateY(0)';
+            }, 400);
         }
 
-        function updateProgress() {
-            const progress = document.getElementById('quote-progress');
-            let width = 0;
-            const step = 100 / (QUOTE_INTERVAL / 100);
-            
-            progressInterval = setInterval(() => {
-                width += step;
-                if (width >= 100) {
-                    width = 0;
-                    currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
-                    showQuote(currentQuoteIndex);
+        // 启动名言轮换
+        function startQuoteRotation() {
+            if (quoteInterval) {
+                clearInterval(quoteInterval);
+            }
+            quoteInterval = setInterval(() => {
+                if (!document.hidden) {
+                    showRandomQuote();
                 }
-                progress.style.width = width + '%';
-            }, 100);
+            }, QUOTE_SWITCH_INTERVAL);
         }
 
-        function resetProgress() {
-            clearInterval(progressInterval);
-            document.getElementById('quote-progress').style.width = '0%';
-            updateProgress();
+        // 停止名言轮换
+        function stopQuoteRotation() {
+            if (quoteInterval) {
+                clearInterval(quoteInterval);
+                quoteInterval = null;
+            }
         }
 
-        initQuoteDots();
-        showQuote(0);
-        updateProgress();
+        // 点击名言区域立即切换
+        document.querySelector('.quote-container').addEventListener('click', () => {
+            showRandomQuote();
+        });
 
-        // 摄影作品
+        // 页面可见性变化时控制轮换
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopQuoteRotation();
+            } else {
+                startQuoteRotation();
+            }
+        });
+
+        // 加载名言并初始化
+        loadQuotes();
+
+        // 摄影作品 - 使用示例图片
         const galleryImages = {
             landscape: [
                 { url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=750&fit=crop', title: '阿尔卑斯山', desc: '壮丽的雪山日出' },
                 { url: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=600&h=750&fit=crop', title: '瀑布森林', desc: '隐秘的自然奇观' },
-                { url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=750&fit=crop', title: '迷雾山谷', desc: '清晨的宁静时刻' }
+                { url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=750&fit=crop', title: '迷雾山谷', desc: '清晨的宁静时刻' },
+                { url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=750&fit=crop', title: '日出山峰', desc: '金色的光芒' },
+                { url: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=600&h=750&fit=crop', title: '森林小径', desc: '阳光透过树叶' },
+                { url: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&h=750&fit=crop', title: '海岸风光', desc: '碧海蓝天' },
+                { url: 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&h=750&fit=crop', title: '山脉倒影', desc: '湖光山色' },
+                { url: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&h=750&fit=crop', title: '草原风光', desc: '广阔无垠' },
+                { url: 'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=600&h=750&fit=crop', title: '云海日出', desc: '壮观的景象' }
             ],
             portrait: [
                 { url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&h=750&fit=crop', title: '光影肖像', desc: '自然光下的优雅' },
                 { url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=750&fit=crop', title: '城市女孩', desc: '都市时尚风格' },
-                { url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=750&fit=crop', title: '阳光少年', desc: '青春的笑容' }
+                { url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=750&fit=crop', title: '阳光少年', desc: '青春的笑容' },
+                { url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=750&fit=crop', title: '微笑女孩', desc: '温暖的笑容' },
+                { url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=750&fit=crop', title: '成熟男士', desc: '自信的眼神' },
+                { url: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=750&fit=crop', title: '文艺青年', desc: '知性的气质' },
+                { url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=750&fit=crop', title: '街头肖像', desc: '城市的面孔' },
+                { url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&h=750&fit=crop', title: '黑白色调', desc: '经典的魅力' },
+                { url: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&h=750&fit=crop', title: '时尚模特', desc: '潮流的风向' }
             ],
             humanity: [
                 { url: 'https://images.unsplash.com/photo-1516826957135-700dedea698c?w=600&h=750&fit=crop', title: '老街巷弄', desc: '岁月的故事' },
                 { url: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=600&h=750&fit=crop', title: '市集热闹', desc: '生活的烟火气' },
-                { url: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=750&fit=crop', title: '工匠手艺', desc: '传统的传承' }
+                { url: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=750&fit=crop', title: '工匠手艺', desc: '传统的传承' },
+                { url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&h=750&fit=crop', title: '家庭时光', desc: '温馨的时刻' },
+                { url: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=600&h=750&fit=crop', title: '街头艺人', desc: '才华的展示' },
+                { url: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=600&h=750&fit=crop', title: '节庆活动', desc: '欢乐的气氛' },
+                { url: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=600&h=750&fit=crop', title: '工作场景', desc: '忙碌的身影' },
+                { url: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=600&h=750&fit=crop', title: '儿童嬉戏', desc: '天真的笑容' },
+                { url: 'https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=600&h=750&fit=crop', title: '友谊时刻', desc: '真挚的情谊' }
             ],
             other: [
                 { url: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=600&h=750&fit=crop', title: '霓虹都市', desc: '赛博朋克之夜' },
                 { url: 'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=600&h=750&fit=crop', title: '极简建筑', desc: '线条与光影' },
-                { url: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=600&h=750&fit=crop', title: '抽象色彩', desc: '艺术的碰撞' }
+                { url: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=600&h=750&fit=crop', title: '抽象色彩', desc: '艺术的碰撞' },
+                { url: 'https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?w=600&h=750&fit=crop', title: '微距世界', desc: '细节的奥秘' },
+                { url: 'https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?w=600&h=750&fit=crop', title: '几何图形', desc: '数学之美' },
+                { url: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=600&h=750&fit=crop', title: '美食摄影', desc: '视觉的盛宴' },
+                { url: 'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=600&h=750&fit=crop', title: '动物世界', desc: '自然的生灵' },
+                { url: 'https://images.unsplash.com/photo-1518173946687-a4c036bc3c95?w=600&h=750&fit=crop', title: '夜景摄影', desc: '城市的灯火' },
+                { url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=750&fit=crop', title: '水下世界', desc: '深蓝的神秘' }
             ]
         };
 
         let currentGalleryCategory = 'landscape';
+        let galleryRefreshInterval = null;
+        let currentGalleryImages = [];
+
+        // 从数组中随机选取3个不重复的元素
+        function getRandomImages(images, count = 3) {
+            const shuffled = [...images].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        // 预加载图片
+        function preloadImage(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(url);
+                img.onerror = reject;
+                img.src = url;
+            });
+        }
+
+        // 平滑更新画廊（带淡入淡出效果）
+        async function updateGallerySmooth(category) {
+            const grid = document.getElementById('gallery-grid');
+            const items = grid.querySelectorAll('.gallery-item');
+            const newImages = getRandomImages(galleryImages[category]);
+            
+            // 预加载所有新图片
+            await Promise.all(newImages.map(img => preloadImage(img.url)));
+            
+            // 淡出当前图片
+            items.forEach(item => {
+                const img = item.querySelector('img');
+                if (img) {
+                    img.classList.add('fade-out');
+                    img.classList.remove('fade-in');
+                }
+            });
+            
+            // 等待淡出完成
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
+            // 更新图片和文字
+            items.forEach((item, index) => {
+                const img = item.querySelector('img');
+                const title = item.querySelector('.gallery-title');
+                const desc = item.querySelector('.gallery-desc');
+                
+                if (newImages[index]) {
+                    if (img) {
+                        img.src = newImages[index].url;
+                        img.alt = newImages[index].title;
+                        img.classList.remove('fade-out');
+                        img.classList.add('fade-in');
+                    }
+                    if (title) title.textContent = newImages[index].title;
+                    if (desc) desc.textContent = newImages[index].desc;
+                }
+            });
+            
+            currentGalleryImages = newImages;
+        }
 
         function renderGallery(category) {
             const grid = document.getElementById('gallery-grid');
-            const images = galleryImages[category];
+            const images = getRandomImages(galleryImages[category]);
+            currentGalleryImages = images;
             
             grid.innerHTML = images.map((img, index) => `
                 <div class="gallery-item" style="animation: fadeInUp 0.6s ease ${index * 0.15}s both;">
-                    <img src="${img.url}" alt="${img.title}" loading="lazy">
+                    <img src="${img.url}" alt="${img.title}" loading="lazy" class="fade-in">
                     <div class="gallery-overlay">
                         <div class="gallery-title">${img.title}</div>
                         <div class="gallery-desc">${img.desc}</div>
                     </div>
                 </div>
             `).join('');
-            
-            // 更新查看更多链接
-            document.querySelector('.gallery-more-link').href = galleryMoreLinks[category];
+        }
+
+        // 启动自动刷新
+        function startGalleryAutoRefresh() {
+            if (galleryRefreshInterval) {
+                clearInterval(galleryRefreshInterval);
+            }
+            galleryRefreshInterval = setInterval(() => {
+                if (!document.hidden) {
+                    updateGallerySmooth(currentGalleryCategory);
+                }
+            }, 10000);
+        }
+
+        // 停止自动刷新
+        function stopGalleryAutoRefresh() {
+            if (galleryRefreshInterval) {
+                clearInterval(galleryRefreshInterval);
+                galleryRefreshInterval = null;
+            }
         }
 
         document.querySelectorAll('.gallery-tab').forEach(tab => {
@@ -950,7 +1349,22 @@
                 tab.classList.add('active');
                 currentGalleryCategory = tab.dataset.category;
                 renderGallery(currentGalleryCategory);
+                startGalleryAutoRefresh();
             });
+        });
+
+        // 页面可见性变化时控制刷新
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopGalleryAutoRefresh();
+            } else {
+                startGalleryAutoRefresh();
+            }
+        });
+
+        // 滚动提示点击事件
+        document.querySelector('.scroll-hint').addEventListener('click', () => {
+            document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
         });
 
         // 音乐播放器
@@ -1048,9 +1462,8 @@
         updateMusicControlUI();
 
         // 初始化
-        renderApps();
-        renderBottomNav();
         renderGallery('landscape');
+        startGalleryAutoRefresh();
     </script>
 </body>
 </html>
