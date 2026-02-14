@@ -612,78 +612,85 @@
             object-fit: cover;
         }
 
-        /* 音乐上传区域 */
-        .music-upload-box {
-            margin-bottom: 20px;
+        /* 音乐上传区域 - 紧凑版 */
+        .music-upload-compact {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 122, 255, 0.03);
+            border: 1px solid rgba(0, 122, 255, 0.15);
+            border-radius: 10px;
         }
 
-        .upload-drop-zone {
-            background: rgba(0, 122, 255, 0.05);
-            border: 2px dashed rgba(0, 122, 255, 0.3);
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
+        .upload-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
-        .upload-drop-zone:hover {
-            border-color: rgba(0, 122, 255, 0.6);
-            background: rgba(0, 122, 255, 0.08);
-        }
-
-        .upload-drop-zone.drag-over {
-            border-color: #007AFF;
-            background: rgba(0, 122, 255, 0.15);
-        }
-
-        .upload-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-
-        .upload-text {
-            font-size: 16px;
+        .select-file-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            padding: 8px 16px;
             color: var(--text-primary);
-            margin-bottom: 8px;
-        }
-
-        .upload-types {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.4);
-            margin-bottom: 15px;
-        }
-
-        .upload-select-btn {
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.3), rgba(0, 212, 255, 0.2));
-            border: 1px solid rgba(0, 122, 255, 0.4);
-            border-radius: 8px;
-            padding: 10px 24px;
-            color: white;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
-        .upload-select-btn:hover {
+        .select-file-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(0, 122, 255, 0.4);
+        }
+
+        .selected-files {
+            flex: 1;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            min-width: 100px;
+        }
+
+        .upload-confirm-btn {
             background: linear-gradient(135deg, rgba(0, 122, 255, 0.4), rgba(0, 212, 255, 0.3));
+            border: 1px solid rgba(0, 122, 255, 0.5);
+            border-radius: 6px;
+            padding: 8px 16px;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .upload-confirm-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.5), rgba(0, 212, 255, 0.4));
             transform: translateY(-1px);
         }
 
-        .upload-progress {
-            margin-top: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 15px;
+        .upload-confirm-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        .progress-bar {
+        .upload-types-compact {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.3);
+            margin-top: 8px;
+        }
+
+        .upload-progress-compact {
+            margin-top: 10px;
+        }
+
+        .progress-bar-compact {
             width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 2px;
             overflow: hidden;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
 
         .progress-fill {
@@ -1661,24 +1668,28 @@
                 <!-- 音乐列表管理 -->
                 <div class="admin-section" id="tab-music">
                     <h3>🎵 音乐管理</h3>
-                    <div class="music-upload-box">
+                    <div id="music-list-editor"></div>
+                    
+                    <!-- 上传区域 -->
+                    <div class="music-upload-compact" id="music-upload-area">
                         <input type="file" id="music-file-input" accept="audio/*" multiple style="display: none;">
-                        <div class="upload-drop-zone" id="music-drop-zone">
-                            <div class="upload-icon">📁</div>
-                            <div class="upload-text">点击或拖拽音乐文件到此处</div>
-                            <div class="upload-types">支持 MP3, WAV, OGG, M4A, FLAC 格式</div>
-                            <button type="button" class="upload-select-btn" onclick="document.getElementById('music-file-input').click()">
-                                选择文件
+                        <div class="upload-row">
+                            <button type="button" class="select-file-btn" onclick="document.getElementById('music-file-input').click()">
+                                📁 选择文件
+                            </button>
+                            <span class="selected-files" id="selected-files-text">未选择文件</span>
+                            <button type="button" class="upload-confirm-btn" id="upload-confirm-btn" disabled>
+                                ⬆️ 上传到列表
                             </button>
                         </div>
-                        <div class="upload-progress" id="upload-progress" style="display: none;">
-                            <div class="progress-bar">
+                        <div class="upload-types-compact">支持格式: MP3, WAV, OGG, M4A, FLAC</div>
+                        <div class="upload-progress-compact" id="upload-progress" style="display: none;">
+                            <div class="progress-bar-compact">
                                 <div class="progress-fill" id="progress-fill"></div>
                             </div>
-                            <div class="progress-text" id="progress-text">准备上传...</div>
+                            <div class="progress-text" id="progress-text"></div>
                         </div>
                     </div>
-                    <div id="music-list-editor"></div>
                 </div>
                 
                 <!-- 每日一言管理 -->
@@ -2259,10 +2270,15 @@
         
         // 音乐文件上传功能
         const musicFileInput = document.getElementById('music-file-input');
-        const musicDropZone = document.getElementById('music-drop-zone');
+        const musicUploadArea = document.getElementById('music-upload-area');
         const uploadProgress = document.getElementById('upload-progress');
         const progressFill = document.getElementById('progress-fill');
         const progressText = document.getElementById('progress-text');
+        const selectedFilesText = document.getElementById('selected-files-text');
+        const uploadConfirmBtn = document.getElementById('upload-confirm-btn');
+        
+        // 暂存选中的文件
+        let pendingMusicFiles = [];
         
         // 支持的音频格式
         const ALLOWED_AUDIO_TYPES = [
@@ -2290,95 +2306,125 @@
             return false;
         }
         
-        // 处理文件上传
-        function handleMusicFiles(files) {
-            const validFiles = [];
-            const invalidFiles = [];
-            
-            for (const file of files) {
-                if (isAudioFile(file)) {
-                    validFiles.push(file);
+        // 更新选择文件显示
+        function updateSelectedFilesDisplay() {
+            if (pendingMusicFiles.length === 0) {
+                selectedFilesText.textContent = '未选择文件';
+                uploadConfirmBtn.disabled = true;
+            } else {
+                const validCount = pendingMusicFiles.filter(f => f.isValid).length;
+                const invalidCount = pendingMusicFiles.length - validCount;
+                if (invalidCount > 0) {
+                    selectedFilesText.textContent = `已选择 ${validCount} 个有效文件 (${invalidCount} 个无效)`;
                 } else {
-                    invalidFiles.push(file.name);
+                    selectedFilesText.textContent = `已选择 ${validCount} 个文件`;
                 }
+                uploadConfirmBtn.disabled = validCount === 0;
+            }
+        }
+        
+        // 处理文件选择（仅暂存，不上传）
+        function handleFileSelection(files) {
+            const newFiles = Array.from(files).map(file => ({
+                file: file,
+                isValid: isAudioFile(file),
+                name: file.name
+            }));
+            
+            // 过滤掉重复文件
+            const existingNames = new Set(pendingMusicFiles.map(f => f.name));
+            const uniqueFiles = newFiles.filter(f => !existingNames.has(f.name));
+            
+            if (uniqueFiles.length < newFiles.length) {
+                const duplicates = newFiles.filter(f => existingNames.has(f.name)).map(f => f.name);
+                alert(`以下文件已存在，已跳过：\n${duplicates.join('\n')}`);
             }
             
-            // 显示无效文件提示
+            // 显示无效文件警告
+            const invalidFiles = uniqueFiles.filter(f => !f.isValid);
             if (invalidFiles.length > 0) {
-                alert(`以下文件不是有效的音乐文件，已过滤：\n${invalidFiles.join('\n')}\n\n支持格式：MP3, WAV, OGG, M4A, FLAC`);
+                alert(`以下文件不是有效的音乐文件：\n${invalidFiles.map(f => f.name).join('\n')}\n\n支持格式：MP3, WAV, OGG, M4A, FLAC`);
             }
+            
+            pendingMusicFiles = pendingMusicFiles.concat(uniqueFiles);
+            updateSelectedFilesDisplay();
+        }
+        
+        // 执行上传（添加到列表）
+        function executeUpload() {
+            const validFiles = pendingMusicFiles.filter(f => f.isValid);
             
             if (validFiles.length === 0) return;
             
             // 显示上传进度
             uploadProgress.style.display = 'block';
             progressFill.style.width = '0%';
-            progressText.textContent = `准备上传 ${validFiles.length} 个文件...`;
+            progressText.textContent = `准备添加 ${validFiles.length} 个文件...`;
             
-            // 模拟上传过程
             let currentIndex = 0;
             const totalFiles = validFiles.length;
             
-            function uploadNext() {
+            function addNext() {
                 if (currentIndex >= totalFiles) {
-                    // 上传完成
+                    // 添加完成
                     setTimeout(() => {
                         uploadProgress.style.display = 'none';
-                        alert(`成功添加 ${totalFiles} 首音乐到播放列表！`);
+                        progressFill.style.width = '0%';
+                        pendingMusicFiles = [];
+                        updateSelectedFilesDisplay();
+                        musicFileInput.value = '';
                         renderMusicList();
                     }, 500);
                     return;
                 }
                 
-                const file = validFiles[currentIndex];
+                const fileInfo = validFiles[currentIndex];
                 const progress = ((currentIndex + 1) / totalFiles) * 100;
                 
                 progressFill.style.width = progress + '%';
-                progressText.textContent = `正在添加: ${file.name} (${currentIndex + 1}/${totalFiles})`;
+                progressText.textContent = `正在添加: ${fileInfo.name} (${currentIndex + 1}/${totalFiles})`;
                 
                 // 添加到配置
-                config.music.push(`music/${file.name}`);
+                config.music.push(`music/${fileInfo.name}`);
                 
                 currentIndex++;
-                setTimeout(uploadNext, 300); // 模拟上传延迟
+                setTimeout(addNext, 200);
             }
             
-            uploadNext();
+            addNext();
         }
         
         // 文件选择事件
         musicFileInput.addEventListener('change', (e) => {
             if (e.target.files && e.target.files.length > 0) {
-                handleMusicFiles(Array.from(e.target.files));
-                e.target.value = ''; // 清空选择，允许重复选择同一文件
+                handleFileSelection(e.target.files);
             }
         });
         
+        // 上传按钮事件
+        uploadConfirmBtn.addEventListener('click', executeUpload);
+        
         // 拖拽事件
-        musicDropZone.addEventListener('click', () => {
-            musicFileInput.click();
-        });
-        
-        musicDropZone.addEventListener('dragover', (e) => {
+        musicUploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            musicDropZone.classList.add('drag-over');
+            musicUploadArea.style.borderColor = '#007AFF';
         });
         
-        musicDropZone.addEventListener('dragleave', (e) => {
+        musicUploadArea.addEventListener('dragleave', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            musicDropZone.classList.remove('drag-over');
+            musicUploadArea.style.borderColor = 'rgba(0, 122, 255, 0.15)';
         });
         
-        musicDropZone.addEventListener('drop', (e) => {
+        musicUploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            musicDropZone.classList.remove('drag-over');
+            musicUploadArea.style.borderColor = 'rgba(0, 122, 255, 0.15)';
             
             const files = Array.from(e.dataTransfer.files);
             if (files.length > 0) {
-                handleMusicFiles(files);
+                handleFileSelection(files);
             }
         });
         
