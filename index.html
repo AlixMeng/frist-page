@@ -116,38 +116,79 @@
             cursor: pointer;
         }
 
-        /* 主内容区 */
+        /* 主内容区 - 全屏滚动 */
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            scroll-behavior: smooth;
+        }
+
         .main-content {
-            padding: 80px 30px 40px;
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .section-full {
+            height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 15px 40px;
             max-width: 1200px;
             margin: 0 auto;
+            position: relative;
         }
 
-        /* Hero */
-        .hero {
+        .section-full:last-child {
+            margin-bottom: 80px;
+        }
+
+        /* 滚动提示 */
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
             text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .hero h1 {
-            font-size: 64px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, #FFFFFF 0%, #007AFF 50%, #00D4FF 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -2px;
-        }
-
-        .hero p {
-            font-size: 18px;
             color: var(--text-secondary);
-            font-weight: 300;
+            font-size: 13px;
+            animation: bounce 2s infinite;
+            cursor: pointer;
         }
 
-        /* 名言轮播 */
+        .scroll-hint span {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .scroll-arrow {
+            font-size: 20px;
+            animation: bounceArrow 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        @keyframes bounceArrow {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(10px); }
+            60% { transform: translateY(5px); }
+        }
+
+        /* 名言轮播 - 全屏居中 */
         .quote-section {
-            margin-bottom: 60px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 0;
         }
 
         .quote-container {
@@ -233,9 +274,11 @@
             opacity: 0.5;
         }
 
-        /* 摄影作品 */
+        /* 摄影作品 - 全屏布局 */
         .gallery-section {
-            margin-bottom: 60px;
+            margin-bottom: 0;
+            justify-content: flex-start;
+            padding-top: 100px;
         }
 
         .section-header {
@@ -415,9 +458,10 @@
             color: white;
         }
 
-        /* 应用导航 */
+        /* 应用导航 - 全屏布局 */
         .apps-section {
-            margin-bottom: 40px;
+            margin-bottom: 0;
+            justify-content: center;
         }
 
         .apps-grid {
@@ -575,24 +619,26 @@
 
     <!-- 主内容 -->
     <main class="main-content">
-        <!-- Hero -->
-        <section class="hero">
-            <h1>Alix go</h1>
-            <p>探索技术的边界，记录生活的美好</p>
-        </section>
-
-        <!-- 名言轮播 -->
-        <section class="quote-section">
-            <div class="quote-container">
-                <div class="quote-text" id="quote-text">生活中不缺少美，只是缺少发现美的眼睛。</div>
-                <div class="quote-author" id="quote-author">— 罗丹</div>
-                <div class="quote-progress" id="quote-progress"></div>
+        <!-- 第一屏：每日一言 -->
+        <section class="section-full">
+            <!-- 名言轮播 -->
+            <div class="quote-section">
+                <div class="quote-container">
+                    <div class="quote-text" id="quote-text">生活中不缺少美，只是缺少发现美的眼睛。</div>
+                    <div class="quote-author" id="quote-author">— 罗丹</div>
+                    <div class="quote-progress" id="quote-progress"></div>
+                </div>
+                <div class="quote-dots" id="quote-dots"></div>
             </div>
-            <div class="quote-dots" id="quote-dots"></div>
+            <!-- 滚动提示 -->
+            <div class="scroll-hint">
+                <span>向下滚动</span>
+                <div class="scroll-arrow">↓</div>
+            </div>
         </section>
 
-        <!-- 摄影作品 -->
-        <section id="gallery" class="gallery-section">
+        <!-- 第二屏：摄影作品 -->
+        <section id="gallery" class="gallery-section section-full">
             <div class="section-header">
                 <h2 class="section-title">摄影作品</h2>
                 <div class="gallery-tabs">
@@ -608,8 +654,8 @@
             </div>
         </section>
 
-        <!-- 应用导航 -->
-        <section id="apps" class="apps-section">
+        <!-- 第三屏：应用导航 -->
+        <section id="apps" class="apps-section section-full">
             <h2 class="section-title">应用导航</h2>
             <div class="apps-grid"></div>
         </section>
@@ -1033,6 +1079,11 @@
             } else {
                 startGalleryAutoRefresh();
             }
+        });
+
+        // 滚动提示点击事件
+        document.querySelector('.scroll-hint').addEventListener('click', () => {
+            document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
         });
 
         // 初始化
