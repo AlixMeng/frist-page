@@ -181,7 +181,7 @@
             60% { transform: translateY(5px); }
         }
 
-        /* 名言轮播 - 全屏居中 */
+        /* 名言轮播 - 全屏居中 - 极简优雅 */
         .quote-section {
             flex: 1;
             display: flex;
@@ -189,79 +189,124 @@
             justify-content: center;
             align-items: center;
             margin-bottom: 0;
+            padding: 0 20px;
         }
 
         .quote-container {
-            max-width: 900px;
+            max-width: 850px;
+            width: 100%;
             margin: 0 auto;
-            padding: 50px 60px;
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(0, 212, 255, 0.05));
-            border: 1px solid rgba(0, 122, 255, 0.2);
-            border-radius: 24px;
+            padding: 60px 50px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.08) 0%, rgba(0, 212, 255, 0.03) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 32px;
             position: relative;
             overflow: hidden;
             text-align: center;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .quote-container::before,
         .quote-container::after {
-            content: '"';
+            content: '';
             position: absolute;
-            font-size: 120px;
-            color: rgba(0, 122, 255, 0.1);
-            font-family: Georgia, serif;
-            line-height: 1;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 122, 255, 0.15) 0%, transparent 70%);
+            pointer-events: none;
         }
 
         .quote-container::before {
-            top: 10px;
-            left: 30px;
+            top: -30px;
+            left: -30px;
         }
 
         .quote-container::after {
-            bottom: 10px;
-            right: 30px;
-            transform: rotate(180deg);
+            bottom: -30px;
+            right: -30px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+        }
+
+        .quote-icon {
+            font-size: 48px;
+            color: rgba(0, 122, 255, 0.4);
+            margin-bottom: 20px;
+            line-height: 1;
         }
 
         .quote-text {
-            font-size: 26px;
-            font-weight: 300;
-            line-height: 1.7;
-            margin-bottom: 20px;
-            min-height: 90px;
+            font-size: 28px;
+            font-weight: 400;
+            line-height: 1.8;
+            margin-bottom: 24px;
+            min-height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            color: rgba(255, 255, 255, 0.95);
+            letter-spacing: 0.3px;
         }
 
         .quote-author {
-            font-size: 15px;
-            color: var(--primary-blue);
+            font-size: 14px;
+            color: rgba(0, 122, 255, 0.8);
             font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+            padding: 0 20px;
+        }
+
+        .quote-author::before,
+        .quote-author::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 122, 255, 0.4));
+        }
+
+        .quote-author::before {
+            right: 100%;
+        }
+
+        .quote-author::after {
+            left: 100%;
+            background: linear-gradient(90deg, rgba(0, 122, 255, 0.4), transparent);
         }
 
         .quote-dots {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            margin-top: 24px;
+            gap: 6px;
+            margin-top: 28px;
         }
 
         .quote-dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .quote-dot:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.2);
         }
 
         .quote-dot.active {
-            background: var(--primary-blue);
-            width: 24px;
-            border-radius: 4px;
+            background: linear-gradient(135deg, var(--primary-blue), #00D4FF);
+            width: 20px;
+            border-radius: 3px;
         }
 
         .quote-progress {
@@ -277,45 +322,46 @@
         /* 摄影作品 - 全屏布局 */
         .gallery-section {
             margin-bottom: 0;
-            justify-content: flex-start;
-            padding-top: 100px;
+            justify-content: center;
+            padding: 80px 15px 40px;
         }
 
         .section-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            padding: 0 5px;
         }
 
         .section-title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .section-title::before {
             content: '';
             width: 4px;
-            height: 24px;
+            height: 22px;
             background: linear-gradient(180deg, var(--primary-blue), #00D4FF);
             border-radius: 2px;
         }
 
         .gallery-tabs {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .gallery-tab {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
-            padding: 8px 18px;
-            color: var(--text-secondary);
-            font-size: 13px;
+            padding: 6px 14px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -335,8 +381,8 @@
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 24px;
+            gap: 16px;
+            margin-bottom: 20px;
         }
 
         @media (max-width: 900px) {
@@ -364,25 +410,22 @@
             .gallery-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .hero h1 {
-                font-size: 42px;
-            }
         }
 
         .gallery-item {
             position: relative;
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
             aspect-ratio: 4/5;
             cursor: pointer;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             background: linear-gradient(135deg, #1a1a2e, #16213e);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .gallery-item:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 40px rgba(0, 122, 255, 0.2);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 122, 255, 0.25);
         }
 
         .gallery-item img {
@@ -414,29 +457,33 @@
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 30px 20px 20px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            padding: 25px 16px 16px;
+            background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.9) 100%);
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .gallery-item:hover .gallery-overlay {
             opacity: 1;
+            transform: translateY(0);
         }
 
         .gallery-title {
-            font-size: 17px;
+            font-size: 15px;
             font-weight: 600;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
+            color: rgba(255, 255, 255, 0.95);
         }
 
         .gallery-desc {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .gallery-more {
             text-align: center;
+            margin-top: 5px;
         }
 
         .gallery-more-link {
@@ -466,110 +513,158 @@
 
         .apps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 700px) {
+            .apps-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .apps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .app-item {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
-            padding: 24px 16px;
+            padding: 20px 12px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
             color: inherit;
             display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0, 122, 255, 0.5), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .app-item:hover {
-            transform: translateY(-4px);
-            background: rgba(0, 122, 255, 0.1);
-            border-color: rgba(0, 122, 255, 0.3);
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1) 0%, rgba(0, 122, 255, 0.05) 100%);
+            border-color: rgba(0, 122, 255, 0.2);
+            box-shadow: 0 8px 30px rgba(0, 122, 255, 0.15);
+        }
+
+        .app-item:hover::before {
+            opacity: 1;
         }
 
         .app-icon {
-            width: 52px;
-            height: 52px;
-            background: linear-gradient(135deg, var(--primary-blue), #00D4FF);
-            border-radius: 14px;
-            margin: 0 auto 14px;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.8), rgba(0, 212, 255, 0.8));
+            border-radius: 12px;
+            margin: 0 auto 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .app-item:hover .app-icon {
+            transform: scale(1.1);
         }
 
         .app-name {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .app-desc {
-            font-size: 11px;
-            color: var(--text-secondary);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
         }
 
-        /* 底部浮动常用网址 */
+        /* 底部浮动常用网址 - 精致胶囊设计 */
         .bottom-favorites {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 70px;
-            background: rgba(0, 0, 0, 0.85);
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 56px;
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(20px);
-            border-top: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            padding: 0 20px;
+            gap: 4px;
+            padding: 0 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
 
         .bottom-favorite-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 16px;
-            border-radius: 12px;
-            color: var(--text-secondary);
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            font-size: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
         .bottom-favorite-item:hover {
-            background: var(--glass-bg);
-            color: var(--text-primary);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.95);
+            transform: translateY(-2px) scale(1.1);
+        }
+
+        .bottom-favorite-item span {
+            display: none;
         }
 
         .bottom-favorite-icon {
-            width: 28px;
-            height: 28px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 20px;
         }
 
         @media (max-width: 768px) {
             .bottom-favorites {
-                gap: 4px;
-                padding: 0 10px;
+                padding: 0 8px;
+                gap: 2px;
             }
             
             .bottom-favorite-item {
-                padding: 8px 10px;
-                font-size: 11px;
+                width: 40px;
+                height: 40px;
             }
+            
+            .bottom-favorite-icon {
+                font-size: 18px;
+            }
+        }
             
             .bottom-favorite-item span:last-child {
                 display: none;
@@ -624,8 +719,9 @@
             <!-- 名言轮播 -->
             <div class="quote-section">
                 <div class="quote-container">
+                    <div class="quote-icon">❝</div>
                     <div class="quote-text" id="quote-text">生活中不缺少美，只是缺少发现美的眼睛。</div>
-                    <div class="quote-author" id="quote-author">— 罗丹</div>
+                    <div class="quote-author" id="quote-author">罗丹</div>
                     <div class="quote-progress" id="quote-progress"></div>
                 </div>
                 <div class="quote-dots" id="quote-dots"></div>
