@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alix go - 个人服务器</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@300;400;500;600;700&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-blue: #007AFF;
@@ -296,64 +296,122 @@
             opacity: 0.8;
         }
 
-        /* 多种字体样式 */
+        /* 多种字体样式 - 包含中文字体 */
         .quote-text {
-            font-size: 32px;
+            font-size: 40px;
             font-weight: 500;
-            line-height: 1.7;
+            line-height: 1.6;
             margin-bottom: 30px;
-            min-height: 120px;
+            min-height: 130px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            color: rgba(255, 255, 255, 0.95);
-            letter-spacing: 1px;
+            color: #FFFFFF;
+            letter-spacing: 2px;
             text-shadow: 0 2px 20px rgba(0, 122, 255, 0.3);
         }
 
-        /* 字体风格 1: 优雅衬线 */
+        /* 亮色系颜色类 - 确保与黑色背景反差大 */
+        .quote-text.color-1 { color: #FFFFFF; text-shadow: 0 2px 20px rgba(255, 255, 255, 0.3); } /* 纯白 */
+        .quote-text.color-2 { color: #00D4FF; text-shadow: 0 2px 20px rgba(0, 212, 255, 0.4); } /* 青色 */
+        .quote-text.color-3 { color: #5AC8FA; text-shadow: 0 2px 20px rgba(90, 200, 250, 0.4); } /* 天蓝 */
+        .quote-text.color-4 { color: #34C759; text-shadow: 0 2px 20px rgba(52, 199, 89, 0.4); } /* 绿色 */
+        .quote-text.color-5 { color: #FF375F; text-shadow: 0 2px 20px rgba(255, 55, 95, 0.4); } /* 粉红 */
+        .quote-text.color-6 { color: #FF9500; text-shadow: 0 2px 20px rgba(255, 149, 0, 0.4); } /* 橙色 */
+        .quote-text.color-7 { color: #FFD60A; text-shadow: 0 2px 20px rgba(255, 214, 10, 0.4); } /* 黄色 */
+        .quote-text.color-8 { color: #BF5AF2; text-shadow: 0 2px 20px rgba(191, 90, 242, 0.4); } /* 紫色 */
+        .quote-text.color-9 { color: #64D2FF; text-shadow: 0 2px 20px rgba(100, 210, 255, 0.4); } /* 浅蓝 */
+        .quote-text.color-10 { color: #FF6B35; text-shadow: 0 2px 20px rgba(255, 107, 53, 0.4); } /* 珊瑚橙 */
+
+        /* 字体风格 1: 宋体（衬线）- Noto Serif SC */
         .quote-text.style-1 {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            font-style: italic;
-            font-weight: 400;
-            letter-spacing: 1.5px;
-        }
-
-        /* 字体风格 2: 现代粗体 */
-        .quote-text.style-2 {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 28px;
-        }
-
-        /* 字体风格 3: 书法风格 */
-        .quote-text.style-3 {
-            font-family: 'Georgia', serif;
-            font-weight: 300;
-            letter-spacing: 2px;
-            line-height: 1.9;
-        }
-
-        /* 字体风格 4: 科技感 */
-        .quote-text.style-4 {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif;
             font-weight: 500;
+            letter-spacing: 4px;
+        }
+
+        /* 字体风格 2: 楷体 */
+        .quote-text.style-2 {
+            font-family: 'KaiTi', 'STKaiti', '楷体', 'Noto Serif SC', serif;
+            font-weight: 500;
+            letter-spacing: 5px;
+            font-size: 44px;
+        }
+
+        /* 字体风格 3: 马善政书法（书法风格） */
+        .quote-text.style-3 {
+            font-family: 'Ma Shan Zheng', 'STXingkai', 'Xingkai SC', cursive;
+            font-weight: 400;
+            letter-spacing: 6px;
+            font-size: 46px;
+            line-height: 1.5;
+        }
+
+        /* 字体风格 4: 小薇体（手写体） */
+        .quote-text.style-4 {
+            font-family: 'ZCOOL XiaoWei', 'STXingkai', 'Xingkai SC', serif;
+            font-weight: 400;
+            letter-spacing: 4px;
+            font-size: 42px;
+        }
+
+        /* 字体风格 5: 快乐体（艺术体） */
+        .quote-text.style-5 {
+            font-family: 'ZCOOL KuaiLe', 'STHeiti', 'SimHei', sans-serif;
+            font-weight: 400;
+            letter-spacing: 3px;
+            font-size: 42px;
+        }
+
+        /* 字体风格 6: 隶书风格 */
+        .quote-text.style-6 {
+            font-family: 'LiSu', 'STLiti', '隶书', 'Noto Serif SC', serif;
+            font-weight: 500;
+            letter-spacing: 5px;
+            font-size: 44px;
+        }
+
+        /* 字体风格 7: 仿宋 */
+        .quote-text.style-7 {
+            font-family: 'FangSong', 'STFangsong', '仿宋', 'Noto Serif SC', serif;
+            font-weight: 500;
+            letter-spacing: 4px;
+            font-size: 42px;
+        }
+
+        /* 字体风格 8: 黑体（现代） */
+        .quote-text.style-8 {
+            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', '黑体', sans-serif;
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 38px;
+        }
+
+        /* 字体风格 9: 渐变科技感 */
+        .quote-text.style-9 {
+            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            font-weight: 600;
             letter-spacing: 1px;
-            background: linear-gradient(135deg, #FFFFFF 0%, #007AFF 50%, #00D4FF 100%);
+            font-size: 36px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #00D4FF 50%, #007AFF 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-shadow: none;
         }
 
-        /* 字体风格 5: 经典优雅 */
-        .quote-text.style-5 {
-            font-family: 'Georgia', serif;
-            font-weight: 400;
-            font-style: italic;
-            letter-spacing: 0.5px;
+        /* 字体风格 10: 金色华丽 */
+        .quote-text.style-10 {
+            font-family: 'Noto Serif SC', 'Songti SC', serif;
+            font-weight: 600;
+            letter-spacing: 4px;
+            font-size: 40px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
         }
 
         /* 点击切换提示 */
@@ -944,8 +1002,11 @@
         let quoteInterval = null;
         const QUOTE_SWITCH_INTERVAL = 8000; // 8秒切换一次
 
-        // 字体风格配置
-        const FONT_STYLES = ['style-1', 'style-2', 'style-3', 'style-4', 'style-5'];
+        // 字体风格配置（10种中文字体）
+        const FONT_STYLES = ['style-1', 'style-2', 'style-3', 'style-4', 'style-5', 'style-6', 'style-7', 'style-8', 'style-9', 'style-10'];
+        
+        // 颜色配置（10种亮色系，确保与黑色背景反差大）
+        const COLORS = ['color-1', 'color-2', 'color-3', 'color-4', 'color-5', 'color-6', 'color-7', 'color-8', 'color-9', 'color-10'];
 
         // 从文本文件加载名言
         async function loadQuotes() {
@@ -985,6 +1046,11 @@
             return FONT_STYLES[Math.floor(Math.random() * FONT_STYLES.length)];
         }
 
+        // 获取随机颜色
+        function getRandomColor() {
+            return COLORS[Math.floor(Math.random() * COLORS.length)];
+        }
+
         // 显示随机名言
         function showRandomQuote() {
             if (quotes.length === 0) return;
@@ -996,9 +1062,11 @@
             const randomIndex = Math.floor(Math.random() * quotes.length);
             const quote = quotes[randomIndex];
             const fontStyle = getRandomFontStyle();
+            const color = getRandomColor();
             
-            // 移除所有字体风格类
+            // 移除所有字体风格类和颜色类
             FONT_STYLES.forEach(style => quoteText.classList.remove(style));
+            COLORS.forEach(c => quoteText.classList.remove(c));
             
             // 淡出动画
             quoteText.style.opacity = '0';
@@ -1011,8 +1079,9 @@
                 quoteText.textContent = quote.text;
                 quoteAuthor.textContent = `— ${quote.author}`;
                 
-                // 添加随机字体风格
+                // 添加随机字体风格和颜色
                 quoteText.classList.add(fontStyle);
+                quoteText.classList.add(color);
                 
                 // 淡入动画
                 quoteText.style.opacity = '1';
