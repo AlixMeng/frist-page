@@ -2546,12 +2546,12 @@
             const appsEditor = document.getElementById('apps-editor');
             appsEditor.innerHTML = config.apps.map((app, index) => `
                 <div class="nav-item-row" data-index="${index}" data-type="app">
-                    <input type="text" class="nav-name" value="${app.name || ''}" placeholder="应用名称">
                     <div class="nav-icon-box">
                         <div class="nav-icon-display" id="app-icon-${index}">${app.icon || (app.iconUrl ? `<img src="${app.iconUrl}">` : '📱')}</div>
-                        <button class="icon-action-btn" onclick="changeIcon('app', ${index})">🎨</button>
-                        <button class="icon-action-btn upload" onclick="uploadIcon('app', ${index})">📤</button>
+                        <button class="icon-action-btn" onclick="changeIcon('app', ${index})" title="从图标库选择">🎨</button>
+                        <button class="icon-action-btn upload" onclick="uploadIcon('app', ${index})" title="上传自定义图标">⬆️</button>
                     </div>
+                    <input type="text" class="nav-name" value="${app.name || ''}" placeholder="应用名称">
                     <input type="text" class="nav-url" value="${app.url || ''}" placeholder="http://localhost:3000">
                     <input type="text" class="nav-desc" value="${app.desc || ''}" placeholder="描述（可选）">
                     <button class="delete-btn" onclick="deleteApp(${index})">🗑️</button>
@@ -2562,12 +2562,12 @@
             const favoritesEditor = document.getElementById('favorites-editor');
             favoritesEditor.innerHTML = config.favorites.map((fav, index) => `
                 <div class="nav-item-row" data-index="${index}" data-type="favorite">
-                    <input type="text" class="nav-name" value="${fav.name || ''}" placeholder="网站名称">
                     <div class="nav-icon-box">
                         <div class="nav-icon-display" id="fav-icon-${index}">${fav.icon || (fav.iconUrl ? `<img src="${fav.iconUrl}">` : '🔗')}</div>
-                        <button class="icon-action-btn" onclick="changeIcon('favorite', ${index})">🎨</button>
-                        <button class="icon-action-btn upload" onclick="uploadIcon('favorite', ${index})">📤</button>
+                        <button class="icon-action-btn" onclick="changeIcon('favorite', ${index})" title="从图标库选择">🎨</button>
+                        <button class="icon-action-btn upload" onclick="uploadIcon('favorite', ${index})" title="上传自定义图标">⬆️</button>
                     </div>
+                    <input type="text" class="nav-name" value="${fav.name || ''}" placeholder="网站名称">
                     <input type="text" class="nav-url" value="${fav.url || ''}" placeholder="https://example.com">
                     <button class="delete-btn" onclick="deleteFavorite(${index})">🗑️</button>
                 </div>
