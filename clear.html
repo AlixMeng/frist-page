@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清除配置</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #000;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+        }
+        h1 { color: #007AFF; }
+        button {
+            padding: 15px 40px;
+            font-size: 16px;
+            background: linear-gradient(135deg, #007AFF, #00D4FF);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover { transform: scale(1.05); }
+        .success { color: #34C759; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 配置清理工具</h1>
+        <p>如果管理功能出现异常，可以使用此工具清除保存的配置</p>
+        <button onclick="clearAll()">🗑️ 清除所有配置</button>
+        <button onclick="location.href='/'">🏠 返回首页</button>
+        <div id="result"></div>
+    </div>
+    <script>
+        function clearAll() {
+            localStorage.removeItem('siteConfig');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('currentRole');
+            localStorage.removeItem('loginExpiry');
+            document.getElementById('result').innerHTML = 
+                '<p class="success">✅ 配置已清除！请返回首页刷新页面</p>';
+        }
+    </script>
+</body>
+</html>

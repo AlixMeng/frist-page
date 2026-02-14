@@ -181,6 +181,632 @@
             content: '点击暂停音乐';
         }
 
+        /* 登录按钮 */
+        .login-btn {
+            position: fixed;
+            top: 20px;
+            right: 80px;
+            z-index: 1001;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .login-btn:hover {
+            background: rgba(0, 122, 255, 0.2);
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .login-btn.logged-in {
+            background: rgba(52, 199, 89, 0.2);
+            border-color: rgba(52, 199, 89, 0.5);
+        }
+
+        /* 管理按钮 */
+        .admin-btn {
+            position: fixed;
+            top: 20px;
+            right: 150px;
+            z-index: 1001;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.3), rgba(0, 212, 255, 0.2));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 122, 255, 0.5);
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            animation: pulse 2s infinite;
+        }
+
+        .admin-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.4), rgba(0, 212, 255, 0.3));
+        }
+
+        .admin-btn.show {
+            display: flex;
+        }
+
+        /* 弹窗遮罩 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* 登录弹窗 */
+        .login-modal {
+            background: linear-gradient(135deg, rgba(30, 30, 40, 0.95), rgba(20, 20, 30, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.show .login-modal {
+            transform: scale(1);
+        }
+
+        .login-modal h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            background: linear-gradient(135deg, #fff, #00D4FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .login-form button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-blue), #00D4FF);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.4);
+        }
+
+        .login-error {
+            color: #FF375F;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: var(--text-primary);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        /* 管理面板 */
+        .admin-panel {
+            background: linear-gradient(135deg, rgba(30, 30, 40, 0.98), rgba(20, 20, 30, 0.98));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.show .admin-panel {
+            transform: scale(1);
+        }
+
+        .admin-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h2 {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 0 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .admin-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .admin-tab:hover {
+            color: var(--text-primary);
+        }
+
+        .admin-tab.active {
+            color: var(--primary-blue);
+            border-bottom-color: var(--primary-blue);
+        }
+
+        .admin-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        .admin-section h3 {
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+        }
+
+        .admin-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: grid;
+            grid-template-columns: 60px 1fr 1fr 1fr 40px;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .admin-item input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .admin-item input:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .admin-item .delete-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 55, 95, 0.2);
+            border: 1px solid rgba(255, 55, 95, 0.3);
+            border-radius: 8px;
+            color: #FF375F;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-item .delete-btn:hover {
+            background: rgba(255, 55, 95, 0.3);
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 122, 255, 0.1);
+            border: 2px dashed rgba(0, 122, 255, 0.3);
+            border-radius: 12px;
+            color: var(--primary-blue);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .add-btn:hover {
+            background: rgba(0, 122, 255, 0.2);
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .admin-footer {
+            padding: 20px 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .admin-footer button {
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .cancel-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .reset-btn {
+            background: rgba(255, 55, 95, 0.1);
+            border: 1px solid rgba(255, 55, 95, 0.3);
+            color: #FF375F;
+            margin-right: auto;
+        }
+
+        .reset-btn:hover {
+            background: rgba(255, 55, 95, 0.2);
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, var(--primary-blue), #00D4FF);
+            border: none;
+            color: white;
+            font-weight: 600;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.4);
+        }
+
+        .quote-editor textarea {
+            width: 100%;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            color: var(--text-primary);
+            font-size: 14px;
+            line-height: 1.6;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .quote-editor textarea:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .quote-hint-text {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        /* 图标选择器 */
+        .icon-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .icon-input {
+            width: 60px;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .icon-url-input {
+            flex: 1;
+        }
+
+        .icon-preview {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            overflow: hidden;
+        }
+
+        .icon-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 音乐上传区域 */
+        .music-upload-box {
+            margin-bottom: 20px;
+        }
+
+        .upload-drop-zone {
+            background: rgba(0, 122, 255, 0.05);
+            border: 2px dashed rgba(0, 122, 255, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-drop-zone:hover {
+            border-color: rgba(0, 122, 255, 0.6);
+            background: rgba(0, 122, 255, 0.08);
+        }
+
+        .upload-drop-zone.drag-over {
+            border-color: #007AFF;
+            background: rgba(0, 122, 255, 0.15);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .upload-types {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 15px;
+        }
+
+        .upload-select-btn {
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.3), rgba(0, 212, 255, 0.2));
+            border: 1px solid rgba(0, 122, 255, 0.4);
+            border-radius: 8px;
+            padding: 10px 24px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-select-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.4), rgba(0, 212, 255, 0.3));
+            transform: translateY(-1px);
+        }
+
+        .upload-progress {
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007AFF, #00D4FF);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .music-list-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+        }
+
+        .music-icon {
+            font-size: 24px;
+        }
+
+        .music-name {
+            flex: 1;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .music-status {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .music-status.uploaded {
+            background: rgba(52, 199, 89, 0.2);
+            color: #34C759;
+        }
+
+        .music-status.pending {
+            background: rgba(255, 149, 0, 0.2);
+            color: #FF9500;
+        }
+
+        /* 名言列表编辑器 */
+        .quotes-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            background: rgba(0, 122, 255, 0.1);
+            border: 1px solid rgba(0, 122, 255, 0.3);
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: var(--primary-blue);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(0, 122, 255, 0.2);
+        }
+
+        .quote-list-editor {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .quote-item-row {
+            display: grid;
+            grid-template-columns: 1fr 120px 40px;
+            gap: 10px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+
+        .quote-item-row input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+
+        .quote-item-row input:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .quote-delete-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 55, 95, 0.1);
+            border: 1px solid rgba(255, 55, 95, 0.3);
+            border-radius: 6px;
+            color: #FF375F;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .quote-delete-btn:hover {
+            background: rgba(255, 55, 95, 0.2);
+        }
+
         /* 主内容区 - 全屏滚动 */
         html, body {
             height: 100%;
@@ -251,17 +877,17 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             margin-bottom: 0;
-            padding: 0 30px;
+            padding: 60px 30px 0;
         }
 
         .quote-container {
-            max-width: 900px;
+            max-width: 950px;
             width: 100%;
             margin: 0 auto;
-            padding: 80px 60px;
+            padding: 90px 70px;
             background: 
                 linear-gradient(135deg, rgba(0, 122, 255, 0.05) 0%, rgba(0, 212, 255, 0.02) 50%, rgba(255, 255, 255, 0.02) 100%);
             border: 2px solid rgba(255, 255, 255, 0.15);
@@ -363,11 +989,11 @@
 
         /* 多种字体样式 - 包含中文字体 */
         .quote-text {
-            font-size: 40px;
+            font-size: 44px;
             font-weight: 500;
             line-height: 1.6;
             margin-bottom: 30px;
-            min-height: 130px;
+            min-height: 140px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -394,6 +1020,7 @@
             font-family: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif;
             font-weight: 500;
             letter-spacing: 4px;
+            font-size: 44px;
         }
 
         /* 字体风格 2: 楷体 */
@@ -401,7 +1028,7 @@
             font-family: 'KaiTi', 'STKaiti', '楷体', 'Noto Serif SC', serif;
             font-weight: 500;
             letter-spacing: 5px;
-            font-size: 44px;
+            font-size: 48px;
         }
 
         /* 字体风格 3: 马善政书法（书法风格） */
@@ -409,7 +1036,7 @@
             font-family: 'Ma Shan Zheng', 'STXingkai', 'Xingkai SC', cursive;
             font-weight: 400;
             letter-spacing: 6px;
-            font-size: 46px;
+            font-size: 50px;
             line-height: 1.5;
         }
 
@@ -418,7 +1045,7 @@
             font-family: 'ZCOOL XiaoWei', 'STXingkai', 'Xingkai SC', serif;
             font-weight: 400;
             letter-spacing: 4px;
-            font-size: 42px;
+            font-size: 46px;
         }
 
         /* 字体风格 5: 快乐体（艺术体） */
@@ -426,7 +1053,7 @@
             font-family: 'ZCOOL KuaiLe', 'STHeiti', 'SimHei', sans-serif;
             font-weight: 400;
             letter-spacing: 3px;
-            font-size: 42px;
+            font-size: 46px;
         }
 
         /* 字体风格 6: 隶书风格 */
@@ -434,7 +1061,7 @@
             font-family: 'LiSu', 'STLiti', '隶书', 'Noto Serif SC', serif;
             font-weight: 500;
             letter-spacing: 5px;
-            font-size: 44px;
+            font-size: 48px;
         }
 
         /* 字体风格 7: 仿宋 */
@@ -442,10 +1069,10 @@
             font-family: 'FangSong', 'STFangsong', '仿宋', 'Noto Serif SC', serif;
             font-weight: 500;
             letter-spacing: 4px;
-            font-size: 42px;
+            font-size: 46px;
         }
 
-        /* 字体风格 8: 黑体（现代） */
+        /* 字体风格 8: 黑体（现代）- 英文风格，保持较小字体 */
         .quote-text.style-8 {
             font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', '黑体', sans-serif;
             font-weight: 600;
@@ -453,7 +1080,7 @@
             font-size: 38px;
         }
 
-        /* 字体风格 9: 渐变科技感 */
+        /* 字体风格 9: 渐变科技感 - 英文风格，保持较小字体 */
         .quote-text.style-9 {
             font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
             font-weight: 600;
@@ -471,7 +1098,7 @@
             font-family: 'Noto Serif SC', 'Songti SC', serif;
             font-weight: 600;
             letter-spacing: 4px;
-            font-size: 40px;
+            font-size: 44px;
             background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -722,7 +1349,8 @@
         /* 应用导航 - 全屏布局 */
         .apps-section {
             margin-bottom: 0;
-            justify-content: center;
+            justify-content: flex-start;
+            padding-top: 160px;
         }
 
         .apps-grid {
@@ -853,6 +1481,47 @@
             transform: translateY(-2px) scale(1.1);
         }
 
+        /* Tooltip */
+        .bottom-favorite-item::after {
+            content: attr(data-name);
+            position: absolute;
+            bottom: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 1002;
+        }
+
+        .bottom-favorite-item::before {
+            content: '';
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.9);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 1002;
+        }
+
+        .bottom-favorite-item:hover::after,
+        .bottom-favorite-item:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
         .bottom-favorite-item span {
             display: none;
         }
@@ -930,6 +1599,107 @@
         🎵
     </div>
 
+    <!-- 登录按钮 -->
+    <button class="login-btn" id="login-btn">
+        <span>👤</span>
+        <span id="login-text">登录</span>
+    </button>
+
+    <!-- 管理按钮 -->
+    <button class="admin-btn" id="admin-btn">
+        <span>⚙️</span>
+        <span>管理</span>
+    </button>
+
+    <!-- 登录弹窗 -->
+    <div class="modal-overlay" id="login-modal">
+        <div class="login-modal">
+            <button class="modal-close" id="close-login">×</button>
+            <h2>🔐 用户登录</h2>
+            <form class="login-form" id="login-form">
+                <input type="text" id="username" placeholder="用户名" required>
+                <input type="password" id="password" placeholder="密码" required>
+                <button type="submit">登录</button>
+            </form>
+            <div class="login-error" id="login-error">用户名或密码错误</div>
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 12px; color: rgba(255,255,255,0.4); text-align: center;">
+                <div>默认账号：</div>
+                <div style="margin-top: 8px;">管理员: admin / admin123</div>
+                <div>普通用户: user / user123</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理面板 -->
+    <div class="modal-overlay" id="admin-modal">
+        <div class="admin-panel">
+            <div class="admin-header">
+                <h2>⚙️ 管理面板</h2>
+                <button class="modal-close" id="close-admin">×</button>
+            </div>
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="apps">应用导航</button>
+                <button class="admin-tab" data-tab="favorites">底部导航</button>
+                <button class="admin-tab" data-tab="music">音乐列表</button>
+                <button class="admin-tab" data-tab="quotes">每日一言</button>
+            </div>
+            <div class="admin-content">
+                <!-- 应用导航管理 -->
+                <div class="admin-section active" id="tab-apps">
+                    <h3>📱 应用导航配置</h3>
+                    <div id="apps-editor"></div>
+                    <button class="add-btn" id="add-app">+ 添加应用</button>
+                </div>
+                
+                <!-- 底部导航管理 -->
+                <div class="admin-section" id="tab-favorites">
+                    <h3>⭐ 底部导航配置</h3>
+                    <div id="favorites-editor"></div>
+                    <button class="add-btn" id="add-favorite">+ 添加网址</button>
+                </div>
+                
+                <!-- 音乐列表管理 -->
+                <div class="admin-section" id="tab-music">
+                    <h3>🎵 音乐管理</h3>
+                    <div class="music-upload-box">
+                        <input type="file" id="music-file-input" accept="audio/*" multiple style="display: none;">
+                        <div class="upload-drop-zone" id="music-drop-zone">
+                            <div class="upload-icon">📁</div>
+                            <div class="upload-text">点击或拖拽音乐文件到此处</div>
+                            <div class="upload-types">支持 MP3, WAV, OGG, M4A, FLAC 格式</div>
+                            <button type="button" class="upload-select-btn" onclick="document.getElementById('music-file-input').click()">
+                                选择文件
+                            </button>
+                        </div>
+                        <div class="upload-progress" id="upload-progress" style="display: none;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <div class="progress-text" id="progress-text">准备上传...</div>
+                        </div>
+                    </div>
+                    <div id="music-list-editor"></div>
+                </div>
+                
+                <!-- 每日一言管理 -->
+                <div class="admin-section" id="tab-quotes">
+                    <h3>💬 每日一言管理</h3>
+                    <div class="quotes-actions">
+                        <button class="action-btn" id="load-quotes-file">📂 从文件加载</button>
+                        <button class="action-btn" id="add-quote-line">➕ 添加名言</button>
+                    </div>
+                    <div class="quote-list-editor" id="quote-list-editor"></div>
+                    <div class="quote-hint-text">从 quotes.txt 文件加载，点击下方删除按钮移除，添加按钮新增</div>
+                </div>
+            </div>
+            <div class="admin-footer">
+                <button class="reset-btn" id="reset-admin">🔄 恢复默认</button>
+                <button class="cancel-btn" id="cancel-admin">取消</button>
+                <button class="save-btn" id="save-admin">💾 保存配置</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 主内容 -->
     <main class="main-content">
         <!-- 第一屏：每日一言 -->
@@ -982,9 +1752,92 @@
     <div class="bottom-favorites"></div>
 
     <script>
-        // ==================== 配置区域 - 可在此处修改应用和网址 ====================
-        const config = {
-            // 应用导航配置
+        // ==================== 用户认证系统 ====================
+        const AUTH_CONFIG = {
+            users: [
+                { username: 'admin', password: 'admin123', role: 'admin' },
+                { username: 'user', password: 'user123', role: 'user' }
+            ]
+        };
+
+        let currentUser = null;
+        let currentRole = null;
+
+        // 检查登录状态
+        function checkLoginStatus() {
+            const savedUser = localStorage.getItem('currentUser');
+            const savedRole = localStorage.getItem('currentRole');
+            const expiry = localStorage.getItem('loginExpiry');
+            
+            if (savedUser && savedRole && expiry && Date.now() < parseInt(expiry)) {
+                currentUser = savedUser;
+                currentRole = savedRole;
+                updateLoginUI();
+                return true;
+            }
+            
+            // 清理过期数据
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('currentRole');
+            localStorage.removeItem('loginExpiry');
+            return false;
+        }
+
+        // 登录
+        function login(username, password) {
+            const user = AUTH_CONFIG.users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                currentUser = user.username;
+                currentRole = user.role;
+                
+                // 保存登录状态（7天有效期）
+                localStorage.setItem('currentUser', currentUser);
+                localStorage.setItem('currentRole', currentRole);
+                localStorage.setItem('loginExpiry', Date.now() + 7 * 24 * 60 * 60 * 1000);
+                
+                updateLoginUI();
+                return true;
+            }
+            
+            return false;
+        }
+
+        // 登出
+        function logout() {
+            currentUser = null;
+            currentRole = null;
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('currentRole');
+            localStorage.removeItem('loginExpiry');
+            updateLoginUI();
+        }
+
+        // 更新登录UI
+        function updateLoginUI() {
+            const loginBtn = document.getElementById('login-btn');
+            const loginText = document.getElementById('login-text');
+            const adminBtn = document.getElementById('admin-btn');
+            
+            if (currentUser) {
+                loginBtn.classList.add('logged-in');
+                loginText.textContent = currentUser;
+                
+                if (currentRole === 'admin') {
+                    adminBtn.classList.add('show');
+                } else {
+                    adminBtn.classList.remove('show');
+                }
+            } else {
+                loginBtn.classList.remove('logged-in');
+                loginText.textContent = '登录';
+                adminBtn.classList.remove('show');
+            }
+        }
+
+        // ==================== 配置管理系统 ====================
+        // 默认配置
+        const DEFAULT_CONFIG = {
             apps: [
                 { icon: '📊', name: 'Grafana', desc: '监控面板', url: 'http://localhost:3000' },
                 { icon: '🐳', name: 'Portainer', desc: '容器管理', url: 'http://localhost:9000' },
@@ -994,7 +1847,6 @@
                 { icon: '🎵', name: 'Navidrome', desc: '音乐服务', url: 'http://localhost:4533' },
                 { icon: '🔄', name: 'Syncthing', desc: '文件同步', url: 'http://localhost:8384' }
             ],
-            // 底部常用网址配置
             favorites: [
                 { icon: '🐙', name: 'GitHub', url: 'https://github.com' },
                 { icon: '💻', name: 'Stack', url: 'https://stackoverflow.com' },
@@ -1004,31 +1856,647 @@
                 { icon: '📺', name: 'B站', url: 'https://www.bilibili.com' },
                 { icon: '🔍', name: 'Google', url: 'https://www.google.com' },
                 { icon: '▶️', name: 'YouTube', url: 'https://www.youtube.com' }
+            ],
+            music: [
+                'music/Monica - 张国荣.mp3',
+                'music/That Girl - Olly Murs.mp3',
+                'music/夜曲 - 周杰伦.mp3',
+                'music/最熟悉的陌生人 - 萧亚轩.mp3',
+                'music/梦中的婚礼 - Richard Clayderman.mp3',
+                'music/花房姑娘 - 崔健.mp3'
+            ],
+            quotes: [
+                { text: "生活中不缺少美，只是缺少发现美的眼睛。", author: "罗丹" },
+                { text: "Stay hungry, stay foolish.", author: "Steve Jobs" },
+                { text: "未经审视的人生不值得过。", author: "苏格拉底" },
+                { text: "千里之行，始于足下。", author: "老子" },
+                { text: "知之者不如好之者，好之者不如乐之者。", author: "孔子" },
+                { text: "简单是终极的复杂。", author: "达芬奇" },
+                { text: "代码是写给人看的，只是顺便能让机器运行。", author: "Donald Knuth" },
+                { text: "学而时习之，不亦说乎？", author: "孔子" },
+                { text: "To be or not to be, that is the question.", author: "莎士比亚" },
+                { text: "己所不欲，勿施于人。", author: "孔子" },
+                { text: "I think, therefore I am.", author: "笛卡尔" },
+                { text: "天行健，君子以自强不息。", author: "《周易》" },
+                { text: "路漫漫其修远兮，吾将上下而求索。", author: "屈原" },
+                { text: "不积跬步，无以至千里。", author: "荀子" },
+                { text: "纸上得来终觉浅，绝知此事要躬行。", author: "陆游" },
+                { text: "宝剑锋从磨砺出，梅花香自苦寒来。", author: "古诗" },
+                { text: "海纳百川，有容乃大。", author: "林则徐" },
+                { text: "业精于勤，荒于嬉。", author: "韩愈" },
+                { text: "非淡泊无以明志，非宁静无以致远。", author: "诸葛亮" },
+                { text: "工欲善其事，必先利其器。", author: "孔子" },
+                { text: "三人行，必有我师焉。", author: "孔子" },
+                { text: "学而不思则罔，思而不学则殆。", author: "孔子" },
+                { text: "温故而知新，可以为师矣。", author: "孔子" },
+                { text: "逝者如斯夫，不舍昼夜。", author: "孔子" },
+                { text: "君子坦荡荡，小人长戚戚。", author: "孔子" },
+                { text: "吾生也有涯，而知也无涯。", author: "庄子" },
+                { text: "穷则独善其身，达则兼济天下。", author: "孟子" },
+                { text: "生于忧患，死于安乐。", author: "孟子" },
+                { text: "得道者多助，失道者寡助。", author: "孟子" },
+                { text: "天时不如地利，地利不如人和。", author: "孟子" },
+                { text: "富贵不能淫，贫贱不能移。", author: "孟子" },
+                { text: "老吾老以及人之老。", author: "孟子" },
+                { text: "居安思危，思则有备。", author: "《左传》" },
+                { text: "人谁无过？过而能改，善莫大焉。", author: "《左传》" },
+                { text: "多行不义必自毙。", author: "《左传》" },
+                { text: "皮之不存，毛将焉附？", author: "《左传》" },
+                { text: "辅车相依，唇亡齿寒。", author: "《左传》" },
+                { text: "一鼓作气，再而衰，三而竭。", author: "《左传》" },
+                { text: "流水不腐，户枢不蠹。", author: "《吕氏春秋》" },
+                { text: "察己则可以知人。", author: "《吕氏春秋》" },
+                { text: "胜人者有力，自胜者强。", author: "老子" },
+                { text: "大直若屈，大巧若拙。", author: "老子" },
+                { text: "祸兮福之所倚，福兮祸之所伏。", author: "老子" },
+                { text: "合抱之木，生于毫末。", author: "老子" },
+                { text: "上善若水，水善利万物而不争。", author: "老子" },
+                { text: "知人者智，自知者明。", author: "老子" },
+                { text: "天下难事，必作于易。", author: "老子" },
+                { text: "慎终如始，则无败事。", author: "老子" },
+                { text: "相濡以沫，不如相忘于江湖。", author: "庄子" },
+                { text: "夏虫不可语冰。", author: "庄子" },
+                { text: "人生天地之间，若白驹过隙。", author: "庄子" },
+                { text: "君子之交淡若水。", author: "庄子" },
+                { text: "天地与我并生。", author: "庄子" },
+                { text: "至人无己，神人无功。", author: "庄子" },
+                { text: "临渊羡鱼，不如退而结网。", author: "《汉书》" },
+                { text: "绳锯木断，水滴石穿。", author: "《汉书》" },
+                { text: "水至清则无鱼。", author: "《汉书》" },
+                { text: "前车之覆，后车之鉴。", author: "《汉书》" },
+                { text: "百闻不如一见。", author: "《汉书》" },
+                { text: "失之毫厘，谬以千里。", author: "《汉书》" },
+                { text: "不入虎穴，焉得虎子。", author: "《汉书》" },
+                { text: "天下熙熙，皆为利来。", author: "《史记》" },
+                { text: "桃李不言，下自成蹊。", author: "《史记》" },
+                { text: "智者千虑，必有一失。", author: "《史记》" },
+                { text: "项庄舞剑，意在沛公。", author: "《史记》" },
+                { text: "人为刀俎，我为鱼肉。", author: "《史记》" },
+                { text: "运筹帷幄之中，决胜千里之外。", author: "《史记》" },
+                { text: "忠言逆耳利于行。", author: "《史记》" },
+                { text: "山重水复疑无路，柳暗花明又一村。", author: "陆游" },
+                { text: "问渠那得清如许？为有源头活水来。", author: "朱熹" },
+                { text: "少年易老学难成，一寸光阴不可轻。", author: "朱熹" },
+                { text: "读书破万卷，下笔如有神。", author: "杜甫" },
+                { text: "会当凌绝顶，一览众山小。", author: "杜甫" },
+                { text: "星垂平野阔，月涌大江流。", author: "杜甫" },
+                { text: "无边落木萧萧下，不尽长江滚滚来。", author: "杜甫" },
+                { text: "白日放歌须纵酒，青春作伴好还乡。", author: "杜甫" },
+                { text: "两个黄鹂鸣翠柳，一行白鹭上青天。", author: "杜甫" },
+                { text: "春江潮水连海平，海上明月共潮生。", author: "张若虚" },
+                { text: "人生代代无穷已，江月年年只相似。", author: "张若虚" },
+                { text: "海内存知己，天涯若比邻。", author: "王勃" },
+                { text: "落霞与孤鹜齐飞，秋水共长天一色。", author: "王勃" },
+                { text: "欲穷千里目，更上一层楼。", author: "王之涣" },
+                { text: "羌笛何须怨杨柳，春风不度玉门关。", author: "王之涣" },
+                { text: "采菊东篱下，悠然见南山。", author: "陶渊明" },
+                { text: "晨兴理荒秽，带月荷锄归。", author: "陶渊明" },
+                { text: "盛年不重来，一日难再晨。", author: "陶渊明" },
+                { text: "大江东去，浪淘尽，千古风流人物。", author: "苏轼" },
+                { text: "但愿人长久，千里共婵娟。", author: "苏轼" },
+                { text: "不识庐山真面目，只缘身在此山中。", author: "苏轼" },
+                { text: "竹外桃花三两枝，春江水暖鸭先知。", author: "苏轼" },
+                { text: "横看成岭侧成峰，远近高低各不同。", author: "苏轼" },
+                { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+                { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
+                { text: "Stay foolish, stay hungry.", author: "Steve Jobs" },
+                { text: "Life is what happens when you're busy making other plans.", author: "John Lennon" },
+                { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+                { text: "It is during our darkest moments that we must focus to see the light.", author: "Aristotle" }
             ]
         };
+
+        // 加载配置（从localStorage或默认，并合并缺失字段）
+        function loadConfig() {
+            const saved = localStorage.getItem('siteConfig');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                // 合并默认配置，确保所有字段都存在
+                return {
+                    apps: parsed.apps || DEFAULT_CONFIG.apps,
+                    favorites: parsed.favorites || DEFAULT_CONFIG.favorites,
+                    music: parsed.music || DEFAULT_CONFIG.music,
+                    quotes: parsed.quotes || DEFAULT_CONFIG.quotes
+                };
+            }
+            return JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+        }
+
+        // 保存配置
+        function saveConfig(config) {
+            localStorage.setItem('siteConfig', JSON.stringify(config));
+        }
+
+        // 当前配置
+        let config = loadConfig();
+
+        // 重置配置
+        function resetConfig() {
+            config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+            saveConfig(config);
+            location.reload();
+        }
 
         // 渲染应用导航
         function renderApps() {
             const appsGrid = document.querySelector('.apps-grid');
-            appsGrid.innerHTML = config.apps.map(app => `
-                <a href="${app.url}" class="app-item" target="_blank">
-                    <div class="app-icon">${app.icon}</div>
-                    <div class="app-name">${app.name}</div>
-                    <div class="app-desc">${app.desc}</div>
-                </a>
-            `).join('');
+            appsGrid.innerHTML = config.apps.map(app => {
+                const iconContent = app.iconUrl 
+                    ? `<img src="${app.iconUrl}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.textContent='📱'">` 
+                    : (app.icon || '📱');
+                return `
+                    <a href="${app.url}" class="app-item" target="_blank">
+                        <div class="app-icon">${iconContent}</div>
+                        <div class="app-name">${app.name}</div>
+                        <div class="app-desc">${app.desc}</div>
+                    </a>
+                `;
+            }).join('');
         }
 
         // 渲染底部收藏
         function renderFavorites() {
             const bottomFavorites = document.querySelector('.bottom-favorites');
-            bottomFavorites.innerHTML = config.favorites.map(fav => `
-                <a href="${fav.url}" class="bottom-favorite-item" target="_blank">
-                    <div class="bottom-favorite-icon">${fav.icon}</div>
-                    <span>${fav.name}</span>
-                </a>
+            bottomFavorites.innerHTML = config.favorites.map(fav => {
+                const iconContent = fav.iconUrl 
+                    ? `<img src="${fav.iconUrl}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" onerror="this.parentElement.textContent='🔗'">` 
+                    : (fav.icon || '🔗');
+                return `
+                    <a href="${fav.url}" class="bottom-favorite-item" target="_blank" data-name="${fav.name}">
+                        <div class="bottom-favorite-icon">${iconContent}</div>
+                        <span>${fav.name}</span>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        // ==================== 登录和管理功能 ====================
+        
+        // 检查登录状态
+        checkLoginStatus();
+        
+        // 登录按钮事件
+        document.getElementById('login-btn').addEventListener('click', () => {
+            if (currentUser) {
+                // 已登录，点击登出
+                if (confirm(`确定要登出 ${currentUser} 吗？`)) {
+                    logout();
+                }
+            } else {
+                // 未登录，显示登录弹窗
+                document.getElementById('login-modal').classList.add('show');
+                document.getElementById('username').focus();
+            }
+        });
+        
+        // 关闭登录弹窗
+        document.getElementById('close-login').addEventListener('click', () => {
+            document.getElementById('login-modal').classList.remove('show');
+            document.getElementById('login-error').classList.remove('show');
+        });
+        
+        // 登录表单提交
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (login(username, password)) {
+                document.getElementById('login-modal').classList.remove('show');
+                document.getElementById('login-error').classList.remove('show');
+                document.getElementById('login-form').reset();
+            } else {
+                document.getElementById('login-error').classList.add('show');
+            }
+        });
+        
+        // 点击弹窗外部关闭
+        document.getElementById('login-modal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                document.getElementById('login-modal').classList.remove('show');
+            }
+        });
+        
+        // ==================== 管理面板功能 ====================
+        
+        // 打开管理面板
+        document.getElementById('admin-btn').addEventListener('click', () => {
+            if (currentRole !== 'admin') {
+                alert('只有管理员可以访问管理面板');
+                return;
+            }
+            openAdminPanel();
+        });
+        
+        // 关闭管理面板
+        document.getElementById('close-admin').addEventListener('click', closeAdminPanel);
+        document.getElementById('cancel-admin').addEventListener('click', closeAdminPanel);
+        
+        // 点击弹窗外部关闭
+        document.getElementById('admin-modal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                closeAdminPanel();
+            }
+        });
+        
+        // 打开管理面板
+        function openAdminPanel() {
+            document.getElementById('admin-modal').classList.add('show');
+            renderAdminEditors();
+        }
+        
+        // 关闭管理面板
+        function closeAdminPanel() {
+            document.getElementById('admin-modal').classList.remove('show');
+        }
+        
+        // 渲染管理编辑器
+        function renderAdminEditors() {
+            // 确保配置数组存在
+            if (!config.apps) config.apps = [];
+            if (!config.favorites) config.favorites = [];
+            if (!config.music) config.music = [];
+            if (!config.quotes) config.quotes = [];
+            
+            // 渲染应用导航编辑器
+            const appsEditor = document.getElementById('apps-editor');
+            appsEditor.innerHTML = config.apps.map((app, index) => `
+                <div class="admin-item" data-index="${index}">
+                    <div class="icon-selector">
+                        <input type="text" class="icon-input app-icon-emoji" value="${app.icon || ''}" placeholder="📱" title="输入Emoji">
+                        <input type="text" class="icon-url-input app-icon-url" value="${app.iconUrl || ''}" placeholder="或输入图片URL">
+                        <div class="icon-preview">${app.icon || (app.iconUrl ? `<img src="${app.iconUrl}">` : '📱')}</div>
+                    </div>
+                    <input type="text" class="app-name-input" value="${app.name || ''}" placeholder="名称">
+                    <input type="text" class="app-desc-input" value="${app.desc || ''}" placeholder="描述">
+                    <input type="text" class="app-url-input" value="${app.url || ''}" placeholder="链接">
+                    <button class="delete-btn" onclick="deleteApp(${index})">🗑️</button>
+                </div>
+            `).join('');
+            
+            // 渲染底部导航编辑器
+            const favoritesEditor = document.getElementById('favorites-editor');
+            favoritesEditor.innerHTML = config.favorites.map((fav, index) => `
+                <div class="admin-item" data-index="${index}">
+                    <div class="icon-selector">
+                        <input type="text" class="icon-input fav-icon-emoji" value="${fav.icon || ''}" placeholder="🔗" title="输入Emoji">
+                        <input type="text" class="icon-url-input fav-icon-url" value="${fav.iconUrl || ''}" placeholder="或输入图片URL">
+                        <div class="icon-preview">${fav.icon || (fav.iconUrl ? `<img src="${fav.iconUrl}">` : '🔗')}</div>
+                    </div>
+                    <input type="text" class="fav-name-input" value="${fav.name || ''}" placeholder="网站名称（鼠标悬停显示）">
+                    <input type="text" class="fav-url-input" value="${fav.url || ''}" placeholder="链接">
+                    <button class="delete-btn" onclick="deleteFavorite(${index})">🗑️</button>
+                </div>
+            `).join('');
+            
+            // 渲染音乐列表
+            renderMusicList();
+            
+            // 渲染每日一言列表
+            renderQuoteList();
+            
+            // 绑定图标预览事件
+            bindIconPreviewEvents();
+        }
+        
+        // 绑定图标预览事件
+        function bindIconPreviewEvents() {
+            document.querySelectorAll('.icon-input, .icon-url-input').forEach(input => {
+                input.addEventListener('input', function() {
+                    const row = this.closest('.admin-item');
+                    const preview = row.querySelector('.icon-preview');
+                    const emoji = row.querySelector('.icon-input').value;
+                    const url = row.querySelector('.icon-url-input').value;
+                    
+                    if (emoji) {
+                        preview.textContent = emoji;
+                    } else if (url) {
+                        preview.innerHTML = `<img src="${url}" onerror="this.parentElement.textContent='❓'">`;
+                    } else {
+                        preview.textContent = '📱';
+                    }
+                });
+            });
+        }
+        
+        // 渲染音乐列表
+        function renderMusicList() {
+            const musicEditor = document.getElementById('music-list-editor');
+            let html = '';
+            
+            // 添加标题
+            html += '<h4 style="margin-bottom: 15px; color: rgba(255,255,255,0.8);">🎶 播放列表</h4>';
+            
+            if (!config.music || config.music.length === 0) {
+                html += '<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 30px; background: rgba(255,255,255,0.03); border-radius: 10px;">暂无音乐，请上传音乐文件</div>';
+            } else {
+                html += config.music.map((music, index) => {
+                    const filename = music.split('/').pop();
+                    const ext = filename.substring(filename.lastIndexOf('.')).toLowerCase();
+                    const icon = ext === '.mp3' ? '🎵' : ext === '.wav' ? '🔊' : ext === '.flac' ? '🎼' : '🎶';
+                    return `
+                        <div class="music-list-item" data-index="${index}">
+                            <span class="music-icon">${icon}</span>
+                            <span class="music-name">${filename}</span>
+                            <span class="music-status uploaded">已添加</span>
+                            <button class="delete-btn" onclick="deleteMusic(${index})" title="删除这首音乐">🗑️</button>
+                        </div>
+                    `;
+                }).join('');
+                
+                html += `<div style="margin-top: 15px; text-align: center; color: rgba(255,255,255,0.4); font-size: 13px;">共 ${config.music.length} 首音乐</div>`;
+            }
+            
+            musicEditor.innerHTML = html;
+        }
+        
+        // 渲染名言列表
+        function renderQuoteList() {
+            const quoteEditor = document.getElementById('quote-list-editor');
+            if (!config.quotes || config.quotes.length === 0) {
+                quoteEditor.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 20px;">暂无名言，请添加或从文件加载</div>';
+                return;
+            }
+            
+            quoteEditor.innerHTML = config.quotes.map((quote, index) => `
+                <div class="quote-item-row" data-index="${index}">
+                    <input type="text" class="quote-text-input" value="${quote.text || ''}" placeholder="名言内容">
+                    <input type="text" class="quote-author-input" value="${quote.author || ''}" placeholder="作者">
+                    <button class="quote-delete-btn" onclick="deleteQuote(${index})">🗑️</button>
+                </div>
             `).join('');
         }
+        
+        // 删除应用
+        window.deleteApp = function(index) {
+            config.apps.splice(index, 1);
+            renderAdminEditors();
+        };
+        
+        // 删除收藏
+        window.deleteFavorite = function(index) {
+            config.favorites.splice(index, 1);
+            renderAdminEditors();
+        };
+        
+        // 删除音乐
+        window.deleteMusic = function(index) {
+            config.music.splice(index, 1);
+            renderAdminEditors();
+        };
+        
+        // 添加应用
+        document.getElementById('add-app').addEventListener('click', () => {
+            config.apps.push({ icon: '📱', name: '新应用', desc: '描述', url: 'http://' });
+            renderAdminEditors();
+        });
+        
+        // 添加收藏
+        document.getElementById('add-favorite').addEventListener('click', () => {
+            config.favorites.push({ icon: '🔗', name: '新网址', url: 'https://' });
+            renderAdminEditors();
+        });
+        
+        // 音乐文件上传功能
+        const musicFileInput = document.getElementById('music-file-input');
+        const musicDropZone = document.getElementById('music-drop-zone');
+        const uploadProgress = document.getElementById('upload-progress');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        
+        // 支持的音频格式
+        const ALLOWED_AUDIO_TYPES = [
+            'audio/mpeg',      // MP3
+            'audio/wav',       // WAV
+            'audio/ogg',       // OGG
+            'audio/x-m4a',     // M4A
+            'audio/mp4',       // M4A/MP4
+            'audio/flac',      // FLAC
+            'audio/x-flac'     // FLAC
+        ];
+        const ALLOWED_EXTENSIONS = ['.mp3', '.wav', '.ogg', '.m4a', '.flac', '.aac'];
+        
+        // 验证文件是否为音乐文件
+        function isAudioFile(file) {
+            // 检查MIME类型
+            if (ALLOWED_AUDIO_TYPES.includes(file.type)) {
+                return true;
+            }
+            // 检查文件扩展名
+            const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+            if (ALLOWED_EXTENSIONS.includes(ext)) {
+                return true;
+            }
+            return false;
+        }
+        
+        // 处理文件上传
+        function handleMusicFiles(files) {
+            const validFiles = [];
+            const invalidFiles = [];
+            
+            for (const file of files) {
+                if (isAudioFile(file)) {
+                    validFiles.push(file);
+                } else {
+                    invalidFiles.push(file.name);
+                }
+            }
+            
+            // 显示无效文件提示
+            if (invalidFiles.length > 0) {
+                alert(`以下文件不是有效的音乐文件，已过滤：\n${invalidFiles.join('\n')}\n\n支持格式：MP3, WAV, OGG, M4A, FLAC`);
+            }
+            
+            if (validFiles.length === 0) return;
+            
+            // 显示上传进度
+            uploadProgress.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressText.textContent = `准备上传 ${validFiles.length} 个文件...`;
+            
+            // 模拟上传过程
+            let currentIndex = 0;
+            const totalFiles = validFiles.length;
+            
+            function uploadNext() {
+                if (currentIndex >= totalFiles) {
+                    // 上传完成
+                    setTimeout(() => {
+                        uploadProgress.style.display = 'none';
+                        alert(`成功添加 ${totalFiles} 首音乐到播放列表！`);
+                        renderMusicList();
+                    }, 500);
+                    return;
+                }
+                
+                const file = validFiles[currentIndex];
+                const progress = ((currentIndex + 1) / totalFiles) * 100;
+                
+                progressFill.style.width = progress + '%';
+                progressText.textContent = `正在添加: ${file.name} (${currentIndex + 1}/${totalFiles})`;
+                
+                // 添加到配置
+                config.music.push(`music/${file.name}`);
+                
+                currentIndex++;
+                setTimeout(uploadNext, 300); // 模拟上传延迟
+            }
+            
+            uploadNext();
+        }
+        
+        // 文件选择事件
+        musicFileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files.length > 0) {
+                handleMusicFiles(Array.from(e.target.files));
+                e.target.value = ''; // 清空选择，允许重复选择同一文件
+            }
+        });
+        
+        // 拖拽事件
+        musicDropZone.addEventListener('click', () => {
+            musicFileInput.click();
+        });
+        
+        musicDropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            musicDropZone.classList.add('drag-over');
+        });
+        
+        musicDropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            musicDropZone.classList.remove('drag-over');
+        });
+        
+        musicDropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            musicDropZone.classList.remove('drag-over');
+            
+            const files = Array.from(e.dataTransfer.files);
+            if (files.length > 0) {
+                handleMusicFiles(files);
+            }
+        });
+        
+        // 从文件加载名言
+        document.getElementById('load-quotes-file').addEventListener('click', async () => {
+            try {
+                const response = await fetch('quotes.txt');
+                if (!response.ok) {
+                    throw new Error('无法加载文件');
+                }
+                const text = await response.text();
+                const lines = text.trim().split('\n').filter(line => line.trim());
+                
+                config.quotes = lines.map(line => {
+                    const parts = line.split('|');
+                    return {
+                        text: (parts[0] || '').trim(),
+                        author: (parts[1] || '佚名').trim()
+                    };
+                }).filter(q => q.text);
+                
+                renderQuoteList();
+                alert(`已从 quotes.txt 加载 ${config.quotes.length} 条名言`);
+            } catch (error) {
+                alert('加载文件失败: ' + error.message);
+            }
+        });
+        
+        // 添加新名言
+        document.getElementById('add-quote-line').addEventListener('click', () => {
+            config.quotes.push({ text: '', author: '' });
+            renderQuoteList();
+            // 滚动到底部
+            const editor = document.getElementById('quote-list-editor');
+            editor.scrollTop = editor.scrollHeight;
+        });
+        
+        // 删除名言
+        window.deleteQuote = function(index) {
+            config.quotes.splice(index, 1);
+            renderQuoteList();
+        };
+        
+        // 管理标签切换
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+            });
+        });
+        
+        // 恢复默认配置
+        document.getElementById('reset-admin').addEventListener('click', () => {
+            if (confirm('确定要恢复默认配置吗？这将删除所有自定义设置。')) {
+                localStorage.removeItem('siteConfig');
+                alert('已恢复默认配置，页面将刷新。');
+                location.reload();
+            }
+        });
+        
+        // 保存配置
+        document.getElementById('save-admin').addEventListener('click', () => {
+            // 收集应用导航数据
+            const appItems = document.querySelectorAll('#apps-editor .admin-item');
+            config.apps = Array.from(appItems).map(item => {
+                const iconEmoji = item.querySelector('.app-icon-emoji').value;
+                const iconUrl = item.querySelector('.app-icon-url').value;
+                return {
+                    icon: iconEmoji,
+                    iconUrl: iconUrl,
+                    name: item.querySelector('.app-name-input').value,
+                    desc: item.querySelector('.app-desc-input').value,
+                    url: item.querySelector('.app-url-input').value
+                };
+            });
+            
+            // 收集底部导航数据
+            const favItems = document.querySelectorAll('#favorites-editor .admin-item');
+            config.favorites = Array.from(favItems).map(item => {
+                const iconEmoji = item.querySelector('.fav-icon-emoji').value;
+                const iconUrl = item.querySelector('.fav-icon-url').value;
+                return {
+                    icon: iconEmoji,
+                    iconUrl: iconUrl,
+                    name: item.querySelector('.fav-name-input').value,
+                    url: item.querySelector('.fav-url-input').value
+                };
+            });
+            
+            // 音乐列表已经在添加/删除时更新到config.music
+            
+            // 收集每日一言数据
+            const quoteRows = document.querySelectorAll('#quote-list-editor .quote-item-row');
+            config.quotes = Array.from(quoteRows).map(row => ({
+                text: row.querySelector('.quote-text-input').value,
+                author: row.querySelector('.quote-author-input').value
+            })).filter(q => q.text.trim());
+            
+            // 保存到localStorage
+            saveConfig(config);
+            
+            // 重新渲染页面
+            renderApps();
+            renderFavorites();
+            
+            // 更新音乐列表 - 直接替换数组引用
+            window.musicList = config.music || DEFAULT_CONFIG.music;
+            
+            // 更新名言列表
+            quotes.length = 0;
+            quotes.push(...config.quotes);
+            
+            alert('配置已保存！');
+            closeAdminPanel();
+        });
 
         // 初始化渲染
         renderApps();
@@ -1077,8 +2545,16 @@
         // 颜色配置（10种亮色系，确保与黑色背景反差大）
         const COLORS = ['color-1', 'color-2', 'color-3', 'color-4', 'color-5', 'color-6', 'color-7', 'color-8', 'color-9', 'color-10'];
 
-        // 从文本文件加载名言
+        // 从配置或文本文件加载名言
         async function loadQuotes() {
+            // 优先使用管理员配置的名言
+            if (config.quotes && config.quotes.length > 0) {
+                quotes = config.quotes;
+                showRandomQuote();
+                startQuoteRotation();
+                return;
+            }
+            
             try {
                 const response = await fetch('quotes.txt');
                 if (!response.ok) {
@@ -1100,11 +2576,7 @@
             } catch (error) {
                 console.error('加载名言失败:', error);
                 // 使用默认名言作为备用
-                quotes = [
-                    { text: "生活中不缺少美，只是缺少发现美的眼睛。", author: "罗丹" },
-                    { text: "千里之行，始于足下。", author: "老子" },
-                    { text: "学而时习之，不亦说乎？", author: "孔子" }
-                ];
+                quotes = DEFAULT_CONFIG.quotes;
                 showRandomQuote();
                 startQuoteRotation();
             }
@@ -1368,14 +2840,7 @@
         });
 
         // 音乐播放器
-        const musicList = [
-            'music/Monica - 张国荣.mp3',
-            'music/That Girl - Olly Murs.mp3',
-            'music/夜曲 - 周杰伦.mp3',
-            'music/最熟悉的陌生人 - 萧亚轩.mp3',
-            'music/梦中的婚礼 - Richard Clayderman.mp3',
-            'music/花房姑娘 - 崔健.mp3'
-        ];
+        let musicList = config.music || DEFAULT_CONFIG.music;
         
         let currentMusicIndex = -1;
         let audio = null;

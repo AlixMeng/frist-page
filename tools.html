@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统工具</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #000000, #1a1a2e);
+            color: #fff;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #007AFF, #00D4FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 40px;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .tool-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+        .tool-card:hover {
+            border-color: rgba(0,122,255,0.3);
+            transform: translateY(-2px);
+        }
+        .tool-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        .tool-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .tool-desc {
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .tool-btn {
+            background: linear-gradient(135deg, rgba(0,122,255,0.2), rgba(0,212,255,0.1));
+            border: 1px solid rgba(0,122,255,0.3);
+            border-radius: 10px;
+            padding: 12px 24px;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .tool-btn:hover {
+            background: linear-gradient(135deg, rgba(0,122,255,0.3), rgba(0,212,255,0.2));
+        }
+        .tool-btn.danger {
+            background: linear-gradient(135deg, rgba(255,55,95,0.2), rgba(255,55,95,0.1));
+            border-color: rgba(255,55,95,0.3);
+        }
+        .tool-btn.danger:hover {
+            background: linear-gradient(135deg, rgba(255,55,95,0.3), rgba(255,55,95,0.2));
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 40px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .back-link:hover {
+            color: #007AFF;
+        }
+        .status-msg {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+        .status-msg.success {
+            background: rgba(52,199,89,0.1);
+            border: 1px solid rgba(52,199,89,0.3);
+            color: #34C759;
+            display: block;
+        }
+        .status-msg.error {
+            background: rgba(255,55,95,0.1);
+            border: 1px solid rgba(255,55,95,0.3);
+            color: #FF375F;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛠️ 系统工具</h1>
+        <p class="subtitle">管理和维护您的个人服务器</p>
+        
+        <div class="tools-grid">
+            <div class="tool-card">
+                <div class="tool-icon">🗑️</div>
+                <h3 class="tool-title">清除配置</h3>
+                <p class="tool-desc">清除所有保存的配置数据，包括应用导航、底部导航、音乐列表和每日一言。这将恢复所有设置为默认值。</p>
+                <button class="tool-btn danger" onclick="clearConfig()">清除配置</button>
+                <div class="status-msg" id="config-status"></div>
+            </div>
+            
+            <div class="tool-card">
+                <div class="tool-icon">👤</div>
+                <h3 class="tool-title">退出登录</h3>
+                <p class="tool-desc">退出当前登录的账号。清除登录状态和会话信息。</p>
+                <button class="tool-btn" onclick="logout()">退出登录</button>
+                <div class="status-msg" id="login-status"></div>
+            </div>
+            
+            <div class="tool-card">
+                <div class="tool-icon">🎵</div>
+                <h3 class="tool-title">音乐上传</h3>
+                <p class="tool-desc">上传音乐文件到服务器的 music 目录。支持 mp3, wav, ogg 等格式。</p>
+                <button class="tool-btn" onclick="location.href='upload.html'">打开上传页面</button>
+            </div>
+            
+            <div class="tool-card">
+                <div class="tool-icon">📊</div>
+                <h3 class="tool-title">查看配置</h3>
+                <p class="tool-desc">在浏览器控制台查看当前保存的所有配置数据。用于调试和检查。</p>
+                <button class="tool-btn" onclick="viewConfig()">查看配置</button>
+            </div>
+        </div>
+        
+        <a href="/" class="back-link">← 返回首页</a>
+    </div>
+    
+    <script>
+        function showStatus(id, message, isError) {
+            const el = document.getElementById(id);
+            el.textContent = message;
+            el.className = 'status-msg ' + (isError ? 'error' : 'success');
+            setTimeout(() => {
+                el.className = 'status-msg';
+            }, 3000);
+        }
+        
+        function clearConfig() {
+            if (confirm('确定要清除所有配置吗？\n这将删除：\n- 应用导航设置\n- 底部导航设置\n- 音乐列表\n- 每日一言\n\n此操作不可恢复！')) {
+                localStorage.removeItem('siteConfig');
+                showStatus('config-status', '✅ 配置已清除！请刷新首页查看效果');
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('currentRole');
+            localStorage.removeItem('loginExpiry');
+            showStatus('login-status', '✅ 已退出登录');
+        }
+        
+        function viewConfig() {
+            const config = localStorage.getItem('siteConfig');
+            if (config) {
+                console.log('当前配置:', JSON.parse(config));
+                alert('配置已输出到浏览器控制台\n按 F12 打开控制台查看');
+            } else {
+                alert('暂无保存的配置');
+            }
+        }
+    </script>
+</body>
+</html>
