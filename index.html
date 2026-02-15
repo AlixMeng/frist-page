@@ -2765,6 +2765,58 @@
             margin-top: 8px;
         }
 
+        /* 显示设置样式 */
+        .visibility-settings {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .setting-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .visibility-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .visibility-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .visibility-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .visibility-icon {
+            font-size: 20px;
+        }
+
+        .visibility-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .visibility-desc {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-left: 8px;
+        }
+
         /* 主机导航样式 */
         .servers-section {
             padding: 80px 60px;
@@ -3402,6 +3454,7 @@
                 <button class="admin-tab" data-tab="photos">照片管理</button>
                 <button class="admin-tab" data-tab="theme">主题样式</button>
                 <button class="admin-tab" data-tab="servers">主机管理</button>
+                <button class="admin-tab" data-tab="visibility">显示设置</button>
 <button class="admin-tab" data-tab="account">账户管理</button>
             </div>
             <div class="admin-content">
@@ -3673,6 +3726,75 @@
                     <div class="server-list-editor" id="servers-editor"></div>
                     <button class="add-btn" id="add-server">+ 添加主机</button>
                     <div class="quote-hint-text">配置需要监控的服务器，系统将自动检测在线状态</div>
+                </div>
+                
+                <!-- 显示设置 -->
+                <div class="admin-section" id="tab-visibility">
+                    <h3>👁️ 显示设置</h3>
+                    <div class="visibility-settings">
+                        <p class="setting-desc">选择要在首页显示的模块</p>
+                        
+                        <div class="visibility-item">
+                            <div class="visibility-info">
+                                <span class="visibility-icon">💬</span>
+                                <span class="visibility-name">每日一言</span>
+                                <span class="visibility-desc">首页顶部的名言轮播</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="show-quote" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="visibility-item">
+                            <div class="visibility-info">
+                                <span class="visibility-icon">📷</span>
+                                <span class="visibility-name">摄影作品</span>
+                                <span class="visibility-desc">照片画廊展示</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="show-gallery" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="visibility-item">
+                            <div class="visibility-info">
+                                <span class="visibility-icon">📱</span>
+                                <span class="visibility-name">应用导航</span>
+                                <span class="visibility-desc">应用图标网格</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="show-apps" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="visibility-item">
+                            <div class="visibility-info">
+                                <span class="visibility-icon">🖥️</span>
+                                <span class="visibility-name">主机导航</span>
+                                <span class="visibility-desc">服务器状态监控</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="show-servers" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="visibility-item">
+                            <div class="visibility-info">
+                                <span class="visibility-icon">⭐</span>
+                                <span class="visibility-name">底部导航</span>
+                                <span class="visibility-desc">底部常用网址</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="show-favorites" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <button class="action-btn" id="apply-visibility">应用设置</button>
                 </div>
                 
                 <!-- 账户管理 -->
@@ -6408,6 +6530,104 @@
                 });
             }
         }
+
+        // ==================== 显示设置 ====================
+        // 默认显示设置
+        const DEFAULT_VISIBILITY = {
+            quote: true,
+            gallery: true,
+            apps: true,
+            servers: true,
+            favorites: true
+        };
+
+        // 加载显示设置
+        function loadVisibilitySettings() {
+            const saved = localStorage.getItem('visibilitySettings');
+            if (saved) {
+                return JSON.parse(saved);
+            }
+            return JSON.parse(JSON.stringify(DEFAULT_VISIBILITY));
+        }
+
+        // 应用显示设置
+        function applyVisibilitySettings(settings) {
+            // 每日一言
+            const quoteSection = document.querySelector('.quote-section');
+            if (quoteSection) {
+                quoteSection.style.display = settings.quote ? '' : 'none';
+            }
+            
+            // 摄影作品
+            const gallerySection = document.getElementById('gallery');
+            if (gallerySection) {
+                gallerySection.style.display = settings.gallery ? '' : 'none';
+            }
+            
+            // 应用导航
+            const appsSection = document.getElementById('apps');
+            if (appsSection) {
+                appsSection.style.display = settings.apps ? '' : 'none';
+            }
+            
+            // 主机导航
+            const serversSection = document.getElementById('servers');
+            if (serversSection) {
+                serversSection.style.display = settings.servers ? '' : 'none';
+            }
+            
+            // 底部导航
+            const favoritesSection = document.querySelector('.bottom-favorites');
+            if (favoritesSection) {
+                favoritesSection.style.display = settings.favorites ? '' : 'none';
+            }
+        }
+
+        // 初始化显示设置
+        function initVisibilitySettings() {
+            const settings = loadVisibilitySettings();
+            
+            // 设置表单值
+            document.getElementById('show-quote').checked = settings.quote;
+            document.getElementById('show-gallery').checked = settings.gallery;
+            document.getElementById('show-apps').checked = settings.apps;
+            document.getElementById('show-servers').checked = settings.servers;
+            document.getElementById('show-favorites').checked = settings.favorites;
+            
+            // 应用到页面
+            applyVisibilitySettings(settings);
+        }
+
+        // 应用按钮点击事件
+        document.getElementById('apply-visibility').addEventListener('click', () => {
+            const settings = {
+                quote: document.getElementById('show-quote').checked,
+                gallery: document.getElementById('show-gallery').checked,
+                apps: document.getElementById('show-apps').checked,
+                servers: document.getElementById('show-servers').checked,
+                favorites: document.getElementById('show-favorites').checked
+            };
+            
+            // 保存设置
+            localStorage.setItem('visibilitySettings', JSON.stringify(settings));
+            
+            // 应用到页面
+            applyVisibilitySettings(settings);
+            
+            alert('显示设置已应用！');
+        });
+
+        // 监听显示设置标签切换
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                if (tab.dataset.tab === 'visibility') {
+                    initVisibilitySettings();
+                }
+            });
+        });
+
+        // 初始化显示设置
+        initVisibilitySettings();
 
         // 初始化主题
         initTheme();
