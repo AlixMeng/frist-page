@@ -14,12 +14,21 @@
             --text-secondary: rgba(255, 255, 255, 0.6);
             --glass-bg: rgba(255, 255, 255, 0.08);
             --glass-border: rgba(255, 255, 255, 0.1);
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-blue) transparent;
         }
 
         body {
@@ -29,6 +38,22 @@
             min-height: 100vh;
             overflow-x: hidden;
             padding-bottom: 80px;
+            line-height: 1.6;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary-blue), #00D4FF);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #00D4FF, var(--primary-blue));
         }
 
         /* 背景 */
@@ -42,6 +67,85 @@
                 radial-gradient(ellipse at 20% 0%, rgba(0, 122, 255, 0.15) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 100%, rgba(0, 150, 255, 0.1) 0%, transparent 50%);
             z-index: -2;
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(0, 122, 255, 0.4);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; animation-duration: 20s; }
+        .particle:nth-child(2) { left: 20%; top: 80%; animation-delay: 2s; animation-duration: 18s; }
+        .particle:nth-child(3) { left: 30%; top: 40%; animation-delay: 4s; animation-duration: 22s; }
+        .particle:nth-child(4) { left: 50%; top: 60%; animation-delay: 6s; animation-duration: 19s; }
+        .particle:nth-child(5) { left: 70%; top: 30%; animation-delay: 8s; animation-duration: 21s; }
+        .particle:nth-child(6) { left: 80%; top: 70%; animation-delay: 10s; animation-duration: 17s; }
+        .particle:nth-child(7) { left: 90%; top: 50%; animation-delay: 12s; animation-duration: 23s; }
+        .particle:nth-child(8) { left: 15%; top: 60%; animation-delay: 3s; animation-duration: 25s; }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0) translateX(0) scale(1); 
+                opacity: 0.3;
+            }
+            25% { 
+                transform: translateY(-30px) translateX(10px) scale(1.2); 
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translateY(-20px) translateX(-10px) scale(0.8); 
+                opacity: 0.4;
+            }
+            75% { 
+                transform: translateY(-40px) translateX(15px) scale(1.1); 
+                opacity: 0.5;
+            }
+        }
+
+        /* Glow orb */
+        .glow-orb {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 122, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+            animation: orbFloat 20s infinite ease-in-out;
+        }
+
+        .glow-orb-1 {
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .glow-orb-2 {
+            bottom: -100px;
+            right: -100px;
+            animation-delay: -10s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(30px, -30px); }
+            66% { transform: translate(-20px, 20px); }
         }
 
         /* 顶部状态栏 - 左上角 */
@@ -562,8 +666,10 @@
         }
 
         .login-btn:hover {
-            background: rgba(0, 122, 255, 0.2);
-            border-color: rgba(0, 122, 255, 0.5);
+            background: rgba(0, 122, 255, 0.25);
+            border-color: rgba(0, 122, 255, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 122, 255, 0.3);
         }
 
         .login-btn.logged-in {
@@ -593,8 +699,9 @@
         }
 
         .admin-btn:hover {
-            transform: scale(1.05);
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.4), rgba(0, 212, 255, 0.3));
+            transform: scale(1.05) translateY(-2px);
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.5), rgba(0, 212, 255, 0.4));
+            box-shadow: 0 8px 25px rgba(0, 122, 255, 0.4);
         }
 
         .admin-btn.show {
@@ -1300,15 +1407,34 @@
         }
 
         .section-full {
-            height: 100vh;
+            min-height: 100vh;
             scroll-snap-align: start;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 80px 15px 40px;
+            padding: 100px 15px 60px;
             max-width: 1200px;
             margin: 0 auto;
             position: relative;
+        }
+
+        /* Section animations */
+        .section-full {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: sectionFadeIn 0.8s ease forwards;
+        }
+
+        .section-full:nth-child(1) { animation-delay: 0s; }
+        .section-full:nth-child(2) { animation-delay: 0.2s; }
+        .section-full:nth-child(3) { animation-delay: 0.4s; }
+        .section-full:nth-child(4) { animation-delay: 0.6s; }
+
+        @keyframes sectionFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .section-full:last-child {
@@ -1396,11 +1522,12 @@
         }
 
         .quote-container:hover {
-            transform: scale(1.01);
+            transform: scale(1.02);
             box-shadow: 
-                0 25px 70px rgba(0, 0, 0, 0.45),
-                0 0 120px rgba(0, 122, 255, 0.15),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+                0 30px 80px rgba(0, 0, 0, 0.5),
+                0 0 150px rgba(0, 122, 255, 0.2),
+                0 0 60px rgba(0, 212, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
         }
 
         /* 多层发光边框效果 */
@@ -1667,19 +1794,22 @@
         }
 
         .section-title {
-            font-size: 22px;
-            font-weight: 600;
+            font-size: 24px;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 15px rgba(0, 122, 255, 0.3);
         }
 
         .section-title::before {
             content: '';
-            width: 4px;
-            height: 22px;
+            width: 5px;
+            height: 26px;
             background: linear-gradient(180deg, var(--primary-blue), #00D4FF);
-            border-radius: 2px;
+            border-radius: 3px;
+            box-shadow: 0 0 15px rgba(0, 122, 255, 0.5);
         }
 
         .gallery-tabs {
@@ -1756,15 +1886,17 @@
         }
 
         .gallery-item:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(0, 122, 255, 0.25);
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 
+                0 20px 50px rgba(0, 122, 255, 0.3),
+                0 0 40px rgba(0, 122, 255, 0.15);
         }
 
         .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease, opacity 0.8s ease;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
             position: absolute;
             top: 0;
             left: 0;
@@ -1772,7 +1904,7 @@
 
         .gallery-item img.fade-out {
             opacity: 0;
-            transform: scale(1.05);
+            transform: scale(1.08);
         }
 
         .gallery-item img.fade-in {
@@ -1781,7 +1913,7 @@
         }
 
         .gallery-item:hover img {
-            transform: scale(1.08);
+            transform: scale(1.12);
         }
 
         .gallery-overlay {
@@ -1789,10 +1921,10 @@
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 25px 16px 16px;
-            background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.9) 100%);
+            padding: 30px 18px 18px;
+            background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.6) 40%, rgba(0, 0, 0, 0.9) 100%);
             opacity: 0;
-            transform: translateY(10px);
+            transform: translateY(15px);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -1802,15 +1934,17 @@
         }
 
         .gallery-title {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 600;
-            margin-bottom: 4px;
-            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 6px;
+            color: rgba(255, 255, 255, 0.98);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
         .gallery-desc {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
         }
 
         .gallery-more {
@@ -1892,10 +2026,13 @@
         }
 
         .app-item:hover {
-            transform: translateY(-3px);
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1) 0%, rgba(0, 122, 255, 0.05) 100%);
-            border-color: rgba(0, 122, 255, 0.2);
-            box-shadow: 0 8px 30px rgba(0, 122, 255, 0.15);
+            transform: translateY(-8px) scale(1.02);
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.15) 0%, rgba(0, 122, 255, 0.08) 100%);
+            border-color: rgba(0, 122, 255, 0.4);
+            box-shadow: 
+                0 15px 40px rgba(0, 122, 255, 0.25),
+                0 0 30px rgba(0, 122, 255, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .app-item:hover::before {
@@ -1913,11 +2050,12 @@
             justify-content: center;
             font-size: 20px;
             box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .app-item:hover .app-icon {
-            transform: scale(1.1);
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px rgba(0, 122, 255, 0.5);
         }
 
         .app-name {
@@ -3121,6 +3259,22 @@
     </script>
 
     <div class="bg-gradient"></div>
+    
+    <!-- Floating particles -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+    
+    <!-- Glow orbs -->
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
 
     <!-- 顶部状态栏 -->
     <div class="top-status-bar">
