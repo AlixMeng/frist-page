@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="icons/fontawesome/fontawesome-free-6.4.0-web/css/all.min.css">
     <title>Alix go - 个人服务器</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@300;400;500;600;700&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
     <style>
@@ -2851,9 +2851,14 @@
         function renderApps() {
             const appsGrid = document.querySelector('.apps-grid');
             appsGrid.innerHTML = config.apps.map(app => {
-                const iconContent = app.iconUrl 
-                    ? `<img src="${app.iconUrl}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.textContent='📱'">` 
-                    : (app.icon || '📱');
+                let iconContent;
+                if (app.iconUrl) {
+                    iconContent = `<img src="${app.iconUrl}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-rocket\\'></i>'">`;
+                } else if (app.icon && app.icon.startsWith('fa-')) {
+                    iconContent = `<i class="fas ${app.icon}"></i>`;
+                } else {
+                    iconContent = app.icon || '<i class="fas fa-rocket"></i>';
+                }
                 return `
                     <a href="${app.url}" class="app-item" target="_blank">
                         <div class="app-icon">${iconContent}</div>
@@ -2867,9 +2872,14 @@
         function renderFavorites() {
             const bottomFavorites = document.querySelector('.bottom-favorites');
             bottomFavorites.innerHTML = config.favorites.map(fav => {
-                const iconContent = fav.iconUrl 
-                    ? `<img src="${fav.iconUrl}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" onerror="this.parentElement.textContent='🔗'">` 
-                    : (fav.icon || '🔗');
+                let iconContent;
+                if (fav.iconUrl) {
+                    iconContent = `<img src="${fav.iconUrl}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-link\\'></i>'">`;
+                } else if (fav.icon && fav.icon.startsWith('fa-')) {
+                    iconContent = `<i class="fas ${fav.icon}"></i>`;
+                } else {
+                    iconContent = fav.icon || '<i class="fas fa-link"></i>';
+                }
                 return `
                     <a href="${fav.url}" class="bottom-favorite-item" target="_blank" data-name="${fav.name}">
                         <div class="bottom-favorite-icon">${iconContent}</div>
@@ -2984,33 +2994,51 @@
             
             // 渲染应用导航编辑器（简化版）
             const appsEditor = document.getElementById('apps-editor');
-            appsEditor.innerHTML = config.apps.map((app, index) => `
+            appsEditor.innerHTML = config.apps.map((app, index) => {
+                let iconDisplay;
+                if (app.iconUrl) {
+                    iconDisplay = `<img src="${app.iconUrl}">`;
+                } else if (app.icon && app.icon.startsWith('fa-')) {
+                    iconDisplay = `<i class="fas ${app.icon}"></i>`;
+                } else {
+                    iconDisplay = app.icon || '<i class="fas fa-rocket"></i>';
+                }
+                return `
                 <div class="nav-item-row" data-index="${index}" data-type="app">
                     <div class="nav-icon-box">
-                        <div class="nav-icon-display" id="app-icon-${index}">${app.icon || (app.iconUrl ? `<img src="${app.iconUrl}">` : '📱')}</div>
-                        <button class="icon-action-btn" onclick="changeIcon('app', ${index})" title="从图标库选择">🎨</button>
-                        <button class="icon-action-btn upload" onclick="uploadIcon('app', ${index})" title="上传自定义图标">⬆️</button>
+                        <div class="nav-icon-display" id="app-icon-${index}">${iconDisplay}</div>
+                        <button class="icon-action-btn" onclick="changeIcon('app', ${index})" title="从图标库选择"><i class="fas fa-palette"></i></button>
+                        <button class="icon-action-btn upload" onclick="uploadIcon('app', ${index})" title="上传自定义图标"><i class="fas fa-upload"></i></button>
                     </div>
                     <input type="text" class="nav-name" value="${app.name || ''}" placeholder="应用名称" onchange="saveNavItem('app', ${index}, 'name', this.value)">
                     <input type="text" class="nav-url" value="${app.url || ''}" placeholder="http://localhost:3000" onchange="saveNavItem('app', ${index}, 'url', this.value)">
-                    <button class="delete-btn" onclick="deleteApp(${index})">🗑️</button>
+                    <button class="delete-btn" onclick="deleteApp(${index})"><i class="fas fa-trash"></i></button>
                 </div>
-            `).join('');
+            `}).join('');
             
             // 渲染底部导航编辑器（简化版）
             const favoritesEditor = document.getElementById('favorites-editor');
-            favoritesEditor.innerHTML = config.favorites.map((fav, index) => `
+            favoritesEditor.innerHTML = config.favorites.map((fav, index) => {
+                let iconDisplay;
+                if (fav.iconUrl) {
+                    iconDisplay = `<img src="${fav.iconUrl}">`;
+                } else if (fav.icon && fav.icon.startsWith('fa-')) {
+                    iconDisplay = `<i class="fas ${fav.icon}"></i>`;
+                } else {
+                    iconDisplay = fav.icon || '<i class="fas fa-link"></i>';
+                }
+                return `
                 <div class="nav-item-row" data-index="${index}" data-type="favorite">
                     <div class="nav-icon-box">
-                        <div class="nav-icon-display" id="fav-icon-${index}">${fav.icon || (fav.iconUrl ? `<img src="${fav.iconUrl}">` : '🔗')}</div>
-                        <button class="icon-action-btn" onclick="changeIcon('favorite', ${index})" title="从图标库选择">🎨</button>
-                        <button class="icon-action-btn upload" onclick="uploadIcon('favorite', ${index})" title="上传自定义图标">⬆️</button>
+                        <div class="nav-icon-display" id="fav-icon-${index}">${iconDisplay}</div>
+                        <button class="icon-action-btn" onclick="changeIcon('favorite', ${index})" title="从图标库选择"><i class="fas fa-palette"></i></button>
+                        <button class="icon-action-btn upload" onclick="uploadIcon('favorite', ${index})" title="上传自定义图标"><i class="fas fa-upload"></i></button>
                     </div>
                     <input type="text" class="nav-name" value="${fav.name || ''}" placeholder="网站名称" onchange="saveNavItem('favorite', ${index}, 'name', this.value)">
                     <input type="text" class="nav-url" value="${fav.url || ''}" placeholder="https://example.com" onchange="saveNavItem('favorite', ${index}, 'url', this.value)">
-                    <button class="delete-btn" onclick="deleteFavorite(${index})">🗑️</button>
+                    <button class="delete-btn" onclick="deleteFavorite(${index})"><i class="fas fa-trash"></i></button>
                 </div>
-            `).join('');
+            `}).join('');
             
             // 渲染音乐列表
             renderMusicList();
@@ -3019,14 +3047,141 @@
             renderQuoteList();
         }
 
-        // 图标库数据
-        const ICON_CATEGORIES = {
-            '常用': ['📱', '💻', '🖥️', '📊', '📈', '📉', '📁', '📂', '🗂️', '📄', '📝', '📋', '✅', '❌', '⚠️', '❓', '❗', '💡', '🔔', '🔕'],
-            '媒体': ['🎵', '🎶', '🎬', '🎮', '🎯', '🎲', '🎰', '🎳', '🎸', '🎺', '🎻', '🎹', '🎤', '🎧', '🎨', '🎭', '🎪', '🎫', '🎟️', '🎗️'],
-            '社交媒体': ['💬', '📢', '📣', '📤', '📥', '📨', '📩', '📮', '📯', '📰', '🗞️', '📑', '📃', '📜', '📄', '📊', '📈', '📉', '📆', '📅'],
-            '工具': ['🔧', '🔨', '⚒️', '🛠️', '⛏️', '🔩', '⚙️', '🗜️', '⚗️', '⚖️', '🔗', '⛓️', '🧰', '🧲', '🧪', '🧫', '🧬', '🔬', '🔭', '📡'],
-            '云服务': ['☁️', '⚡', '🔥', '💧', '❄️', '🌊', '🌀', '🌈', '☀️', '🌤️', '⛅', '🌥️', '☁️', '🌦️', '🌧️', '⛈️', '🌩️', '🌨️', '❄️', '☃️'],
-            '开发': ['⚡', '🔌', '💻', '🖥️', '🖨️', '⌨️', '🖱️', '🖲️', '💽', '💾', '💿', '📀', '🧮', '🎥', '🎦', '📽️', '🎬', '📺', '📷', '📸']
+        // Font Awesome图标渲染函数
+        function renderFAIcon(iconClass) {
+            if (!iconClass) return '<i class="fas fa-star"></i>';
+            if (iconClass.startsWith('fa-')) {
+                return `<i class="fas ${iconClass}"></i>`;
+            }
+            return iconClass;
+        }
+
+        // 合并的图标库数据 - Font Awesome + 彩色Logo
+        const ICON_LIBRARY = {
+            '常用': [
+                { type: 'fa', value: 'fa-house', name: '首页' },
+                { type: 'fa', value: 'fa-user', name: '用户' },
+                { type: 'fa', value: 'fa-gear', name: '设置' },
+                { type: 'fa', value: 'fa-star', name: '收藏' },
+                { type: 'fa', value: 'fa-heart', name: '喜欢' },
+                { type: 'fa', value: 'fa-bell', name: '通知' },
+                { type: 'fa', value: 'fa-calendar', name: '日历' },
+                { type: 'fa', value: 'fa-folder', name: '文件夹' },
+                { type: 'fa', value: 'fa-file', name: '文件' },
+                { type: 'fa', value: 'fa-envelope', name: '邮件' },
+                { type: 'fa', value: 'fa-search', name: '搜索' },
+                { type: 'fa', value: 'fa-lock', name: '锁定' },
+                { type: 'fa', value: 'fa-link', name: '链接' },
+                { type: 'fa', value: 'fa-download', name: '下载' },
+                { type: 'fa', value: 'fa-upload', name: '上传' },
+                { type: 'fa', value: 'fa-plus', name: '添加' },
+                { type: 'fa', value: 'fa-check', name: '完成' },
+                { type: 'fa', value: 'fa-xmark', name: '关闭' },
+                { type: 'fa', value: 'fa-trash', name: '删除' },
+                { type: 'fa', value: 'fa-pen', name: '编辑' }
+            ],
+            '开发': [
+                { type: 'fa', value: 'fa-code', name: '代码' },
+                { type: 'fa', value: 'fa-terminal', name: '终端' },
+                { type: 'fa', value: 'fa-database', name: '数据库' },
+                { type: 'fa', value: 'fa-server', name: '服务器' },
+                { type: 'fa', value: 'fa-bug', name: 'Bug' },
+                { type: 'fa', value: 'fa-git', name: 'Git' },
+                { type: 'logo', value: 'github.svg', name: 'GitHub' },
+                { type: 'logo', value: 'gitlab.svg', name: 'GitLab' },
+                { type: 'logo', value: 'bitbucket.svg', name: 'Bitbucket' },
+                { type: 'logo', value: 'docker.svg', name: 'Docker' },
+                { type: 'logo', value: 'kubernetes.svg', name: 'K8s' },
+                { type: 'logo', value: 'vscode.svg', name: 'VS Code' },
+                { type: 'logo', value: 'intellij.svg', name: 'IntelliJ' },
+                { type: 'logo', value: 'pycharm.svg', name: 'PyCharm' },
+                { type: 'logo', value: 'vim.svg', name: 'Vim' },
+                { type: 'logo', value: 'neovim.svg', name: 'Neovim' },
+                { type: 'logo', value: 'sublime.svg', name: 'Sublime' },
+                { type: 'logo', value: 'postman.svg', name: 'Postman' },
+                { type: 'fa', value: 'fa-laptop', name: '笔记本' }
+            ],
+            '编程语言': [
+                { type: 'logo', value: 'python.svg', name: 'Python' },
+                { type: 'logo', value: 'php.svg', name: 'PHP' },
+                { type: 'logo', value: 'golang.svg', name: 'Go' },
+                { type: 'logo', value: 'rust.svg', name: 'Rust' },
+                { type: 'logo', value: 'nodejs.svg', name: 'Node.js' },
+                { type: 'logo', value: 'typescript.svg', name: 'TypeScript' },
+                { type: 'logo', value: 'react.svg', name: 'React' },
+                { type: 'logo', value: 'laravel.svg', name: 'Laravel' }
+            ],
+            '数据库': [
+                { type: 'logo', value: 'mysql.svg', name: 'MySQL' },
+                { type: 'logo', value: 'postgresql.svg', name: 'PostgreSQL' },
+                { type: 'logo', value: 'mongodb.svg', name: 'MongoDB' },
+                { type: 'logo', value: 'redis.svg', name: 'Redis' }
+            ],
+            '服务器': [
+                { type: 'logo', value: 'nginx.svg', name: 'Nginx' },
+                { type: 'logo', value: 'apache.svg', name: 'Apache' }
+            ],
+            '云服务': [
+                { type: 'fa', value: 'fa-cloud', name: '云' },
+                { type: 'logo', value: 'google.svg', name: 'Google' },
+                { type: 'logo', value: 'microsoft.svg', name: '微软' },
+                { type: 'logo', value: 'dropbox.svg', name: 'Dropbox' },
+                { type: 'logo', value: 'vercel.svg', name: 'Vercel' },
+                { type: 'logo', value: 'netlify.svg', name: 'Netlify' },
+                { type: 'logo', value: 'heroku.svg', name: 'Heroku' },
+                { type: 'logo', value: 'cloudflare.svg', name: 'Cloudflare' },
+                { type: 'logo', value: 'digitalocean.svg', name: 'DigitalOcean' },
+                { type: 'fa', value: 'fa-wifi', name: 'WiFi' }
+            ],
+            '监控': [
+                { type: 'logo', value: 'grafana.svg', name: 'Grafana' },
+                { type: 'logo', value: 'prometheus.svg', name: 'Prometheus' },
+                { type: 'logo', value: 'elastic.svg', name: 'Elastic' }
+            ],
+            '项目管理': [
+                { type: 'logo', value: 'jira.svg', name: 'Jira' },
+                { type: 'logo', value: 'trello.svg', name: 'Trello' },
+                { type: 'logo', value: 'confluence.svg', name: 'Confluence' }
+            ],
+            '媒体': [
+                { type: 'fa', value: 'fa-music', name: '音乐' },
+                { type: 'fa', value: 'fa-video', name: '视频' },
+                { type: 'fa', value: 'fa-camera', name: '相机' },
+                { type: 'logo', value: 'spotify.svg', name: 'Spotify' },
+                { type: 'logo', value: 'netflix.svg', name: 'Netflix' },
+                { type: 'logo', value: 'youtube.svg', name: 'YouTube' }
+            ],
+            '社交': [
+                { type: 'fa', value: 'fa-comments', name: '消息' },
+                { type: 'logo', value: 'facebook.svg', name: 'Facebook' },
+                { type: 'logo', value: 'instagram.svg', name: 'Instagram' },
+                { type: 'logo', value: 'telegram.svg', name: 'Telegram' },
+                { type: 'logo', value: 'whatsapp.svg', name: 'WhatsApp' },
+                { type: 'logo', value: 'discord.svg', name: 'Discord' }
+            ],
+            '公司': [
+                { type: 'logo', value: 'apple.svg', name: 'Apple' },
+                { type: 'logo', value: 'google.svg', name: 'Google' },
+                { type: 'logo', value: 'microsoft.svg', name: '微软' },
+                { type: 'logo', value: 'github.svg', name: 'GitHub' }
+            ],
+            '浏览器': [
+                { type: 'logo', value: 'chrome.svg', name: 'Chrome' }
+            ],
+            '工具': [
+                { type: 'logo', value: 'slack.svg', name: 'Slack' },
+                { type: 'logo', value: 'zoom.svg', name: 'Zoom' },
+                { type: 'logo', value: 'notion.svg', name: 'Notion' },
+                { type: 'logo', value: 'figma.svg', name: 'Figma' },
+                { type: 'logo', value: 'sketch.svg', name: 'Sketch' },
+                { type: 'logo', value: 'wordpress.svg', name: 'WordPress' },
+                { type: 'fa', value: 'fa-gamepad', name: '游戏' }
+            ],
+            '创意': [
+                { type: 'logo', value: 'photoshop.svg', name: 'Photoshop' },
+                { type: 'logo', value: 'illustrator.svg', name: 'Illustrator' },
+                { type: 'logo', value: 'premiere.svg', name: 'Premiere' }
+            ]
         };
 
         // 渲染图标库
@@ -3034,9 +3189,9 @@
             const content = document.getElementById('icon-library-content');
             let html = '';
             
-            for (const [category, icons] of Object.entries(ICON_CATEGORIES)) {
+            for (const [category, icons] of Object.entries(ICON_LIBRARY)) {
                 const filteredIcons = filter 
-                    ? icons.filter(icon => icon.includes(filter))
+                    ? icons.filter(icon => icon.name.toLowerCase().includes(filter.toLowerCase()))
                     : icons;
                 
                 if (filteredIcons.length === 0) continue;
@@ -3045,11 +3200,22 @@
                     <div class="icon-category">
                         <div class="icon-category-title">${category}</div>
                         <div class="icon-grid">
-                            ${filteredIcons.map(icon => `
-                                <div class="icon-option" onclick="selectIconFromLibrary('', '${icon}')">
-                                    <span class="icon-option-emoji">${icon}</span>
-                                </div>
-                            `).join('')}
+                            ${filteredIcons.map(icon => {
+                                if (icon.type === 'fa') {
+                                    return `<div class="icon-option" onclick="selectIconFromLibrary('fa', '${icon.value}')">
+                                        <i class="fas ${icon.value}"></i>
+                                        <span class="icon-option-name">${icon.name}</span>
+                                    </div>`;
+                                } else {
+                                    return `<div class="icon-option" onclick="selectIconFromLibrary('logo', '${icon.value}')">
+                                        <div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;">
+                                            <img src="icons/logos/${icon.value}" alt="${icon.name}" style="max-width:100%;max-height:100%;object-fit:contain;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                                            <i class="fas fa-image" style="display:none;font-size:20px;color:rgba(255,255,255,0.5);"></i>
+                                        </div>
+                                        <span class="icon-option-name">${icon.name}</span>
+                                    </div>`;
+                                }
+                            }).join('')}
                         </div>
                     </div>
                 `;
@@ -3119,19 +3285,31 @@
         }
 
         // 从图标库选择
-        window.selectIconFromLibrary = function(iconId, iconEmoji) {
+        window.selectIconFromLibrary = function(iconType, iconValue) {
             if (currentIconEditType === null || currentIconEditIndex === null) return;
             
             if (currentIconEditType === 'app') {
-                config.apps[currentIconEditIndex].icon = iconEmoji;
-                config.apps[currentIconEditIndex].iconUrl = '';
-                document.getElementById(`app-icon-${currentIconEditIndex}`).textContent = iconEmoji;
+                if (iconType === 'fa') {
+                    config.apps[currentIconEditIndex].icon = iconValue;
+                    config.apps[currentIconEditIndex].iconUrl = '';
+                    document.getElementById(`app-icon-${currentIconEditIndex}`).innerHTML = renderFAIcon(iconValue);
+                } else {
+                    config.apps[currentIconEditIndex].icon = '';
+                    config.apps[currentIconEditIndex].iconUrl = `icons/logos/${iconValue}`;
+                    document.getElementById(`app-icon-${currentIconEditIndex}`).innerHTML = `<img src="icons/logos/${iconValue}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-rocket\\'></i>'">`;
+                }
                 saveConfig(config);
                 renderApps();
             } else {
-                config.favorites[currentIconEditIndex].icon = iconEmoji;
-                config.favorites[currentIconEditIndex].iconUrl = '';
-                document.getElementById(`fav-icon-${currentIconEditIndex}`).textContent = iconEmoji;
+                if (iconType === 'fa') {
+                    config.favorites[currentIconEditIndex].icon = iconValue;
+                    config.favorites[currentIconEditIndex].iconUrl = '';
+                    document.getElementById(`fav-icon-${currentIconEditIndex}`).innerHTML = renderFAIcon(iconValue);
+                } else {
+                    config.favorites[currentIconEditIndex].icon = '';
+                    config.favorites[currentIconEditIndex].iconUrl = `icons/logos/${iconValue}`;
+                    document.getElementById(`fav-icon-${currentIconEditIndex}`).innerHTML = `<img src="icons/logos/${iconValue}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-link\\'></i>'">`;
+                }
                 saveConfig(config);
                 renderFavorites();
             }
