@@ -1365,7 +1365,7 @@
             max-width: 950px;
             width: 100%;
             margin: 0 auto;
-            padding: 90px 70px;
+            padding: 50px 70px;
             background: 
                 linear-gradient(135deg, rgba(0, 122, 255, 0.05) 0%, rgba(0, 212, 255, 0.02) 50%, rgba(255, 255, 255, 0.02) 100%);
             border: 2px solid rgba(255, 255, 255, 0.15);
@@ -1380,6 +1380,19 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.15);
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* 站点名称样式 */
+        .site-name {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #fff, #00D4FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 4px;
+            text-shadow: 0 2px 20px rgba(0, 122, 255, 0.3);
         }
 
         .quote-container:hover {
@@ -1934,8 +1947,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
-            padding: 0 12px;
+            gap: 12px;
+            padding: 0 16px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
 
@@ -2332,9 +2345,781 @@
             text-overflow: ellipsis;
             width: 100%;
         }
+
+        /* 站点设置样式 */
+        .settings-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .setting-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .setting-item label {
+            display: block;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .setting-item input[type="text"] {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .setting-item input[type="text"]:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .settings-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* 账户管理样式 */
+        .account-form {
+            max-width: 500px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .current-user-display {
+            padding: 12px 16px;
+            background: rgba(0, 122, 255, 0.1);
+            border: 1px solid rgba(0, 122, 255, 0.3);
+            border-radius: 10px;
+            color: var(--primary-blue);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .account-hint {
+            margin-top: 16px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .account-message {
+            margin-top: 12px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .account-message.success {
+            display: block;
+            background: rgba(52, 199, 89, 0.1);
+            border: 1px solid rgba(52, 199, 89, 0.3);
+            color: #34C759;
+        }
+
+        .account-message.error {
+            display: block;
+            background: rgba(255, 55, 95, 0.1);
+            border: 1px solid rgba(255, 55, 95, 0.3);
+            color: #FF375F;
+        }
+
+        /* 密码保护遮罩层 */
+        .page-lock-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 30, 0.98));
+            backdrop-filter: blur(20px);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .page-lock-overlay.show {
+            display: flex;
+        }
+
+        .page-lock-content {
+            text-align: center;
+            padding: 60px 50px;
+            background: linear-gradient(135deg, rgba(30, 30, 40, 0.98), rgba(20, 20, 30, 0.98));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .page-lock-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .page-lock-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff, #00D4FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-lock-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 30px;
+        }
+
+        .page-lock-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 8px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .page-lock-input:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+
+        .page-lock-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary-blue), #00D4FF);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .page-lock-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.4);
+        }
+
+        .page-lock-error {
+            color: #FF375F;
+            font-size: 14px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .page-lock-error.show {
+            display: block;
+        }
+
+        /* 开关样式 */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 32px;
+            margin-bottom: 10px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .3s;
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 24px;
+            width: 24px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: rgba(0, 122, 255, 0.5);
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(28px);
+        }
+
+        .setting-hint {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 8px;
+        }
+
+        /* 主机导航样式 */
+        .servers-section {
+            padding: 80px 60px;
+        }
+
+        .servers-last-check {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 5px;
+        }
+
+        .servers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .server-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .server-item:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .server-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .server-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .server-name {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .server-url {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .server-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .server-status.online {
+            background: #34C759;
+            box-shadow: 0 0 8px rgba(52, 199, 89, 0.6);
+        }
+
+        .server-status.offline {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .server-status.checking {
+            background: #FFD60A;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* 主机管理编辑器样式 */
+        .server-list-editor {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .server-item-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .server-item-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .server-item-inputs {
+            flex: 1;
+            display: flex;
+            gap: 10px;
+        }
+
+        .server-item-inputs input {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+
+        .server-item-inputs input:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .server-delete-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 55, 95, 0.2);
+            border: 1px solid rgba(255, 55, 95, 0.3);
+            border-radius: 6px;
+            color: #FF375F;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .server-delete-btn:hover {
+            background: rgba(255, 55, 95, 0.3);
+        }
+
+        /* 主题样式设置 */
+        .theme-presets h4,
+        .theme-custom h4,
+        .theme-fonts h4,
+        .theme-radius h4 {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+            margin-top: 25px;
+        }
+
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .preset-item {
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .preset-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .preset-item.active .preset-preview {
+            box-shadow: 0 0 0 3px var(--primary-blue);
+        }
+
+        .preset-preview {
+            width: 80px;
+            height: 60px;
+            border-radius: 8px;
+            margin: 0 auto 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .preset-item span {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .preset-preview.default-theme {
+            background: linear-gradient(135deg, #007AFF, #000000);
+        }
+
+        .preset-preview.dark-theme {
+            background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+        }
+
+        .preset-preview.ocean-theme {
+            background: linear-gradient(135deg, #0066CC, #003366);
+        }
+
+        .preset-preview.forest-theme {
+            background: linear-gradient(135deg, #228B22, #0d3310);
+        }
+
+        .preset-preview.sunset-theme {
+            background: linear-gradient(135deg, #FF6B35, #4a1a1a);
+        }
+
+        .preset-preview.purple-theme {
+            background: linear-gradient(135deg, #8B5CF6, #1a0d33);
+        }
+
+        .color-settings {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .color-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .color-item label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .color-item input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .font-settings,
+        .radius-settings {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .font-item,
+        .radius-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .font-item label,
+        .radius-item label {
+            width: 120px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            flex-shrink: 0;
+        }
+
+        .font-item select {
+            flex: 1;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .font-item select:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .font-item input[type="range"],
+        .radius-item input[type="range"] {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .font-item input[type="range"]::-webkit-slider-thumb,
+        .radius-item input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .font-item input[type="range"]::-webkit-slider-thumb:hover,
+        .radius-item input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .range-value {
+            width: 50px;
+            text-align: right;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .theme-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 照片管理样式 */
+        .photo-category-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .photo-cat-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 8px 16px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .photo-cat-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .photo-cat-btn.active {
+            background: linear-gradient(135deg, var(--primary-blue), #00D4FF);
+            border-color: transparent;
+            color: white;
+        }
+
+        .photo-upload-area {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 122, 255, 0.03);
+            border: 1px solid rgba(0, 122, 255, 0.15);
+            border-radius: 12px;
+        }
+
+        .photo-list-section h4 {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+        }
+
+        .admin-photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+        }
+
+        .admin-photo-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .admin-photo-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(0, 122, 255, 0.3);
+        }
+
+        .admin-photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .admin-photo-delete {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 55, 95, 0.9);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-photo-item:hover .admin-photo-delete {
+            opacity: 1;
+        }
+
+        .admin-photo-delete:hover {
+            background: rgba(255, 55, 95, 1);
+            transform: scale(1.1);
+        }
+
+        .admin-photo-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
+    <!-- 页面密码保护遮罩层 -->
+    <div class="page-lock-overlay" id="page-lock-overlay">
+        <div class="page-lock-content">
+            <div class="page-lock-icon">🔒</div>
+            <div class="page-lock-title">访问受限</div>
+            <div class="page-lock-subtitle">请输入访问密码以继续</div>
+            <input type="password" class="page-lock-input" id="page-lock-password" placeholder="输入密码" maxlength="20">
+            <button class="page-lock-btn" id="page-lock-submit">解锁</button>
+            <div class="page-lock-error" id="page-lock-error">密码错误，请重试</div>
+        </div>
+    </div>
+
+    <script>
+        // 立即检查密码保护（在页面渲染前）
+        (function() {
+            const isLocked = localStorage.getItem('pagePasswordEnabled') === 'true';
+            const savedPassword = localStorage.getItem('pagePassword');
+            const isUnlocked = sessionStorage.getItem('pageUnlocked') === 'true';
+            
+            if (isLocked && savedPassword && !isUnlocked) {
+                document.documentElement.style.overflow = 'hidden';
+                // 等待DOM加载完成后显示遮罩
+                document.addEventListener('DOMContentLoaded', function() {
+                    const overlay = document.getElementById('page-lock-overlay');
+                    if (overlay) {
+                        overlay.classList.add('show');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            }
+        })();
+    </script>
+
     <div class="bg-gradient"></div>
 
     <!-- 顶部状态栏 -->
@@ -2459,6 +3244,11 @@
                 <button class="admin-tab" data-tab="favorites">底部导航</button>
                 <button class="admin-tab" data-tab="music">音乐列表</button>
                 <button class="admin-tab" data-tab="quotes">每日一言</button>
+                <button class="admin-tab" data-tab="settings">站点设置</button>
+                <button class="admin-tab" data-tab="photos">照片管理</button>
+                <button class="admin-tab" data-tab="theme">主题样式</button>
+                <button class="admin-tab" data-tab="servers">主机管理</button>
+<button class="admin-tab" data-tab="account">账户管理</button>
             </div>
             <div class="admin-content">
                 <!-- 应用导航管理 -->
@@ -2487,7 +3277,7 @@
                         <!-- 选择按钮行 -->
                         <div class="upload-row">
                             <button type="button" class="select-file-btn" onclick="document.getElementById('music-file-input').click()">
-                                📁 选择文件
+                                📁 选择音乐文件（可多选）
                             </button>
                             <span class="selected-files" id="selected-files-text">未选择文件（最多20个）</span>
                             <button type="button" class="upload-confirm-btn" id="upload-confirm-btn" disabled>
@@ -2523,14 +3313,240 @@
                         <button class="action-btn" id="add-quote-line">➕ 添加名言</button>
                     </div>
                     <div class="quote-list-editor" id="quote-list-editor"></div>
-                    <div class="quote-hint-text">从 quotes.txt 文件加载，点击下方删除按钮移除，添加按钮新增</div>
+                    <div class="quote-hint-text">从文本文件加载（格式：句子 + 空格 + 作者），点击下方删除按钮移除，添加按钮新增</div>
+                </div>
+                
+                <!-- 站点设置 -->
+                <div class="admin-section" id="tab-settings">
+                    <h3>⚙️ 站点设置</h3>
+                    <div class="settings-section">
+                        <div class="setting-item">
+                            <label>站点名称</label>
+                            <input type="text" id="site-name-input" placeholder="Alix Go" value="Alix Go">
+                            <button class="action-btn" id="save-site-name">保存名称</button>
+                        </div>
+                        <div class="setting-item">
+                            <label>页面密码保护</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="page-password-toggle">
+                                <span class="toggle-slider"></span>
+                            </div>
+                            <div class="setting-hint">开启后进入网站需要输入密码</div>
+                        </div>
+                        <div class="setting-item" id="page-password-input-container" style="display: none;">
+                            <label>页面访问密码</label>
+                            <input type="password" id="page-password-input" placeholder="设置访问密码">
+                            <button class="action-btn" id="save-page-password">保存设置</button>
+                            <div class="setting-hint">此密码用于首页访问验证</div>
+                        </div>
+                        <div class="setting-item">
+                            <label>配置导出/导入</label>
+                            <div class="settings-actions">
+                                <button class="action-btn" id="export-config">📤 导出配置</button>
+                                <button class="action-btn" id="import-config">📥 导入配置</button>
+                            </div>
+                            <input type="file" id="import-file-input" accept=".json" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 照片管理 -->
+                <div class="admin-section" id="tab-photos">
+                    <h3>📷 照片管理</h3>
+                    
+                    <!-- 分类选择 -->
+                    <div class="photo-category-tabs">
+                        <button class="photo-cat-btn active" data-cat="landscape">风景</button>
+                        <button class="photo-cat-btn" data-cat="portrait">人像</button>
+                        <button class="photo-cat-btn" data-cat="humanity">人文</button>
+                        <button class="photo-cat-btn" data-cat="other">其他</button>
+                    </div>
+                    
+                    <!-- 上传区域 -->
+                    <div class="photo-upload-area" id="photo-upload-area">
+                        <input type="file" id="photo-file-input" accept="image/*" multiple style="display: none;">
+                        <div class="upload-row">
+                            <button type="button" class="select-file-btn" onclick="document.getElementById('photo-file-input').click()">
+                                📁 选择照片（可多选）
+                            </button>
+                            <span class="selected-files" id="photo-selected-text">未选择文件</span>
+                            <button type="button" class="upload-confirm-btn" id="photo-upload-btn" disabled>
+                                ⬆️ 确认上传
+                            </button>
+                            <button type="button" class="clear-files-btn" id="photo-clear-btn" style="display: none;">
+                                清空
+                            </button>
+                        </div>
+                        <div class="upload-types-compact">支持格式: JPG, PNG, GIF, WebP</div>
+                        
+                        <!-- 待上传文件列表 -->
+                        <div class="pending-files-list" id="photo-pending-list" style="display: none;">
+                            <div class="pending-header">📋 待上传文件列表：</div>
+                            <div id="photo-pending-container"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 照片列表 -->
+                    <div class="photo-list-section">
+                        <h4>当前分类照片</h4>
+                        <div class="admin-photo-grid" id="admin-photo-grid"></div>
+                    </div>
+                </div>
+                
+                <!-- 主题样式 -->
+                <div class="admin-section" id="tab-theme">
+                    <h3>🎨 主题样式</h3>
+                    
+                    <!-- 预设主题 -->
+                    <div class="theme-presets">
+                        <h4>预设主题</h4>
+                        <div class="preset-grid">
+                            <div class="preset-item" data-preset="default">
+                                <div class="preset-preview default-theme"></div>
+                                <span>默认主题</span>
+                            </div>
+                            <div class="preset-item" data-preset="dark">
+                                <div class="preset-preview dark-theme"></div>
+                                <span>深邃黑</span>
+                            </div>
+                            <div class="preset-item" data-preset="ocean">
+                                <div class="preset-preview ocean-theme"></div>
+                                <span>海洋蓝</span>
+                            </div>
+                            <div class="preset-item" data-preset="forest">
+                                <div class="preset-preview forest-theme"></div>
+                                <span>森林绿</span>
+                            </div>
+                            <div class="preset-item" data-preset="sunset">
+                                <div class="preset-preview sunset-theme"></div>
+                                <span>日落橙</span>
+                            </div>
+                            <div class="preset-item" data-preset="purple">
+                                <div class="preset-preview purple-theme"></div>
+                                <span>梦幻紫</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 自定义颜色 -->
+                    <div class="theme-custom">
+                        <h4>自定义颜色</h4>
+                        <div class="color-settings">
+                            <div class="color-item">
+                                <label>主色调</label>
+                                <input type="color" id="theme-primary" value="#007AFF">
+                            </div>
+                            <div class="color-item">
+                                <label>背景色</label>
+                                <input type="color" id="theme-bg" value="#000000">
+                            </div>
+                            <div class="color-item">
+                                <label>文字颜色</label>
+                                <input type="color" id="theme-text" value="#FFFFFF">
+                            </div>
+                            <div class="color-item">
+                                <label>次要文字</label>
+                                <input type="color" id="theme-text-secondary" value="#999999">
+                            </div>
+                            <div class="color-item">
+                                <label>边框颜色</label>
+                                <input type="color" id="theme-border" value="rgba(255, 255, 255, 0.1)">
+                            </div>
+                            <div class="color-item">
+                                <label>卡片背景</label>
+                                <input type="color" id="theme-card-bg" value="rgba(255, 255, 255, 0.08)">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 字体设置 -->
+                    <div class="theme-fonts">
+                        <h4>字体设置</h4>
+                        <div class="font-settings">
+                            <div class="font-item">
+                                <label>主字体</label>
+                                <select id="theme-font-primary">
+                                    <option value="'Inter', sans-serif">Inter (默认)</option>
+                                    <option value="'Noto Sans SC', sans-serif">Noto Sans SC</option>
+                                    <option value="'Noto Serif SC', serif">Noto Serif SC</option>
+                                    <option value="'Ma Shan Zheng', cursive">马善政毛笔</option>
+                                    <option value="'ZCOOL XiaoWei', serif">站酷小薇</option>
+                                    <option value="'ZCOOL KuaiLe', cursive">站酷快乐体</option>
+                                    <option value="system-ui, sans-serif">系统字体</option>
+                                </select>
+                            </div>
+                            <div class="font-item">
+                                <label>标题字体大小</label>
+                                <input type="range" id="theme-title-size" min="14" max="32" value="20">
+                                <span class="range-value">20px</span>
+                            </div>
+                            <div class="font-item">
+                                <label>正文字体大小</label>
+                                <input type="range" id="theme-body-size" min="12" max="20" value="14">
+                                <span class="range-value">14px</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 圆角设置 -->
+                    <div class="theme-radius">
+                        <h4>圆角设置</h4>
+                        <div class="radius-settings">
+                            <div class="radius-item">
+                                <label>卡片圆角</label>
+                                <input type="range" id="theme-card-radius" min="0" max="30" value="16">
+                                <span class="range-value">16px</span>
+                            </div>
+                            <div class="radius-item">
+                                <label>按钮圆角</label>
+                                <input type="range" id="theme-btn-radius" min="0" max="30" value="25">
+                                <span class="range-value">25px</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 操作按钮 -->
+                    <div class="theme-actions">
+                        <button class="action-btn" id="apply-theme">应用主题</button>
+                        <button class="action-btn" id="save-theme">保存为预设</button>
+                        <button class="action-btn" id="reset-theme">恢复默认</button>
+                    </div>
+                </div>
+                
+                <!-- 主机管理 -->
+                <div class="admin-section" id="tab-servers">
+                    <h3>🖥️ 主机管理</h3>
+                    <div class="server-list-editor" id="servers-editor"></div>
+                    <button class="add-btn" id="add-server">+ 添加主机</button>
+                    <div class="quote-hint-text">配置需要监控的服务器，系统将自动检测在线状态</div>
+                </div>
+                
+                <!-- 账户管理 -->
+                <div class="admin-section" id="tab-account">
+                    <h3>👤 账户管理</h3>
+                    <div class="account-form">
+                        <div class="form-group">
+                            <label>当前用户</label>
+                            <div class="current-user-display" id="current-user-display">未登录</div>
+                        </div>
+                        <div class="form-group">
+                            <label>新用户名</label>
+                            <input type="text" id="new-username" placeholder="输入新用户名">
+                        </div>
+                        <div class="form-group">
+                            <label>新密码</label>
+                            <input type="password" id="new-password" placeholder="输入新密码">
+                        </div>
+                        <div class="form-group">
+                            <label>确认密码</label>
+                            <input type="password" id="confirm-password" placeholder="再次输入新密码">
+                        </div>
+                        <button class="action-btn" id="update-account">更新账户信息</button>
+                        <div class="account-hint">密码将采用 SHA-256 加密存储</div>
+                    </div>
                 </div>
             </div>
-            <div class="admin-footer">
-                <button class="reset-btn" id="reset-admin">🔄 恢复默认</button>
-                <button class="cancel-btn" id="cancel-admin">取消</button>
-                <button class="save-btn" id="save-admin">💾 保存配置</button>
-            </div>
+
         </div>
     </div>
 
@@ -2556,6 +3572,7 @@
         <section class="section-full">
             <!-- 名言轮播 -->
             <div class="quote-section">
+                <div class="site-name">Alix Go</div>
                 <div class="quote-container">
                     <div class="quote-corner top-left"></div>
                     <div class="quote-corner top-right"></div>
@@ -2596,6 +3613,15 @@
             <h2 class="section-title">应用导航</h2>
             <div class="apps-grid"></div>
         </section>
+
+        <!-- 第四屏：主机导航 -->
+        <section id="servers" class="servers-section section-full">
+            <div class="section-header">
+                <h2 class="section-title">🖥️ 主机导航</h2>
+                <div class="servers-last-check" id="servers-last-check">上次检查: --</div>
+            </div>
+            <div class="servers-grid" id="servers-grid"></div>
+        </section>
     </main>
 
     <!-- 底部浮动常用网址 -->
@@ -2633,11 +3659,25 @@
             return false;
         }
 
-        // 登录
-        function login(username, password) {
-            const user = AUTH_CONFIG.users.find(u => u.username === username && u.password === password);
+        // 登录（支持明文和 SHA-256 加密密码）
+        async function login(username, password) {
+            const user = AUTH_CONFIG.users.find(u => u.username === username);
             
-            if (user) {
+            if (!user) return false;
+            
+            let isValid = false;
+            
+            // 检查密码是否是 SHA-256 格式（64位十六进制字符串）
+            if (user.password.length === 64 && /^[a-f0-9]+$/.test(user.password)) {
+                // 加密密码，需要 SHA-256 比对
+                const hashedPassword = await sha256(password);
+                isValid = hashedPassword === user.password;
+            } else {
+                // 明文密码，直接比对
+                isValid = user.password === password;
+            }
+            
+            if (isValid) {
                 currentUser = user.username;
                 currentRole = user.role;
                 
@@ -2832,6 +3872,33 @@
             return JSON.parse(JSON.stringify(DEFAULT_CONFIG));
         }
 
+        // 加载照片数据
+        function loadGalleryData() {
+            const saved = localStorage.getItem('galleryData');
+            if (saved) {
+                return JSON.parse(saved);
+            }
+            // 返回默认照片数据
+            return {
+                landscape: [
+                    { src: 'images/landscape/1.jpg', title: '山水', desc: '清晨的山水' },
+                    { src: 'images/landscape/2.jpg', title: '湖泊', desc: '宁静的湖面' },
+                    { src: 'images/landscape/3.jpg', title: '森林', desc: '林间小道' }
+                ],
+                portrait: [
+                    { src: 'images/portrait/1.jpg', title: '人像1', desc: '人像摄影' },
+                    { src: 'images/portrait/2.jpg', title: '人像2', desc: '人像摄影' }
+                ],
+                humanity: [
+                    { src: 'images/humanity/1.jpg', title: '人文1', desc: '人文纪实' },
+                    { src: 'images/humanity/2.jpg', title: '人文2', desc: '人文纪实' }
+                ],
+                other: [
+                    { src: 'images/other/1.jpg', title: '其他1', desc: '其他照片' }
+                ]
+            };
+        }
+
         // 保存配置
         function saveConfig(config) {
             localStorage.setItem('siteConfig', JSON.stringify(config));
@@ -2839,6 +3906,9 @@
 
         // 当前配置
         let config = loadConfig();
+        
+        // 照片数据（全局变量，支持持久化）
+        window.galleryData = loadGalleryData();
 
         // 重置配置
         function resetConfig() {
@@ -2915,12 +3985,12 @@
         });
         
         // 登录表单提交
-        document.getElementById('login-form').addEventListener('submit', (e) => {
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            if (login(username, password)) {
+            if (await login(username, password)) {
                 document.getElementById('login-modal').classList.remove('show');
                 document.getElementById('login-error').classList.remove('show');
                 document.getElementById('login-form').reset();
@@ -2949,7 +4019,6 @@
         
         // 关闭管理面板
         document.getElementById('close-admin').addEventListener('click', closeAdminPanel);
-        document.getElementById('cancel-admin').addEventListener('click', closeAdminPanel);
         
         // 点击弹窗外部关闭
         document.getElementById('admin-modal').addEventListener('click', (e) => {
@@ -2962,21 +4031,6 @@
         function openAdminPanel() {
             document.getElementById('admin-modal').classList.add('show');
             renderAdminEditors();
-            
-            // 检查当前标签页，应用导航和网址导航不需要保存按钮
-            const activeTab = document.querySelector('.admin-tab.active');
-            if (activeTab) {
-                const currentTab = activeTab.dataset.tab;
-                const resetBtn = document.getElementById('reset-admin');
-                const saveBtn = document.getElementById('save-admin');
-                if (currentTab === 'apps' || currentTab === 'favorites') {
-                    resetBtn.style.display = 'none';
-                    saveBtn.style.display = 'none';
-                } else {
-                    resetBtn.style.display = 'inline-block';
-                    saveBtn.style.display = 'inline-block';
-                }
-            }
         }
         
         // 关闭管理面板
@@ -3358,12 +4412,18 @@
             
             quoteEditor.innerHTML = config.quotes.map((quote, index) => `
                 <div class="quote-item-row" data-index="${index}">
-                    <input type="text" class="quote-text-input" value="${quote.text || ''}" placeholder="名言内容">
-                    <input type="text" class="quote-author-input" value="${quote.author || ''}" placeholder="作者">
+                    <input type="text" class="quote-text-input" value="${quote.text || ''}" placeholder="名言内容" onchange="updateQuote(${index}, 'text', this.value)">
+                    <input type="text" class="quote-author-input" value="${quote.author || ''}" placeholder="作者" onchange="updateQuote(${index}, 'author', this.value)">
                     <button class="quote-delete-btn" onclick="deleteQuote(${index})">🗑️</button>
                 </div>
             `).join('');
         }
+        
+        // 更新名言
+        window.updateQuote = function(index, field, value) {
+            config.quotes[index][field] = value;
+            saveConfig(config);
+        };
         
         // 删除应用
         window.deleteApp = function(index) {
@@ -3628,33 +4688,46 @@
         });
         
         // 从文件加载名言
-        document.getElementById('load-quotes-file').addEventListener('click', async () => {
-            try {
-                const response = await fetch('quotes.txt');
-                if (!response.ok) {
-                    throw new Error('无法加载文件');
+        // 从文件选择器加载名言
+        document.getElementById('load-quotes-file').addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.txt';
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                try {
+                    const text = await file.text();
+                    const lines = text.trim().split('\n').filter(line => line.trim());
+                    
+                    config.quotes = lines.map(line => {
+                        // 格式："句子内容 作者"
+                        // 从最后一个空格分割，前面是句子，后面是作者
+                        const lastSpaceIndex = line.lastIndexOf(' ');
+                        if (lastSpaceIndex > 0) {
+                            const text = line.substring(0, lastSpaceIndex).trim();
+                            const author = line.substring(lastSpaceIndex + 1).trim();
+                            return { text, author: author || '佚名' };
+                        }
+                        // 如果没有空格，整行作为句子，作者为佚名
+                        return { text: line.trim(), author: '佚名' };
+                    }).filter(q => q.text);
+                    
+                    saveConfig(config);
+                    renderQuoteList();
+                    alert(`已从 ${file.name} 加载 ${config.quotes.length} 条名言`);
+                } catch (error) {
+                    alert('加载文件失败: ' + error.message);
                 }
-                const text = await response.text();
-                const lines = text.trim().split('\n').filter(line => line.trim());
-                
-                config.quotes = lines.map(line => {
-                    const parts = line.split('|');
-                    return {
-                        text: (parts[0] || '').trim(),
-                        author: (parts[1] || '佚名').trim()
-                    };
-                }).filter(q => q.text);
-                
-                renderQuoteList();
-                alert(`已从 quotes.txt 加载 ${config.quotes.length} 条名言`);
-            } catch (error) {
-                alert('加载文件失败: ' + error.message);
-            }
+            };
+            input.click();
         });
         
         // 添加新名言
         document.getElementById('add-quote-line').addEventListener('click', () => {
             config.quotes.push({ text: '', author: '' });
+            saveConfig(config);
             renderQuoteList();
             // 滚动到底部
             const editor = document.getElementById('quote-list-editor');
@@ -3664,6 +4737,7 @@
         // 删除名言
         window.deleteQuote = function(index) {
             config.quotes.splice(index, 1);
+            saveConfig(config);
             renderQuoteList();
         };
         
@@ -3676,27 +4750,15 @@
                 tab.classList.add('active');
                 document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
                 
-                // 应用导航和网址导航即时生效，不需要保存按钮
-                const currentTab = tab.dataset.tab;
-                const resetBtn = document.getElementById('reset-admin');
-                const saveBtn = document.getElementById('save-admin');
-                if (currentTab === 'apps' || currentTab === 'favorites') {
-                    resetBtn.style.display = 'none';
-                    saveBtn.style.display = 'none';
-                } else {
-                    resetBtn.style.display = 'inline-block';
-                    saveBtn.style.display = 'inline-block';
+                // 切换到站点设置时加载密码保护设置
+                if (tab.dataset.tab === 'settings') {
+                    loadPagePasswordSettings();
+                }
+                // 切换到账户管理时更新用户显示
+                else if (tab.dataset.tab === 'account') {
+                    updateCurrentUserDisplay();
                 }
             });
-        });
-        
-        // 恢复默认配置
-        document.getElementById('reset-admin').addEventListener('click', () => {
-            if (confirm('确定要恢复默认配置吗？这将删除所有自定义设置。')) {
-                localStorage.removeItem('siteConfig');
-                alert('已恢复默认配置，页面将刷新。');
-                location.reload();
-            }
         });
 
         // 自动保存单个导航项
@@ -3714,62 +4776,7 @@
             }
         }
         
-        // 保存配置（其他标签页使用）
-        document.getElementById('save-admin').addEventListener('click', () => {
-            // 收集应用导航数据（新格式）
-            const appItems = document.querySelectorAll('#apps-editor .nav-item-row');
-            config.apps = Array.from(appItems).map(item => {
-                const index = item.dataset.index;
-                const iconEl = document.getElementById(`app-icon-${index}`);
-                const iconImg = iconEl.querySelector('img');
-                return {
-                    name: item.querySelector('.nav-name').value,
-                    icon: iconImg ? '' : iconEl.textContent,
-                    iconUrl: iconImg ? iconImg.src : '',
-                    url: item.querySelector('.nav-url').value
-                };
-            });
-            
-            // 收集底部导航数据（新格式）
-            const favItems = document.querySelectorAll('#favorites-editor .nav-item-row');
-            config.favorites = Array.from(favItems).map(item => {
-                const index = item.dataset.index;
-                const iconEl = document.getElementById(`fav-icon-${index}`);
-                const iconImg = iconEl.querySelector('img');
-                return {
-                    name: item.querySelector('.nav-name').value,
-                    icon: iconImg ? '' : iconEl.textContent,
-                    iconUrl: iconImg ? iconImg.src : '',
-                    url: item.querySelector('.nav-url').value
-                };
-            });
-            
-            // 音乐列表已经在添加/删除时更新到config.music
-            
-            // 收集每日一言数据
-            const quoteRows = document.querySelectorAll('#quote-list-editor .quote-item-row');
-            config.quotes = Array.from(quoteRows).map(row => ({
-                text: row.querySelector('.quote-text-input').value,
-                author: row.querySelector('.quote-author-input').value
-            })).filter(q => q.text.trim());
-            
-            // 保存到localStorage
-            saveConfig(config);
-            
-            // 重新渲染页面
-            renderApps();
-            renderFavorites();
-            
-            // 更新音乐列表 - 直接替换数组引用
-            window.musicList = config.music || DEFAULT_CONFIG.music;
-            
-            // 更新名言列表
-            quotes.length = 0;
-            quotes.push(...config.quotes);
-            
-            alert('配置已保存！');
-            closeAdminPanel();
-        });
+
 
         // 初始化渲染
         renderApps();
@@ -4109,10 +5116,12 @@
         async function updateGallerySmooth(category) {
             const grid = document.getElementById('gallery-grid');
             const items = grid.querySelectorAll('.gallery-item');
-            const newImages = getRandomImages(galleryImages[category]);
+            // 合并默认图片和用户上传的图片
+            const allImages = [...(galleryImages[category] || []), ...(window.galleryData[category] || [])];
+            const newImages = getRandomImages(allImages);
             
             // 预加载所有新图片
-            await Promise.all(newImages.map(img => preloadImage(img.url)));
+            await Promise.all(newImages.map(img => preloadImage(img.url || img.src)));
             
             // 淡出当前图片
             items.forEach(item => {
@@ -4134,7 +5143,7 @@
                 
                 if (newImages[index]) {
                     if (img) {
-                        img.src = newImages[index].url;
+                        img.src = newImages[index].url || newImages[index].src;
                         img.alt = newImages[index].title;
                         img.classList.remove('fade-out');
                         img.classList.add('fade-in');
@@ -4149,12 +5158,14 @@
 
         function renderGallery(category) {
             const grid = document.getElementById('gallery-grid');
-            const images = getRandomImages(galleryImages[category]);
+            // 合并默认图片和用户上传的图片
+            const allImages = [...(galleryImages[category] || []), ...(window.galleryData[category] || [])];
+            const images = getRandomImages(allImages);
             currentGalleryImages = images;
             
             grid.innerHTML = images.map((img, index) => `
                 <div class="gallery-item" style="animation: fadeInUp 0.6s ease ${index * 0.15}s both;">
-                    <img src="${img.url}" alt="${img.title}" loading="lazy" class="fade-in">
+                    <img src="${img.url || img.src}" alt="${img.title}" loading="lazy" class="fade-in">
                     <div class="gallery-overlay">
                         <div class="gallery-title">${img.title}</div>
                         <div class="gallery-desc">${img.desc}</div>
@@ -4423,6 +5434,1003 @@
         // 初始化
         renderGallery('landscape');
         startGalleryAutoRefresh();
+
+        // ==================== 页面密码保护 ====================
+        // 密码验证
+        document.getElementById('page-lock-submit').addEventListener('click', () => {
+            const input = document.getElementById('page-lock-password');
+            const error = document.getElementById('page-lock-error');
+            const savedPassword = localStorage.getItem('pagePassword');
+            
+            if (input.value === savedPassword) {
+                sessionStorage.setItem('pageUnlocked', 'true');
+                document.getElementById('page-lock-overlay').classList.remove('show');
+                document.body.style.overflow = '';
+                error.classList.remove('show');
+                input.value = '';
+            } else {
+                error.classList.add('show');
+                input.value = '';
+                input.focus();
+            }
+        });
+
+        // 回车提交
+        document.getElementById('page-lock-password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('page-lock-submit').click();
+            }
+        });
+
+        // ==================== 站点设置 ====================
+        // 加载保存的站点名称
+        function loadSiteName() {
+            const savedName = localStorage.getItem('siteName');
+            if (savedName) {
+                document.querySelector('.site-name').textContent = savedName;
+                document.getElementById('site-name-input').value = savedName;
+            }
+        }
+        loadSiteName();
+
+        // 加载页面密码保护设置
+        function loadPagePasswordSettings() {
+            const isEnabled = localStorage.getItem('pagePasswordEnabled') === 'true';
+            const savedPassword = localStorage.getItem('pagePassword') || '';
+            
+            document.getElementById('page-password-toggle').checked = isEnabled;
+            document.getElementById('page-password-input').value = savedPassword;
+            
+            // 显示/隐藏密码输入框
+            document.getElementById('page-password-input-container').style.display = isEnabled ? 'block' : 'none';
+        }
+
+        // 切换密码保护开关
+        document.getElementById('page-password-toggle').addEventListener('change', (e) => {
+            const isEnabled = e.target.checked;
+            document.getElementById('page-password-input-container').style.display = isEnabled ? 'block' : 'none';
+            
+            if (!isEnabled) {
+                // 关闭时清除密码
+                localStorage.removeItem('pagePasswordEnabled');
+                localStorage.removeItem('pagePassword');
+                sessionStorage.removeItem('pageUnlocked');
+                alert('页面密码保护已关闭');
+            } else {
+                // 开启时立即设置标志（密码在保存按钮中设置）
+                localStorage.setItem('pagePasswordEnabled', 'true');
+                document.getElementById('page-password-input').focus();
+            }
+        });
+
+        // 保存页面密码
+        document.getElementById('save-page-password').addEventListener('click', () => {
+            const password = document.getElementById('page-password-input').value;
+            const isEnabled = document.getElementById('page-password-toggle').checked;
+            
+            if (isEnabled && !password) {
+                alert('请输入访问密码');
+                return;
+            }
+            
+            if (isEnabled) {
+                localStorage.setItem('pagePasswordEnabled', 'true');
+                localStorage.setItem('pagePassword', password);
+                alert('页面密码保护已开启，下次访问需要输入密码');
+            }
+        });
+
+        // 保存站点名称
+        document.getElementById('save-site-name').addEventListener('click', () => {
+            const newName = document.getElementById('site-name-input').value.trim();
+            if (newName) {
+                localStorage.setItem('siteName', newName);
+                document.querySelector('.site-name').textContent = newName;
+                alert('站点名称已保存！');
+            }
+        });
+
+        // 导出配置
+        document.getElementById('export-config').addEventListener('click', () => {
+            const exportData = {
+                siteName: localStorage.getItem('siteName') || 'Alix Go',
+                siteConfig: JSON.parse(localStorage.getItem('siteConfig') || '{}'),
+                users: JSON.parse(localStorage.getItem('customUsers') || '[]'),
+                pagePasswordEnabled: localStorage.getItem('pagePasswordEnabled') === 'true',
+                pagePassword: localStorage.getItem('pagePassword') || '',
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `alix-go-config-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // 导入配置
+        document.getElementById('import-config').addEventListener('click', () => {
+            document.getElementById('import-file-input').click();
+        });
+
+        document.getElementById('import-file-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const importData = JSON.parse(event.target.result);
+                    
+                    if (confirm('导入配置将覆盖当前所有设置，是否继续？')) {
+                        // 导入站点名称
+                        if (importData.siteName) {
+                            localStorage.setItem('siteName', importData.siteName);
+                            document.querySelector('.site-name').textContent = importData.siteName;
+                            document.getElementById('site-name-input').value = importData.siteName;
+                        }
+                        
+                        // 导入配置
+                        if (importData.siteConfig) {
+                            localStorage.setItem('siteConfig', JSON.stringify(importData.siteConfig));
+                            config = importData.siteConfig;
+                            renderApps();
+                            renderFavorites();
+                        }
+                        
+                        // 导入用户
+                        if (importData.users) {
+                            localStorage.setItem('customUsers', JSON.stringify(importData.users));
+                        }
+                        
+                        // 导入页面密码保护设置
+                        if (importData.pagePasswordEnabled !== undefined) {
+                            localStorage.setItem('pagePasswordEnabled', importData.pagePasswordEnabled.toString());
+                        }
+                        if (importData.pagePassword) {
+                            localStorage.setItem('pagePassword', importData.pagePassword);
+                        }
+                        
+                        alert('配置导入成功！页面将刷新。');
+                        location.reload();
+                    }
+                } catch (error) {
+                    alert('导入失败：文件格式错误');
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        });
+
+        // ==================== 账户管理 ====================
+        // SHA-256 加密函数
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // 显示当前用户
+        function updateCurrentUserDisplay() {
+            const display = document.getElementById('current-user-display');
+            if (currentUser) {
+                display.textContent = `${currentUser} (${currentRole === 'admin' ? '管理员' : '普通用户'})`;
+            } else {
+                display.textContent = '未登录';
+            }
+        }
+
+        // 加载自定义用户
+        function loadCustomUsers() {
+            const saved = localStorage.getItem('customUsers');
+            if (saved) {
+                const customUsers = JSON.parse(saved);
+                // 合并到 AUTH_CONFIG
+                AUTH_CONFIG.users = [
+                    { username: 'admin', password: 'admin123', role: 'admin' },
+                    { username: 'user', password: 'user123', role: 'user' },
+                    ...customUsers
+                ];
+            }
+        }
+        loadCustomUsers();
+
+        // 更新账户信息
+        document.getElementById('update-account').addEventListener('click', async () => {
+            if (!currentUser) {
+                alert('请先登录');
+                return;
+            }
+
+            const newUsername = document.getElementById('new-username').value.trim();
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // 验证
+            if (newPassword && newPassword !== confirmPassword) {
+                alert('两次输入的密码不一致');
+                return;
+            }
+
+            if (newPassword && newPassword.length < 6) {
+                alert('密码长度至少6位');
+                return;
+            }
+
+            // 查找当前用户
+            const userIndex = AUTH_CONFIG.users.findIndex(u => u.username === currentUser);
+            if (userIndex === -1) {
+                alert('用户不存在');
+                return;
+            }
+
+            // 更新用户信息
+            const updatedUser = { ...AUTH_CONFIG.users[userIndex] };
+            
+            if (newUsername && newUsername !== currentUser) {
+                // 检查用户名是否已存在
+                if (AUTH_CONFIG.users.some(u => u.username === newUsername)) {
+                    alert('该用户名已存在');
+                    return;
+                }
+                updatedUser.username = newUsername;
+                currentUser = newUsername;
+                localStorage.setItem('currentUser', newUsername);
+            }
+
+            if (newPassword) {
+                // SHA-256 加密密码
+                updatedUser.password = await sha256(newPassword);
+            }
+
+            // 保存到自定义用户列表（排除默认用户）
+            const customUsers = JSON.parse(localStorage.getItem('customUsers') || '[]');
+            const existingIndex = customUsers.findIndex(u => u.username === AUTH_CONFIG.users[userIndex].username);
+            
+            if (existingIndex !== -1) {
+                customUsers[existingIndex] = updatedUser;
+            } else {
+                customUsers.push(updatedUser);
+            }
+            
+            localStorage.setItem('customUsers', JSON.stringify(customUsers));
+            AUTH_CONFIG.users[userIndex] = updatedUser;
+
+            // 清空表单
+            document.getElementById('new-username').value = '';
+            document.getElementById('new-password').value = '';
+            document.getElementById('confirm-password').value = '';
+
+            updateCurrentUserDisplay();
+            updateLoginUI();
+            alert('账户信息已更新！');
+        });
+
+        // ==================== 照片管理 ====================
+        let currentPhotoCategory = 'landscape';
+        let pendingPhotoFiles = [];
+
+        // 照片分类切换
+        document.querySelectorAll('.photo-cat-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.photo-cat-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentPhotoCategory = btn.dataset.cat;
+                renderPhotoList();
+            });
+        });
+
+        // 渲染照片列表
+        function renderPhotoList() {
+            const grid = document.getElementById('admin-photo-grid');
+            const photos = window.galleryData[currentPhotoCategory] || [];
+            
+            if (photos.length === 0) {
+                grid.innerHTML = '<div class="admin-photo-empty">该分类暂无照片</div>';
+                return;
+            }
+            
+            grid.innerHTML = photos.map((photo, index) => `
+                <div class="admin-photo-item" data-index="${index}">
+                    <img src="${photo.src}" alt="${photo.title}">
+                    <button class="admin-photo-delete" onclick="deletePhoto(${index})" title="删除">×</button>
+                </div>
+            `).join('');
+        }
+
+        // 删除照片
+        window.deletePhoto = function(index) {
+            if (!confirm('确定要删除这张照片吗？')) return;
+            
+            window.galleryData[currentPhotoCategory].splice(index, 1);
+            saveGalleryData();
+            renderPhotoList();
+            renderGallery(currentPhotoCategory);
+        };
+
+        // 保存照片数据
+        function saveGalleryData() {
+            localStorage.setItem('galleryData', JSON.stringify(window.galleryData));
+        }
+
+        // 照片文件上传功能
+        const photoFileInput = document.getElementById('photo-file-input');
+        const photoSelectedText = document.getElementById('photo-selected-text');
+        const photoUploadBtn = document.getElementById('photo-upload-btn');
+        const photoClearBtn = document.getElementById('photo-clear-btn');
+        const photoPendingList = document.getElementById('photo-pending-list');
+        const photoPendingContainer = document.getElementById('photo-pending-container');
+
+        // 支持的图片格式
+        const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        const ALLOWED_IMAGE_EXTS = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+
+        function isImageFile(file) {
+            if (ALLOWED_IMAGE_TYPES.includes(file.type)) return true;
+            const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+            return ALLOWED_IMAGE_EXTS.includes(ext);
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        function updatePhotoSelectedDisplay() {
+            if (pendingPhotoFiles.length === 0) {
+                photoSelectedText.textContent = '未选择文件';
+                photoUploadBtn.disabled = true;
+                photoClearBtn.style.display = 'none';
+                photoPendingList.style.display = 'none';
+            } else {
+                const validCount = pendingPhotoFiles.filter(f => f.isValid).length;
+                photoSelectedText.textContent = `已选择 ${pendingPhotoFiles.length} 个文件（${validCount} 个有效）`;
+                photoUploadBtn.disabled = validCount === 0;
+                photoClearBtn.style.display = 'inline-block';
+                photoPendingList.style.display = 'block';
+                renderPhotoPendingList();
+            }
+        }
+
+        function renderPhotoPendingList() {
+            photoPendingContainer.innerHTML = pendingPhotoFiles.map((fileInfo, index) => {
+                const icon = fileInfo.isValid ? '🖼️' : '❌';
+                const statusClass = fileInfo.isValid ? 'valid' : 'invalid';
+                const statusText = fileInfo.isValid ? '有效' : '无效';
+                return `
+                    <div class="pending-file-item ${fileInfo.isValid ? '' : 'invalid'}">
+                        <span class="pending-file-icon">${icon}</span>
+                        <span class="pending-file-name ${fileInfo.isValid ? '' : 'invalid'}" title="${fileInfo.name}">${fileInfo.name}</span>
+                        <span class="pending-file-size">${formatFileSize(fileInfo.size)}</span>
+                        <span class="pending-file-status ${statusClass}">${statusText}</span>
+                        <button class="pending-file-remove" onclick="removePendingPhoto(${index})" title="移除">×</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.removePendingPhoto = function(index) {
+            pendingPhotoFiles.splice(index, 1);
+            updatePhotoSelectedDisplay();
+        };
+
+        function clearAllPendingPhotos() {
+            if (pendingPhotoFiles.length === 0) return;
+            if (confirm(`确定要清空所有 ${pendingPhotoFiles.length} 个待上传文件吗？`)) {
+                pendingPhotoFiles = [];
+                updatePhotoSelectedDisplay();
+                photoFileInput.value = '';
+            }
+        }
+
+        function handlePhotoFileSelection(files) {
+            let filesToProcess = Array.from(files);
+            
+            const newFiles = filesToProcess.map(file => ({
+                file: file,
+                isValid: isImageFile(file),
+                name: file.name,
+                size: file.size
+            }));
+            
+            // 过滤重复文件
+            const existingNames = new Set(pendingPhotoFiles.map(f => f.name));
+            const uniqueFiles = newFiles.filter(f => !existingNames.has(f.name));
+            
+            if (uniqueFiles.length < newFiles.length) {
+                const duplicates = newFiles.filter(f => existingNames.has(f.name)).map(f => f.name);
+                alert(`以下文件已在列表中，已跳过：\n${duplicates.join('\n')}`);
+            }
+            
+            pendingPhotoFiles = pendingPhotoFiles.concat(uniqueFiles);
+            updatePhotoSelectedDisplay();
+        }
+
+        function executePhotoUpload() {
+            const validFiles = pendingPhotoFiles.filter(f => f.isValid);
+            
+            if (validFiles.length === 0) {
+                alert('没有有效的图片文件可上传');
+                return;
+            }
+            
+            let uploadedCount = 0;
+            
+            validFiles.forEach(fileInfo => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    // 添加到当前分类
+                    if (!window.galleryData[currentPhotoCategory]) {
+                        window.galleryData[currentPhotoCategory] = [];
+                    }
+                    
+                    window.galleryData[currentPhotoCategory].push({
+                        src: e.target.result,
+                        title: fileInfo.name.replace(/\.[^/.]+$/, ''),
+                        desc: '用户上传照片'
+                    });
+                    
+                    uploadedCount++;
+                    
+                    if (uploadedCount === validFiles.length) {
+                        // 所有文件上传完成
+                        saveGalleryData();
+                        pendingPhotoFiles = [];
+                        updatePhotoSelectedDisplay();
+                        photoFileInput.value = '';
+                        renderPhotoList();
+                        renderGallery(currentPhotoCategory);
+                        alert(`成功上传 ${uploadedCount} 张照片！`);
+                    }
+                };
+                reader.readAsDataURL(fileInfo.file);
+            });
+        }
+
+        // 照片文件选择事件
+        photoFileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files.length > 0) {
+                handlePhotoFileSelection(e.target.files);
+                e.target.value = '';
+            }
+        });
+
+        // 照片上传按钮事件
+        photoUploadBtn.addEventListener('click', executePhotoUpload);
+
+        // 清空按钮事件
+        photoClearBtn.addEventListener('click', clearAllPendingPhotos);
+
+        // 初始化照片列表
+        function initPhotoManager() {
+            // 从localStorage加载照片数据
+            const saved = localStorage.getItem('galleryData');
+            if (saved) {
+                window.galleryData = JSON.parse(saved);
+            }
+        }
+
+        // 监听标签切换到照片管理
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                if (tab.dataset.tab === 'photos') {
+                    initPhotoManager();
+                    renderPhotoList();
+                } else if (tab.dataset.tab === 'theme') {
+                    loadThemeSettings();
+                }
+            });
+        });
+
+        // ==================== 主题管理 ====================
+        // 预设主题定义
+        const THEMES = {
+            default: {
+                primary: '#007AFF',
+                bg: '#000000',
+                text: '#FFFFFF',
+                textSecondary: 'rgba(255, 255, 255, 0.6)',
+                border: 'rgba(255, 255, 255, 0.1)',
+                cardBg: 'rgba(255, 255, 255, 0.08)',
+                font: "'Inter', sans-serif",
+                titleSize: '20px',
+                bodySize: '14px',
+                cardRadius: '16px',
+                btnRadius: '25px'
+            },
+            dark: {
+                primary: '#5AC8FA',
+                bg: '#0d0d0d',
+                text: '#FFFFFF',
+                textSecondary: 'rgba(255, 255, 255, 0.5)',
+                border: 'rgba(255, 255, 255, 0.08)',
+                cardBg: 'rgba(255, 255, 255, 0.05)',
+                font: "'Inter', sans-serif",
+                titleSize: '20px',
+                bodySize: '14px',
+                cardRadius: '12px',
+                btnRadius: '20px'
+            },
+            ocean: {
+                primary: '#00A8E8',
+                bg: '#001524',
+                text: '#FFFFFF',
+                textSecondary: 'rgba(255, 255, 255, 0.6)',
+                border: 'rgba(0, 168, 232, 0.2)',
+                cardBg: 'rgba(0, 168, 232, 0.1)',
+                font: "'Noto Sans SC', sans-serif",
+                titleSize: '22px',
+                bodySize: '15px',
+                cardRadius: '20px',
+                btnRadius: '30px'
+            },
+            forest: {
+                primary: '#2ECC71',
+                bg: '#0a1f0d',
+                text: '#FFFFFF',
+                textSecondary: 'rgba(255, 255, 255, 0.6)',
+                border: 'rgba(46, 204, 113, 0.2)',
+                cardBg: 'rgba(46, 204, 113, 0.08)',
+                font: "'Noto Serif SC', serif",
+                titleSize: '20px',
+                bodySize: '14px',
+                cardRadius: '18px',
+                btnRadius: '25px'
+            },
+            sunset: {
+                primary: '#FF6B35',
+                bg: '#1a0a05',
+                text: '#FFFFFF',
+                textSecondary: 'rgba(255, 255, 255, 0.6)',
+                border: 'rgba(255, 107, 53, 0.2)',
+                cardBg: 'rgba(255, 107, 53, 0.08)',
+                font: "'Ma Shan Zheng', cursive",
+                titleSize: '24px',
+                bodySize: '15px',
+                cardRadius: '16px',
+                btnRadius: '28px'
+            },
+            purple: {
+                primary: '#A855F7',
+                bg: '#0f0518',
+                text: '#FFFFFF',
+                textSecondary: 'rgba(255, 255, 255, 0.6)',
+                border: 'rgba(168, 85, 247, 0.2)',
+                cardBg: 'rgba(168, 85, 247, 0.08)',
+                font: "'ZCOOL XiaoWei', serif",
+                titleSize: '22px',
+                bodySize: '14px',
+                cardRadius: '24px',
+                btnRadius: '30px'
+            }
+        };
+
+        // 加载主题设置
+        function loadThemeSettings() {
+            const saved = localStorage.getItem('themeSettings');
+            if (saved) {
+                const settings = JSON.parse(saved);
+                document.getElementById('theme-primary').value = settings.primary || '#007AFF';
+                document.getElementById('theme-bg').value = settings.bg || '#000000';
+                document.getElementById('theme-text').value = settings.text || '#FFFFFF';
+                document.getElementById('theme-text-secondary').value = settings.textSecondary || '#999999';
+                document.getElementById('theme-border').value = settings.border || 'rgba(255, 255, 255, 0.1)';
+                document.getElementById('theme-card-bg').value = settings.cardBg || 'rgba(255, 255, 255, 0.08)';
+                document.getElementById('theme-font-primary').value = settings.font || "'Inter', sans-serif";
+                document.getElementById('theme-title-size').value = parseInt(settings.titleSize) || 20;
+                document.getElementById('theme-body-size').value = parseInt(settings.bodySize) || 14;
+                document.getElementById('theme-card-radius').value = parseInt(settings.cardRadius) || 16;
+                document.getElementById('theme-btn-radius').value = parseInt(settings.btnRadius) || 25;
+                
+                // 更新范围值显示
+                updateRangeValues();
+            }
+        }
+
+        // 更新范围值显示
+        function updateRangeValues() {
+            document.querySelectorAll('.font-item input[type="range"], .radius-item input[type="range"]').forEach(input => {
+                const valueSpan = input.parentElement.querySelector('.range-value');
+                if (valueSpan) {
+                    valueSpan.textContent = input.value + 'px';
+                }
+            });
+        }
+
+        // 监听范围输入变化
+        document.querySelectorAll('.font-item input[type="range"], .radius-item input[type="range"]').forEach(input => {
+            input.addEventListener('input', function() {
+                const valueSpan = this.parentElement.querySelector('.range-value');
+                if (valueSpan) {
+                    valueSpan.textContent = this.value + 'px';
+                }
+            });
+        });
+
+        // 预设主题点击
+        document.querySelectorAll('.preset-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const preset = item.dataset.preset;
+                const theme = THEMES[preset];
+                
+                if (theme) {
+                    // 更新表单值
+                    document.getElementById('theme-primary').value = theme.primary;
+                    document.getElementById('theme-bg').value = theme.bg;
+                    document.getElementById('theme-text').value = theme.text;
+                    document.getElementById('theme-text-secondary').value = theme.textSecondary.includes('rgba') ? '#808080' : theme.textSecondary;
+                    document.getElementById('theme-border').value = theme.border.includes('rgba') ? '#333333' : theme.border;
+                    document.getElementById('theme-card-bg').value = theme.cardBg.includes('rgba') ? '#1a1a1a' : theme.cardBg;
+                    document.getElementById('theme-font-primary').value = theme.font;
+                    document.getElementById('theme-title-size').value = parseInt(theme.titleSize);
+                    document.getElementById('theme-body-size').value = parseInt(theme.bodySize);
+                    document.getElementById('theme-card-radius').value = parseInt(theme.cardRadius);
+                    document.getElementById('theme-btn-radius').value = parseInt(theme.btnRadius);
+                    
+                    updateRangeValues();
+                    
+                    // 高亮选中的预设
+                    document.querySelectorAll('.preset-item').forEach(p => p.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                    // 自动应用主题
+                    applyThemeSettings();
+                }
+            });
+        });
+
+        // 应用主题设置
+        function applyThemeSettings() {
+            const settings = {
+                primary: document.getElementById('theme-primary').value,
+                bg: document.getElementById('theme-bg').value,
+                text: document.getElementById('theme-text').value,
+                textSecondary: document.getElementById('theme-text-secondary').value,
+                border: document.getElementById('theme-border').value,
+                cardBg: document.getElementById('theme-card-bg').value,
+                font: document.getElementById('theme-font-primary').value,
+                titleSize: document.getElementById('theme-title-size').value + 'px',
+                bodySize: document.getElementById('theme-body-size').value + 'px',
+                cardRadius: document.getElementById('theme-card-radius').value + 'px',
+                btnRadius: document.getElementById('theme-btn-radius').value + 'px'
+            };
+
+            // 应用CSS变量
+            document.documentElement.style.setProperty('--primary-blue', settings.primary);
+            document.documentElement.style.setProperty('--bg-dark', settings.bg);
+            document.documentElement.style.setProperty('--text-primary', settings.text);
+            document.documentElement.style.setProperty('--text-secondary', settings.textSecondary);
+            document.documentElement.style.setProperty('--glass-border', settings.border);
+            document.documentElement.style.setProperty('--glass-bg', settings.cardBg);
+            document.documentElement.style.setProperty('--theme-font', settings.font);
+            document.documentElement.style.setProperty('--theme-title-size', settings.titleSize);
+            document.documentElement.style.setProperty('--theme-body-size', settings.bodySize);
+            document.documentElement.style.setProperty('--theme-card-radius', settings.cardRadius);
+            document.documentElement.style.setProperty('--theme-btn-radius', settings.btnRadius);
+
+            // 应用全局样式
+            document.body.style.backgroundColor = settings.bg;
+            document.body.style.color = settings.text;
+            document.body.style.fontFamily = settings.font;
+
+            // 应用到具体元素
+            document.querySelectorAll('.section-title').forEach(el => {
+                el.style.fontSize = settings.titleSize;
+            });
+            document.querySelectorAll('body, .app-name, .gallery-desc').forEach(el => {
+                el.style.fontSize = settings.bodySize;
+            });
+            document.querySelectorAll('.app-item, .gallery-item, .quote-container').forEach(el => {
+                el.style.borderRadius = settings.cardRadius;
+            });
+            document.querySelectorAll('.login-btn, .admin-btn, .action-btn').forEach(el => {
+                el.style.borderRadius = settings.btnRadius;
+            });
+
+            // 保存到localStorage
+            localStorage.setItem('themeSettings', JSON.stringify(settings));
+            
+            alert('主题已应用！');
+        }
+
+        // 应用主题按钮
+        document.getElementById('apply-theme').addEventListener('click', applyThemeSettings);
+
+        // 保存为预设按钮
+        document.getElementById('save-theme').addEventListener('click', () => {
+            const name = prompt('请输入预设主题名称：');
+            if (name) {
+                const settings = {
+                    primary: document.getElementById('theme-primary').value,
+                    bg: document.getElementById('theme-bg').value,
+                    text: document.getElementById('theme-text').value,
+                    textSecondary: document.getElementById('theme-text-secondary').value,
+                    border: document.getElementById('theme-border').value,
+                    cardBg: document.getElementById('theme-card-bg').value,
+                    font: document.getElementById('theme-font-primary').value,
+                    titleSize: document.getElementById('theme-title-size').value + 'px',
+                    bodySize: document.getElementById('theme-body-size').value + 'px',
+                    cardRadius: document.getElementById('theme-card-radius').value + 'px',
+                    btnRadius: document.getElementById('theme-btn-radius').value + 'px'
+                };
+                
+                let customThemes = JSON.parse(localStorage.getItem('customThemes') || '{}');
+                customThemes[name] = settings;
+                localStorage.setItem('customThemes', JSON.stringify(customThemes));
+                
+                alert(`主题 "${name}" 已保存！`);
+            }
+        });
+
+        // 恢复默认按钮
+        document.getElementById('reset-theme').addEventListener('click', () => {
+            if (confirm('确定要恢复默认主题吗？')) {
+                localStorage.removeItem('themeSettings');
+                
+                // 恢复默认CSS变量
+                document.documentElement.style.removeProperty('--primary-blue');
+                document.documentElement.style.removeProperty('--bg-dark');
+                document.documentElement.style.removeProperty('--text-primary');
+                document.documentElement.style.removeProperty('--text-secondary');
+                document.documentElement.style.removeProperty('--glass-border');
+                document.documentElement.style.removeProperty('--glass-bg');
+                document.documentElement.style.removeProperty('--theme-font');
+                document.documentElement.style.removeProperty('--theme-title-size');
+                document.documentElement.style.removeProperty('--theme-body-size');
+                document.documentElement.style.removeProperty('--theme-card-radius');
+                document.documentElement.style.removeProperty('--theme-btn-radius');
+                
+                // 恢复默认样式
+                document.body.style.backgroundColor = '';
+                document.body.style.color = '';
+                document.body.style.fontFamily = '';
+                
+                document.querySelectorAll('.section-title, body, .app-name, .gallery-desc, .app-item, .gallery-item, .quote-container, .login-btn, .admin-btn, .action-btn').forEach(el => {
+                    el.style.fontSize = '';
+                    el.style.borderRadius = '';
+                });
+                
+                // 重置表单
+                document.querySelectorAll('.preset-item').forEach(p => p.classList.remove('active'));
+                document.getElementById('theme-primary').value = '#007AFF';
+                document.getElementById('theme-bg').value = '#000000';
+                document.getElementById('theme-text').value = '#FFFFFF';
+                document.getElementById('theme-text-secondary').value = '#999999';
+                document.getElementById('theme-border').value = 'rgba(255, 255, 255, 0.1)';
+                document.getElementById('theme-card-bg').value = 'rgba(255, 255, 255, 0.08)';
+                document.getElementById('theme-font-primary').value = "'Inter', sans-serif";
+                document.getElementById('theme-title-size').value = 20;
+                document.getElementById('theme-body-size').value = 14;
+                document.getElementById('theme-card-radius').value = 16;
+                document.getElementById('theme-btn-radius').value = 25;
+                updateRangeValues();
+                
+                alert('已恢复默认主题！');
+            }
+        });
+
+        // 页面加载时应用保存的主题
+        function initTheme() {
+            const saved = localStorage.getItem('themeSettings');
+            if (saved) {
+                const settings = JSON.parse(saved);
+                
+                // 应用CSS变量
+                document.documentElement.style.setProperty('--primary-blue', settings.primary);
+                document.documentElement.style.setProperty('--bg-dark', settings.bg);
+                document.documentElement.style.setProperty('--text-primary', settings.text);
+                document.documentElement.style.setProperty('--text-secondary', settings.textSecondary);
+                document.documentElement.style.setProperty('--glass-border', settings.border);
+                document.documentElement.style.setProperty('--glass-bg', settings.cardBg);
+                document.documentElement.style.setProperty('--theme-font', settings.font);
+                document.documentElement.style.setProperty('--theme-title-size', settings.titleSize);
+                document.documentElement.style.setProperty('--theme-body-size', settings.bodySize);
+                document.documentElement.style.setProperty('--theme-card-radius', settings.cardRadius);
+                document.documentElement.style.setProperty('--theme-btn-radius', settings.btnRadius);
+
+                // 应用全局样式
+                document.body.style.backgroundColor = settings.bg;
+                document.body.style.color = settings.text;
+                document.body.style.fontFamily = settings.font;
+
+                // 应用到具体元素
+                document.querySelectorAll('.section-title').forEach(el => {
+                    el.style.fontSize = settings.titleSize;
+                });
+                document.querySelectorAll('body, .app-name, .gallery-desc').forEach(el => {
+                    el.style.fontSize = settings.bodySize;
+                });
+                document.querySelectorAll('.app-item, .gallery-item, .quote-container').forEach(el => {
+                    el.style.borderRadius = settings.cardRadius;
+                });
+                document.querySelectorAll('.login-btn, .admin-btn, .action-btn').forEach(el => {
+                    el.style.borderRadius = settings.btnRadius;
+                });
+            }
+        }
+
+        // 初始化主题
+        initTheme();
+
+        // ==================== 主机管理 ====================
+        // 默认主机列表
+        const DEFAULT_SERVERS = [
+            { name: 'Grafana', url: 'http://localhost:3000', icon: '📊' },
+            { name: 'Portainer', url: 'http://localhost:9000', icon: '🐳' },
+            { name: 'Jellyfin', url: 'http://localhost:8096', icon: '🎬' },
+            { name: 'AList', url: 'http://localhost:5244', icon: '☁️' },
+            { name: '青龙面板', url: 'http://localhost:5700', icon: '🤖' }
+        ];
+
+        // 加载主机数据
+        function loadServers() {
+            const saved = localStorage.getItem('serverConfig');
+            if (saved) {
+                return JSON.parse(saved);
+            }
+            return JSON.parse(JSON.stringify(DEFAULT_SERVERS));
+        }
+
+        // 保存主机数据
+        function saveServers(servers) {
+            localStorage.setItem('serverConfig', JSON.stringify(servers));
+        }
+
+        let serverList = loadServers();
+
+        // 渲染主机列表（在页面上显示）
+        function renderServerNav() {
+            const grid = document.getElementById('servers-grid');
+            if (!grid) return;
+            
+            if (serverList.length === 0) {
+                grid.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.4); grid-column: 1/-1; padding: 40px;">暂无主机，请添加</div>';
+                return;
+            }
+            
+            grid.innerHTML = serverList.map((server, index) => `
+                <a href="${server.url}" class="server-item" target="_blank" data-index="${index}">
+                    <div class="server-icon">${server.icon || '🖥️'}</div>
+                    <div class="server-info">
+                        <div class="server-name">${server.name}</div>
+                        <div class="server-url">${server.url}</div>
+                    </div>
+                    <div class="server-status offline" id="server-status-${index}"></div>
+                </a>
+            `).join('');
+            
+            // 开始检测主机状态
+            checkServerStatus();
+        }
+
+        // 检测主机在线状态
+        async function checkServerStatus() {
+            const lastCheckEl = document.getElementById('servers-last-check');
+            if (!lastCheckEl) return;
+            
+            const now = new Date();
+            lastCheckEl.textContent = `上次检查: ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
+            
+            for (let i = 0; i < serverList.length; i++) {
+                const statusEl = document.getElementById(`server-status-${i}`);
+                if (!statusEl) continue;
+                
+                statusEl.className = 'server-status checking';
+                
+                const url = serverList[i].url;
+                const isOnline = await pingServer(url);
+                
+                statusEl.className = isOnline ? 'server-status online' : 'server-status offline';
+            }
+        }
+
+        // ping服务器
+        async function pingServer(url) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                const timeout = 3000;
+                
+                const timer = setTimeout(() => {
+                    img.src = '';
+                    resolve(false);
+                }, timeout);
+                
+                img.onload = () => {
+                    clearTimeout(timer);
+                    resolve(true);
+                };
+                
+                img.onerror = () => {
+                    clearTimeout(timer);
+                    resolve(false);
+                };
+                
+                // 尝试加载favicon
+                const baseUrl = url.replace(/\/$/, '');
+                img.src = baseUrl + '/favicon.ico?_=' + Date.now();
+            });
+        }
+
+        // 渲染主机管理编辑器
+        function renderServerEditor() {
+            const editor = document.getElementById('servers-editor');
+            if (!editor) return;
+            
+            if (serverList.length === 0) {
+                editor.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 20px;">暂无主机，请添加</div>';
+                return;
+            }
+            
+            editor.innerHTML = serverList.map((server, index) => `
+                <div class="server-item-row" data-index="${index}">
+                    <div class="server-item-icon" onclick="selectServerIcon(${index})" style="cursor:pointer">${server.icon || '🖥️'}</div>
+                    <div class="server-item-inputs">
+                        <input type="text" class="server-name-input" value="${server.name || ''}" placeholder="主机名称" onchange="updateServer(${index}, 'name', this.value)">
+                        <input type="text" class="server-url-input" value="${server.url || ''}" placeholder="http://..." onchange="updateServer(${index}, 'url', this.value)">
+                    </div>
+                    <button class="server-delete-btn" onclick="deleteServer(${index})">🗑️</button>
+                </div>
+            `).join('');
+        }
+
+        // 更新主机
+        window.updateServer = function(index, field, value) {
+            serverList[index][field] = value;
+            saveServers(serverList);
+            renderServerNav();
+        };
+
+        // 删除主机
+        window.deleteServer = function(index) {
+            if (confirm('确定要删除这个主机吗？')) {
+                serverList.splice(index, 1);
+                saveServers(serverList);
+                renderServerEditor();
+                renderServerNav();
+            }
+        };
+
+        // 添加主机
+        document.getElementById('add-server').addEventListener('click', () => {
+            serverList.push({ name: '新主机', url: 'http://', icon: '🖥️' });
+            saveServers(serverList);
+            renderServerEditor();
+            renderServerNav();
+        });
+
+        // 选择主机图标
+        window.selectServerIcon = function(index) {
+            const icons = ['🖥️', '📊', '🐳', '🎬', '☁️', '🤖', '🎵', '🔄', '📁', '🗄️', '🌐', '🔧', '📡', '💻', '🖼️', '🎮'];
+            const currentIcon = serverList[index].icon || '🖥️';
+            let currentIndex = icons.indexOf(currentIcon);
+            
+            // 循环切换图标
+            currentIndex = (currentIndex + 1) % icons.length;
+            serverList[index].icon = icons[currentIndex];
+            saveServers(serverList);
+            renderServerEditor();
+            renderServerNav();
+        };
+
+        // 监听标签切换到主机管理
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                if (tab.dataset.tab === 'servers') {
+                    serverList = loadServers();
+                    renderServerEditor();
+                }
+            });
+        });
+
+        // 初始化主机导航
+        renderServerNav();
+
     </script>
 </body>
 </html>

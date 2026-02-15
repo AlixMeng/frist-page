@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试页面</title>
+    <link rel="stylesheet" href="icons/fontawesome/fontawesome-free-6.4.0-web/css/all.min.css">
+    <style>
+        body { background: #000; color: #fff; padding: 20px; }
+        .test-section { margin: 20px 0; }
+        .apps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 500px; }
+        .app-item { background: rgba(255,255,255,0.1); padding: 20px; text-align: center; border-radius: 12px; text-decoration: none; color: #fff; }
+        .app-icon { font-size: 32px; margin-bottom: 8px; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+        .gallery-item { aspect-ratio: 3/4; background: rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+    </style>
+</head>
+<body>
+    <h1>测试页面</h1>
+    
+    <div class="test-section">
+        <h2>应用导航</h2>
+        <div class="apps-grid" id="apps-grid"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>摄影画廊</h2>
+        <div class="gallery-grid" id="gallery-grid"></div>
+    </div>
+    
+    <script>
+        const DEFAULT_APPS = [
+            { icon: '📊', name: 'Grafana', url: 'http://localhost:3000' },
+            { icon: '🐳', name: 'Portainer', url: 'http://localhost:9000' },
+            { icon: '🎬', name: 'Jellyfin', url: 'http://localhost:8096' },
+            { icon: '☁️', name: 'AList', url: 'http://localhost:5244' }
+        ];
+        
+        const GALLERY_IMAGES = {
+            landscape: [
+                { url: 'images/landscape/alps.jpg', title: '阿尔卑斯山' },
+                { url: 'images/landscape/waterfall.jpg', title: '瀑布' },
+                { url: 'images/landscape/fog.jpg', title: '迷雾' }
+            ]
+        };
+        
+        function renderApps() {
+            const grid = document.getElementById('apps-grid');
+            grid.innerHTML = DEFAULT_APPS.map(app => `
+                <a href="${app.url}" class="app-item" target="_blank">
+                    <div class="app-icon">${app.icon}</div>
+                    <div class="app-name">${app.name}</div>
+                </a>
+            `).join('');
+        }
+        
+        function renderGallery() {
+            const grid = document.getElementById('gallery-grid');
+            grid.innerHTML = GALLERY_IMAGES.landscape.map(img => `
+                <div class="gallery-item">
+                    <img src="${img.url}" alt="${img.title}">
+                </div>
+            `).join('');
+        }
+        
+        renderApps();
+        renderGallery();
+        console.log('测试页面加载完成');
+    </script>
+</body>
+</html>

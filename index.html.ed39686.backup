@@ -1,0 +1,3632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alix go - 个人服务器</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@300;400;500;600;700&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #007AFF;
+            --bg-dark: #000000;
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+
+        /* 背景 */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 0%, rgba(0, 122, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(0, 150, 255, 0.1) 0%, transparent 50%);
+            z-index: -2;
+        }
+
+        /* 顶部状态栏 - 左上角 */
+        .top-status-bar {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.15), rgba(0, 212, 255, 0.1));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 122, 255, 0.3);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 122, 255, 0.2), 0 0 20px rgba(0, 122, 255, 0.1);
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 4px 30px rgba(0, 122, 255, 0.2), 0 0 20px rgba(0, 122, 255, 0.1); }
+            50% { box-shadow: 0 4px 40px rgba(0, 122, 255, 0.35), 0 0 30px rgba(0, 212, 255, 0.2); }
+        }
+
+        .top-status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .top-status-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .top-status-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.3), rgba(0, 212, 255, 0.2));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .top-status-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-status-label {
+            font-size: 9px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .top-status-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .top-status-weather {
+            cursor: pointer;
+        }
+
+        /* 右上角音乐控制 */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 20px;
+        }
+
+        .music-control:hover {
+            background: rgba(0, 122, 255, 0.2);
+            border-color: rgba(0, 122, 255, 0.5);
+            transform: scale(1.1);
+        }
+
+        .music-control.playing {
+            animation: pulse 2s infinite;
+            background: rgba(0, 122, 255, 0.3);
+            border-color: rgba(0, 122, 255, 0.8);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 122, 255, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(0, 122, 255, 0); }
+        }
+
+        .music-control::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .music-control:hover::after {
+            opacity: 1;
+        }
+
+        .music-control[data-state="off"]::after {
+            content: '点击播放音乐';
+        }
+
+        .music-control[data-state="on"]::after {
+            content: '点击暂停音乐';
+        }
+
+        /* 登录按钮 */
+        .login-btn {
+            position: fixed;
+            top: 20px;
+            right: 80px;
+            z-index: 1001;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .login-btn:hover {
+            background: rgba(0, 122, 255, 0.2);
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .login-btn.logged-in {
+            background: rgba(52, 199, 89, 0.2);
+            border-color: rgba(52, 199, 89, 0.5);
+        }
+
+        /* 管理按钮 */
+        .admin-btn {
+            position: fixed;
+            top: 20px;
+            right: 150px;
+            z-index: 1001;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.3), rgba(0, 212, 255, 0.2));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 122, 255, 0.5);
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            animation: pulse 2s infinite;
+        }
+
+        .admin-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.4), rgba(0, 212, 255, 0.3));
+        }
+
+        .admin-btn.show {
+            display: flex;
+        }
+
+        /* 弹窗遮罩 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* 登录弹窗 */
+        .login-modal {
+            background: linear-gradient(135deg, rgba(30, 30, 40, 0.95), rgba(20, 20, 30, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.show .login-modal {
+            transform: scale(1);
+        }
+
+        .login-modal h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            background: linear-gradient(135deg, #fff, #00D4FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .login-form button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-blue), #00D4FF);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.4);
+        }
+
+        .login-error {
+            color: #FF375F;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: var(--text-primary);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        /* 管理面板 */
+        .admin-panel {
+            background: linear-gradient(135deg, rgba(30, 30, 40, 0.98), rgba(20, 20, 30, 0.98));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.show .admin-panel {
+            transform: scale(1);
+        }
+
+        .admin-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h2 {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 0 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .admin-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .admin-tab:hover {
+            color: var(--text-primary);
+        }
+
+        .admin-tab.active {
+            color: var(--primary-blue);
+            border-bottom-color: var(--primary-blue);
+        }
+
+        .admin-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        .admin-section h3 {
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+        }
+
+        .admin-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: grid;
+            grid-template-columns: 60px 1fr 1fr 1fr 40px;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .admin-item input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .admin-item input:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .admin-item .delete-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 55, 95, 0.2);
+            border: 1px solid rgba(255, 55, 95, 0.3);
+            border-radius: 8px;
+            color: #FF375F;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-item .delete-btn:hover {
+            background: rgba(255, 55, 95, 0.3);
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 122, 255, 0.1);
+            border: 2px dashed rgba(0, 122, 255, 0.3);
+            border-radius: 12px;
+            color: var(--primary-blue);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .add-btn:hover {
+            background: rgba(0, 122, 255, 0.2);
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .admin-footer {
+            padding: 20px 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .admin-footer button {
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .cancel-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .reset-btn {
+            background: rgba(255, 55, 95, 0.1);
+            border: 1px solid rgba(255, 55, 95, 0.3);
+            color: #FF375F;
+            margin-right: auto;
+        }
+
+        .reset-btn:hover {
+            background: rgba(255, 55, 95, 0.2);
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, var(--primary-blue), #00D4FF);
+            border: none;
+            color: white;
+            font-weight: 600;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.4);
+        }
+
+        .quote-editor textarea {
+            width: 100%;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            color: var(--text-primary);
+            font-size: 14px;
+            line-height: 1.6;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .quote-editor textarea:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .quote-hint-text {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        /* 图标选择器 */
+        .icon-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .icon-input {
+            width: 60px;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .icon-url-input {
+            flex: 1;
+        }
+
+        .icon-preview {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            overflow: hidden;
+        }
+
+        .icon-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 音乐上传区域 - 紧凑版 */
+        .music-upload-compact {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 122, 255, 0.03);
+            border: 1px solid rgba(0, 122, 255, 0.15);
+            border-radius: 10px;
+        }
+
+        .upload-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .select-file-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            padding: 8px 16px;
+            color: var(--text-primary);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .select-file-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(0, 122, 255, 0.4);
+        }
+
+        .selected-files {
+            flex: 1;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            min-width: 100px;
+        }
+
+        .upload-confirm-btn {
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.4), rgba(0, 212, 255, 0.3));
+            border: 1px solid rgba(0, 122, 255, 0.5);
+            border-radius: 6px;
+            padding: 8px 16px;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .upload-confirm-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.5), rgba(0, 212, 255, 0.4));
+            transform: translateY(-1px);
+        }
+
+        .upload-confirm-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .upload-types-compact {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.3);
+            margin-top: 8px;
+        }
+
+        .clear-files-btn {
+            background: rgba(255, 55, 95, 0.1);
+            border: 1px solid rgba(255, 55, 95, 0.3);
+            border-radius: 6px;
+            padding: 8px 16px;
+            color: #FF375F;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .clear-files-btn:hover {
+            background: rgba(255, 55, 95, 0.2);
+        }
+
+        .pending-files-list {
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 12px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .pending-header {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pending-file-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        .pending-file-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .pending-file-item.invalid {
+            background: rgba(255, 55, 95, 0.05);
+            border: 1px solid rgba(255, 55, 95, 0.1);
+        }
+
+        .pending-file-icon {
+            font-size: 18px;
+        }
+
+        .pending-file-name {
+            flex: 1;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .pending-file-name.invalid {
+            color: rgba(255, 55, 95, 0.7);
+            text-decoration: line-through;
+        }
+
+        .pending-file-size {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .pending-file-remove {
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 55, 95, 0.1);
+            border: none;
+            border-radius: 4px;
+            color: #FF375F;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .pending-file-remove:hover {
+            background: rgba(255, 55, 95, 0.2);
+        }
+
+        .pending-file-status {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .pending-file-status.valid {
+            background: rgba(52, 199, 89, 0.1);
+            color: #34C759;
+        }
+
+        .pending-file-status.invalid {
+            background: rgba(255, 55, 95, 0.1);
+            color: #FF375F;
+        }
+
+        .upload-progress-compact {
+            margin-top: 10px;
+        }
+
+        .progress-bar-compact {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007AFF, #00D4FF);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .music-list-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+        }
+
+        .music-icon {
+            font-size: 24px;
+        }
+
+        .music-name {
+            flex: 1;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .music-status {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .music-status.uploaded {
+            background: rgba(52, 199, 89, 0.2);
+            color: #34C759;
+        }
+
+        .music-status.pending {
+            background: rgba(255, 149, 0, 0.2);
+            color: #FF9500;
+        }
+
+        /* 名言列表编辑器 */
+        .quotes-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            background: rgba(0, 122, 255, 0.1);
+            border: 1px solid rgba(0, 122, 255, 0.3);
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: var(--primary-blue);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(0, 122, 255, 0.2);
+        }
+
+        .quote-list-editor {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .quote-item-row {
+            display: grid;
+            grid-template-columns: 1fr 120px 40px;
+            gap: 10px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+
+        .quote-item-row input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+
+        .quote-item-row input:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .quote-delete-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 55, 95, 0.1);
+            border: 1px solid rgba(255, 55, 95, 0.3);
+            border-radius: 6px;
+            color: #FF375F;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .quote-delete-btn:hover {
+            background: rgba(255, 55, 95, 0.2);
+        }
+
+        /* 主内容区 - 全屏滚动 */
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .main-content {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .section-full {
+            height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 15px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .section-full:last-child {
+            margin-bottom: 80px;
+        }
+
+        /* 滚动提示 */
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 13px;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        .scroll-hint span {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .scroll-arrow {
+            font-size: 20px;
+            animation: bounceArrow 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        @keyframes bounceArrow {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(10px); }
+            60% { transform: translateY(5px); }
+        }
+
+        /* 名言轮播 - 全屏居中 - 超大边框炫酷设计 */
+        .quote-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 0;
+            padding: 60px 30px 0;
+        }
+
+        .quote-container {
+            max-width: 950px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 90px 70px;
+            background: 
+                linear-gradient(135deg, rgba(0, 122, 255, 0.05) 0%, rgba(0, 212, 255, 0.02) 50%, rgba(255, 255, 255, 0.02) 100%);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 40px;
+            position: relative;
+            overflow: visible;
+            text-align: center;
+            backdrop-filter: blur(30px);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                0 0 100px rgba(0, 122, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .quote-container:hover {
+            transform: scale(1.01);
+            box-shadow: 
+                0 25px 70px rgba(0, 0, 0, 0.45),
+                0 0 120px rgba(0, 122, 255, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* 多层发光边框效果 */
+        .quote-container::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 44px;
+            padding: 2px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.5), rgba(0, 212, 255, 0.3), rgba(255, 255, 255, 0.2), rgba(0, 122, 255, 0.4));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .quote-container::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 48px;
+            border: 1px solid rgba(0, 122, 255, 0.1);
+            pointer-events: none;
+        }
+
+        /* 角落装饰 */
+        .quote-corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(0, 122, 255, 0.3);
+            pointer-events: none;
+        }
+
+        .quote-corner.top-left {
+            top: 20px;
+            left: 20px;
+            border-right: none;
+            border-bottom: none;
+            border-radius: 20px 0 0 0;
+        }
+
+        .quote-corner.top-right {
+            top: 20px;
+            right: 20px;
+            border-left: none;
+            border-bottom: none;
+            border-radius: 0 20px 0 0;
+        }
+
+        .quote-corner.bottom-left {
+            bottom: 20px;
+            left: 20px;
+            border-right: none;
+            border-top: none;
+            border-radius: 0 0 0 20px;
+        }
+
+        .quote-corner.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            border-left: none;
+            border-top: none;
+            border-radius: 0 0 20px 0;
+        }
+
+        .quote-icon {
+            font-size: 60px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.8), rgba(0, 212, 255, 0.6));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            line-height: 1;
+            opacity: 0.8;
+        }
+
+        /* 多种字体样式 - 包含中文字体 */
+        .quote-text {
+            font-size: 44px;
+            font-weight: 500;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            min-height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #FFFFFF;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 20px rgba(0, 122, 255, 0.3);
+        }
+
+        /* 亮色系颜色类 - 确保与黑色背景反差大 */
+        .quote-text.color-1 { color: #FFFFFF; text-shadow: 0 2px 20px rgba(255, 255, 255, 0.3); } /* 纯白 */
+        .quote-text.color-2 { color: #00D4FF; text-shadow: 0 2px 20px rgba(0, 212, 255, 0.4); } /* 青色 */
+        .quote-text.color-3 { color: #5AC8FA; text-shadow: 0 2px 20px rgba(90, 200, 250, 0.4); } /* 天蓝 */
+        .quote-text.color-4 { color: #34C759; text-shadow: 0 2px 20px rgba(52, 199, 89, 0.4); } /* 绿色 */
+        .quote-text.color-5 { color: #FF375F; text-shadow: 0 2px 20px rgba(255, 55, 95, 0.4); } /* 粉红 */
+        .quote-text.color-6 { color: #FF9500; text-shadow: 0 2px 20px rgba(255, 149, 0, 0.4); } /* 橙色 */
+        .quote-text.color-7 { color: #FFD60A; text-shadow: 0 2px 20px rgba(255, 214, 10, 0.4); } /* 黄色 */
+        .quote-text.color-8 { color: #BF5AF2; text-shadow: 0 2px 20px rgba(191, 90, 242, 0.4); } /* 紫色 */
+        .quote-text.color-9 { color: #64D2FF; text-shadow: 0 2px 20px rgba(100, 210, 255, 0.4); } /* 浅蓝 */
+        .quote-text.color-10 { color: #FF6B35; text-shadow: 0 2px 20px rgba(255, 107, 53, 0.4); } /* 珊瑚橙 */
+
+        /* 字体风格 1: 宋体（衬线）- Noto Serif SC */
+        .quote-text.style-1 {
+            font-family: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif;
+            font-weight: 500;
+            letter-spacing: 4px;
+            font-size: 44px;
+        }
+
+        /* 字体风格 2: 楷体 */
+        .quote-text.style-2 {
+            font-family: 'KaiTi', 'STKaiti', '楷体', 'Noto Serif SC', serif;
+            font-weight: 500;
+            letter-spacing: 5px;
+            font-size: 48px;
+        }
+
+        /* 字体风格 3: 马善政书法（书法风格） */
+        .quote-text.style-3 {
+            font-family: 'Ma Shan Zheng', 'STXingkai', 'Xingkai SC', cursive;
+            font-weight: 400;
+            letter-spacing: 6px;
+            font-size: 50px;
+            line-height: 1.5;
+        }
+
+        /* 字体风格 4: 小薇体（手写体） */
+        .quote-text.style-4 {
+            font-family: 'ZCOOL XiaoWei', 'STXingkai', 'Xingkai SC', serif;
+            font-weight: 400;
+            letter-spacing: 4px;
+            font-size: 46px;
+        }
+
+        /* 字体风格 5: 快乐体（艺术体） */
+        .quote-text.style-5 {
+            font-family: 'ZCOOL KuaiLe', 'STHeiti', 'SimHei', sans-serif;
+            font-weight: 400;
+            letter-spacing: 3px;
+            font-size: 46px;
+        }
+
+        /* 字体风格 6: 隶书风格 */
+        .quote-text.style-6 {
+            font-family: 'LiSu', 'STLiti', '隶书', 'Noto Serif SC', serif;
+            font-weight: 500;
+            letter-spacing: 5px;
+            font-size: 48px;
+        }
+
+        /* 字体风格 7: 仿宋 */
+        .quote-text.style-7 {
+            font-family: 'FangSong', 'STFangsong', '仿宋', 'Noto Serif SC', serif;
+            font-weight: 500;
+            letter-spacing: 4px;
+            font-size: 46px;
+        }
+
+        /* 字体风格 8: 黑体（现代）- 英文风格，保持较小字体 */
+        .quote-text.style-8 {
+            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', '黑体', sans-serif;
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 38px;
+        }
+
+        /* 字体风格 9: 渐变科技感 - 英文风格，保持较小字体 */
+        .quote-text.style-9 {
+            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-size: 36px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #00D4FF 50%, #007AFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+        }
+
+        /* 字体风格 10: 金色华丽 */
+        .quote-text.style-10 {
+            font-family: 'Noto Serif SC', 'Songti SC', serif;
+            font-weight: 600;
+            letter-spacing: 4px;
+            font-size: 44px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+        }
+
+        /* 点击切换提示 */
+        .quote-hint {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.3);
+            margin-top: 25px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .quote-container:hover .quote-hint {
+            opacity: 1;
+        }
+
+        .quote-author {
+            font-size: 14px;
+            color: rgba(0, 122, 255, 0.8);
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+            padding: 0 20px;
+        }
+
+        .quote-author::before,
+        .quote-author::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 122, 255, 0.4));
+        }
+
+        .quote-author::before {
+            right: 100%;
+        }
+
+        .quote-author::after {
+            left: 100%;
+            background: linear-gradient(90deg, rgba(0, 122, 255, 0.4), transparent);
+        }
+
+        .quote-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 28px;
+        }
+
+        /* 摄影作品 - 全屏布局 */
+
+        /* 摄影作品 - 全屏布局 */
+        .gallery-section {
+            margin-bottom: 0;
+            justify-content: center;
+            padding: 80px 15px 40px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding: 0 5px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 22px;
+            background: linear-gradient(180deg, var(--primary-blue), #00D4FF);
+            border-radius: 2px;
+        }
+
+        .gallery-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .gallery-tab {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 6px 14px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .gallery-tab:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: var(--text-primary);
+        }
+
+        .gallery-tab.active {
+            background: linear-gradient(135deg, var(--primary-blue), #00D4FF);
+            color: white;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .top-status-bar {
+                top: 10px;
+                left: 10px;
+                padding: 10px 14px;
+                gap: 10px;
+            }
+            
+            .top-status-item {
+                padding: 4px 8px;
+            }
+            
+            .top-status-label {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 4/5;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 122, 255, 0.25);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease, opacity 0.8s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .gallery-item img.fade-out {
+            opacity: 0;
+            transform: scale(1.05);
+        }
+
+        .gallery-item img.fade-in {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 25px 16px 16px;
+            background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.9) 100%);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .gallery-desc {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .gallery-more {
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .gallery-more-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 10px 24px;
+            border: 1px solid var(--primary-blue);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-more-link:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        /* 应用导航 - 全屏布局 */
+        .apps-section {
+            margin-bottom: 0;
+            justify-content: flex-start;
+            padding-top: 160px;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 700px) {
+            .apps-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .apps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .app-item {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0, 122, 255, 0.5), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .app-item:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1) 0%, rgba(0, 122, 255, 0.05) 100%);
+            border-color: rgba(0, 122, 255, 0.2);
+            box-shadow: 0 8px 30px rgba(0, 122, 255, 0.15);
+        }
+
+        .app-item:hover::before {
+            opacity: 1;
+        }
+
+        .app-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.15), rgba(0, 212, 255, 0.1));
+            border: 2px solid rgba(0, 122, 255, 0.3);
+            border-radius: 16px;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: 0 8px 25px rgba(0, 122, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .app-icon img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+
+        .app-item:hover .app-icon {
+            transform: scale(1.1);
+        }
+
+        .app-name {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 2px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .app-desc {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* 底部浮动常用网址 - 精致胶囊设计 */
+        .bottom-favorites {
+            position: fixed;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 56px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 0 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .bottom-favorite-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .bottom-favorite-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.95);
+            transform: translateY(-2px) scale(1.1);
+        }
+
+        /* Tooltip */
+        .bottom-favorite-item::after {
+            content: attr(data-name);
+            position: absolute;
+            bottom: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 1002;
+        }
+
+        .bottom-favorite-item::before {
+            content: '';
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.9);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 1002;
+        }
+
+        .bottom-favorite-item:hover::after,
+        .bottom-favorite-item:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .bottom-favorite-item span {
+            display: none;
+        }
+
+        .bottom-favorite-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .bottom-favorites {
+                padding: 0 8px;
+                gap: 2px;
+            }
+            
+            .bottom-favorite-item {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .bottom-favorite-icon {
+                font-size: 18px;
+            }
+        }
+            
+            .bottom-favorite-item span:last-child {
+                display: none;
+            }
+        }
+
+        /* 动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 现代风格的导航项卡片 */
+        .nav-item-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item-row:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+            border-color: rgba(0, 122, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-item-row .nav-icon-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .nav-item-row .nav-icon-display {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.15), rgba(0, 212, 255, 0.1));
+            border: 2px solid rgba(0, 122, 255, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.2);
+        }
+
+        .nav-item-row .nav-icon-display:hover {
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.25), rgba(0, 212, 255, 0.2));
+            border-color: rgba(0, 122, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        .nav-item-row .nav-icon-display img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+
+        .nav-item-row .icon-action-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-item-row .icon-action-btn:hover {
+            background: rgba(0, 122, 255, 0.2);
+            border-color: rgba(0, 122, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .nav-item-row .icon-action-btn.upload:hover {
+            background: rgba(52, 199, 89, 0.2);
+            border-color: rgba(52, 199, 89, 0.4);
+        }
+
+        .nav-item-row .nav-name {
+            width: 140px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item-row .nav-name:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 122, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+
+        .nav-item-row .nav-url {
+            flex: 1;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item-row .nav-url:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 122, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .nav-item-row .delete-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 55, 95, 0.1);
+            border: 1px solid rgba(255, 55, 95, 0.2);
+            border-radius: 10px;
+            color: #FF375F;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-item-row .delete-btn:hover {
+            background: rgba(255, 55, 95, 0.25);
+            border-color: rgba(255, 55, 95, 0.4);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .nav-item-row {
+                flex-wrap: wrap;
+                padding: 12px;
+                gap: 10px;
+            }
+
+            .nav-item-row .nav-icon-box {
+                order: 0;
+            }
+
+            .nav-item-row .nav-name {
+                width: calc(100% - 70px);
+                order: 1;
+            }
+
+            .nav-item-row .nav-url {
+                width: 100%;
+                order: 2;
+            }
+
+            .nav-item-row .delete-btn {
+                order: 3;
+                margin-left: auto;
+            }
+        }
+
+        /* 图标库弹窗 */
+        .icon-library-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .icon-library-modal.show {
+            display: flex;
+        }
+
+        .icon-library-panel {
+            background: linear-gradient(135deg, rgba(30, 30, 40, 0.98), rgba(20, 20, 30, 0.98));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .icon-library-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .icon-library-header h3 {
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-search {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .icon-search input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .icon-search input:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.5);
+        }
+
+        .icon-library-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .icon-category {
+            margin-bottom: 20px;
+        }
+
+        .icon-category-title {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 8px;
+        }
+
+        .icon-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 12px 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .icon-option:hover {
+            background: rgba(0, 122, 255, 0.1);
+            border-color: rgba(0, 122, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .icon-option-emoji {
+            font-size: 28px;
+            line-height: 1;
+        }
+
+        .icon-option-name {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <!-- 顶部状态栏 -->
+    <div class="top-status-bar">
+        <div class="top-status-item">
+            <div class="top-status-icon">📅</div>
+            <div class="top-status-content">
+                <span class="top-status-label">日期</span>
+                <span class="top-status-value" id="current-date">--/--</span>
+            </div>
+        </div>
+        <div class="top-status-item">
+            <div class="top-status-icon">⏰</div>
+            <div class="top-status-content">
+                <span class="top-status-label">时间</span>
+                <span class="top-status-value" id="current-time">--:--</span>
+            </div>
+        </div>
+        <div class="top-status-item top-status-weather" id="weather-item" title="点击刷新">
+            <div class="top-status-icon">🌤️</div>
+            <div class="top-status-content">
+                <span class="top-status-label">天气</span>
+                <span class="top-status-value" id="weather-info">--°C</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="music-control" id="music-control" data-state="off" title="音乐开关">
+        🎵
+    </div>
+
+    <!-- 登录按钮 -->
+    <button class="login-btn" id="login-btn">
+        <span>👤</span>
+        <span id="login-text">登录</span>
+    </button>
+
+    <!-- 管理按钮 -->
+    <button class="admin-btn" id="admin-btn">
+        <span>⚙️</span>
+        <span>管理</span>
+    </button>
+
+    <!-- 登录弹窗 -->
+    <div class="modal-overlay" id="login-modal">
+        <div class="login-modal">
+            <button class="modal-close" id="close-login">×</button>
+            <h2>🔐 用户登录</h2>
+            <form class="login-form" id="login-form">
+                <input type="text" id="username" placeholder="用户名" required>
+                <input type="password" id="password" placeholder="密码" required>
+                <button type="submit">登录</button>
+            </form>
+            <div class="login-error" id="login-error">用户名或密码错误</div>
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 12px; color: rgba(255,255,255,0.4); text-align: center;">
+                <div>默认账号：</div>
+                <div style="margin-top: 8px;">管理员: admin / admin123</div>
+                <div>普通用户: user / user123</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理面板 -->
+    <div class="modal-overlay" id="admin-modal">
+        <div class="admin-panel">
+            <div class="admin-header">
+                <h2>⚙️ 管理面板</h2>
+                <button class="modal-close" id="close-admin">×</button>
+            </div>
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="apps">应用导航</button>
+                <button class="admin-tab" data-tab="favorites">底部导航</button>
+                <button class="admin-tab" data-tab="music">音乐列表</button>
+                <button class="admin-tab" data-tab="quotes">每日一言</button>
+            </div>
+            <div class="admin-content">
+                <!-- 应用导航管理 -->
+                <div class="admin-section active" id="tab-apps">
+                    <h3>📱 应用导航配置</h3>
+                    <div id="apps-editor"></div>
+                    <button class="add-btn" id="add-app">+ 添加应用</button>
+                </div>
+                
+                <!-- 底部导航管理 -->
+                <div class="admin-section" id="tab-favorites">
+                    <h3>⭐ 底部导航配置</h3>
+                    <div id="favorites-editor"></div>
+                    <button class="add-btn" id="add-favorite">+ 添加网址</button>
+                </div>
+                
+                <!-- 音乐列表管理 -->
+                <div class="admin-section" id="tab-music">
+                    <h3>🎵 音乐管理</h3>
+                    <div id="music-list-editor"></div>
+                    
+                    <!-- 上传区域 -->
+                    <div class="music-upload-compact" id="music-upload-area">
+                        <input type="file" id="music-file-input" accept="audio/*" multiple style="display: none;">
+                        
+                        <!-- 选择按钮行 -->
+                        <div class="upload-row">
+                            <button type="button" class="select-file-btn" onclick="document.getElementById('music-file-input').click()">
+                                📁 选择文件
+                            </button>
+                            <span class="selected-files" id="selected-files-text">未选择文件（最多20个）</span>
+                            <button type="button" class="upload-confirm-btn" id="upload-confirm-btn" disabled>
+                                ⬆️ 确认添加
+                            </button>
+                            <button type="button" class="clear-files-btn" id="clear-files-btn" style="display: none;">
+                                清空
+                            </button>
+                        </div>
+                        <div class="upload-types-compact">支持格式: MP3, WAV, OGG, M4A, FLAC</div>
+                        
+                        <!-- 待上传文件列表 -->
+                        <div class="pending-files-list" id="pending-files-list" style="display: none;">
+                            <div class="pending-header">📋 待添加文件列表：</div>
+                            <div id="pending-files-container"></div>
+                        </div>
+                        
+                        <!-- 进度条 -->
+                        <div class="upload-progress-compact" id="upload-progress" style="display: none;">
+                            <div class="progress-bar-compact">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <div class="progress-text" id="progress-text"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 每日一言管理 -->
+                <div class="admin-section" id="tab-quotes">
+                    <h3>💬 每日一言管理</h3>
+                    <div class="quotes-actions">
+                        <button class="action-btn" id="load-quotes-file">📂 从文件加载</button>
+                        <button class="action-btn" id="add-quote-line">➕ 添加名言</button>
+                    </div>
+                    <div class="quote-list-editor" id="quote-list-editor"></div>
+                    <div class="quote-hint-text">从 quotes.txt 文件加载，点击下方删除按钮移除，添加按钮新增</div>
+                </div>
+            </div>
+            <div class="admin-footer">
+                <button class="reset-btn" id="reset-admin">🔄 恢复默认</button>
+                <button class="cancel-btn" id="cancel-admin">取消</button>
+                <button class="save-btn" id="save-admin">💾 保存配置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图标库弹窗 -->
+    <div class="icon-library-modal" id="icon-library-modal">
+        <div class="icon-library-panel">
+            <div class="icon-library-header">
+                <h3>🎨 选择图标</h3>
+                <button class="modal-close" onclick="closeIconLibrary()">×</button>
+            </div>
+            <div class="icon-search">
+                <input type="text" id="icon-search-input" placeholder="搜索图标..." oninput="filterIcons(this.value)">
+            </div>
+            <div class="icon-library-content" id="icon-library-content">
+                <!-- 图标列表 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        <!-- 第一屏：每日一言 -->
+        <section class="section-full">
+            <!-- 名言轮播 -->
+            <div class="quote-section">
+                <div class="quote-container">
+                    <div class="quote-corner top-left"></div>
+                    <div class="quote-corner top-right"></div>
+                    <div class="quote-corner bottom-left"></div>
+                    <div class="quote-corner bottom-right"></div>
+                    <div class="quote-icon">❝</div>
+                    <div class="quote-text" id="quote-text">生活中不缺少美，只是缺少发现美的眼睛。</div>
+                    <div class="quote-author" id="quote-author">罗丹</div>
+                    <div class="quote-hint">点击切换名言</div>
+                </div>
+            </div>
+            <!-- 滚动提示 -->
+            <div class="scroll-hint">
+                <span>向下滚动</span>
+                <div class="scroll-arrow">↓</div>
+            </div>
+        </section>
+
+        <!-- 第二屏：摄影作品 -->
+        <section id="gallery" class="gallery-section section-full">
+            <div class="section-header">
+                <h2 class="section-title">摄影作品</h2>
+                <div class="gallery-tabs">
+                    <button class="gallery-tab active" data-category="landscape">风景</button>
+                    <button class="gallery-tab" data-category="portrait">人像</button>
+                    <button class="gallery-tab" data-category="humanity">人文</button>
+                    <button class="gallery-tab" data-category="other">其他</button>
+                </div>
+            </div>
+            <div class="gallery-grid" id="gallery-grid"></div>
+            <div class="gallery-more">
+                <a href="#" class="gallery-more-link">查看更多 →</a>
+            </div>
+        </section>
+
+        <!-- 第三屏：应用导航 -->
+        <section id="apps" class="apps-section section-full">
+            <h2 class="section-title">应用导航</h2>
+            <div class="apps-grid"></div>
+        </section>
+    </main>
+
+    <!-- 底部浮动常用网址 -->
+    <div class="bottom-favorites"></div>
+
+    <script>
+        // ==================== 用户认证系统 ====================
+        const AUTH_CONFIG = {
+            users: [
+                { username: 'admin', password: 'admin123', role: 'admin' },
+                { username: 'user', password: 'user123', role: 'user' }
+            ]
+        };
+
+        let currentUser = null;
+        let currentRole = null;
+
+        // 检查登录状态
+        function checkLoginStatus() {
+            const savedUser = localStorage.getItem('currentUser');
+            const savedRole = localStorage.getItem('currentRole');
+            const expiry = localStorage.getItem('loginExpiry');
+            
+            if (savedUser && savedRole && expiry && Date.now() < parseInt(expiry)) {
+                currentUser = savedUser;
+                currentRole = savedRole;
+                updateLoginUI();
+                return true;
+            }
+            
+            // 清理过期数据
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('currentRole');
+            localStorage.removeItem('loginExpiry');
+            return false;
+        }
+
+        // 登录
+        function login(username, password) {
+            const user = AUTH_CONFIG.users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                currentUser = user.username;
+                currentRole = user.role;
+                
+                // 保存登录状态（7天有效期）
+                localStorage.setItem('currentUser', currentUser);
+                localStorage.setItem('currentRole', currentRole);
+                localStorage.setItem('loginExpiry', Date.now() + 7 * 24 * 60 * 60 * 1000);
+                
+                updateLoginUI();
+                return true;
+            }
+            
+            return false;
+        }
+
+        // 登出
+        function logout() {
+            currentUser = null;
+            currentRole = null;
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('currentRole');
+            localStorage.removeItem('loginExpiry');
+            updateLoginUI();
+        }
+
+        // 更新登录UI
+        function updateLoginUI() {
+            const loginBtn = document.getElementById('login-btn');
+            const loginText = document.getElementById('login-text');
+            const adminBtn = document.getElementById('admin-btn');
+            
+            if (currentUser) {
+                loginBtn.classList.add('logged-in');
+                loginText.textContent = currentUser;
+                
+                if (currentRole === 'admin') {
+                    adminBtn.classList.add('show');
+                } else {
+                    adminBtn.classList.remove('show');
+                }
+            } else {
+                loginBtn.classList.remove('logged-in');
+                loginText.textContent = '登录';
+                adminBtn.classList.remove('show');
+            }
+        }
+
+        // ==================== 配置管理系统 ====================
+        // 默认配置
+        const DEFAULT_CONFIG = {
+            apps: [
+                { icon: '📊', name: 'Grafana', desc: '监控面板', url: 'http://localhost:3000' },
+                { icon: '🐳', name: 'Portainer', desc: '容器管理', url: 'http://localhost:9000' },
+                { icon: '🎬', name: 'Jellyfin', desc: '媒体中心', url: 'http://localhost:8096' },
+                { icon: '☁️', name: 'AList', desc: '网盘管理', url: 'http://localhost:5244' },
+                { icon: '🤖', name: '青龙', desc: '定时任务', url: 'http://localhost:5700' },
+                { icon: '🎵', name: 'Navidrome', desc: '音乐服务', url: 'http://localhost:4533' },
+                { icon: '🔄', name: 'Syncthing', desc: '文件同步', url: 'http://localhost:8384' }
+            ],
+            favorites: [
+                { icon: '🐙', name: 'GitHub', url: 'https://github.com' },
+                { icon: '💻', name: 'Stack', url: 'https://stackoverflow.com' },
+                { icon: '🗣️', name: 'V2EX', url: 'https://www.v2ex.com' },
+                { icon: '❓', name: '知乎', url: 'https://www.zhihu.com' },
+                { icon: '📱', name: '少数派', url: 'https://sspai.com' },
+                { icon: '📺', name: 'B站', url: 'https://www.bilibili.com' },
+                { icon: '🔍', name: 'Google', url: 'https://www.google.com' },
+                { icon: '▶️', name: 'YouTube', url: 'https://www.youtube.com' }
+            ],
+            music: [
+                'music/Monica - 张国荣.mp3',
+                'music/That Girl - Olly Murs.mp3',
+                'music/夜曲 - 周杰伦.mp3',
+                'music/最熟悉的陌生人 - 萧亚轩.mp3',
+                'music/梦中的婚礼 - Richard Clayderman.mp3',
+                'music/花房姑娘 - 崔健.mp3'
+            ],
+            quotes: [
+                { text: "生活中不缺少美，只是缺少发现美的眼睛。", author: "罗丹" },
+                { text: "Stay hungry, stay foolish.", author: "Steve Jobs" },
+                { text: "未经审视的人生不值得过。", author: "苏格拉底" },
+                { text: "千里之行，始于足下。", author: "老子" },
+                { text: "知之者不如好之者，好之者不如乐之者。", author: "孔子" },
+                { text: "简单是终极的复杂。", author: "达芬奇" },
+                { text: "代码是写给人看的，只是顺便能让机器运行。", author: "Donald Knuth" },
+                { text: "学而时习之，不亦说乎？", author: "孔子" },
+                { text: "To be or not to be, that is the question.", author: "莎士比亚" },
+                { text: "己所不欲，勿施于人。", author: "孔子" },
+                { text: "I think, therefore I am.", author: "笛卡尔" },
+                { text: "天行健，君子以自强不息。", author: "《周易》" },
+                { text: "路漫漫其修远兮，吾将上下而求索。", author: "屈原" },
+                { text: "不积跬步，无以至千里。", author: "荀子" },
+                { text: "纸上得来终觉浅，绝知此事要躬行。", author: "陆游" },
+                { text: "宝剑锋从磨砺出，梅花香自苦寒来。", author: "古诗" },
+                { text: "海纳百川，有容乃大。", author: "林则徐" },
+                { text: "业精于勤，荒于嬉。", author: "韩愈" },
+                { text: "非淡泊无以明志，非宁静无以致远。", author: "诸葛亮" },
+                { text: "工欲善其事，必先利其器。", author: "孔子" },
+                { text: "三人行，必有我师焉。", author: "孔子" },
+                { text: "学而不思则罔，思而不学则殆。", author: "孔子" },
+                { text: "温故而知新，可以为师矣。", author: "孔子" },
+                { text: "逝者如斯夫，不舍昼夜。", author: "孔子" },
+                { text: "君子坦荡荡，小人长戚戚。", author: "孔子" },
+                { text: "吾生也有涯，而知也无涯。", author: "庄子" },
+                { text: "穷则独善其身，达则兼济天下。", author: "孟子" },
+                { text: "生于忧患，死于安乐。", author: "孟子" },
+                { text: "得道者多助，失道者寡助。", author: "孟子" },
+                { text: "天时不如地利，地利不如人和。", author: "孟子" },
+                { text: "富贵不能淫，贫贱不能移。", author: "孟子" },
+                { text: "老吾老以及人之老。", author: "孟子" },
+                { text: "居安思危，思则有备。", author: "《左传》" },
+                { text: "人谁无过？过而能改，善莫大焉。", author: "《左传》" },
+                { text: "多行不义必自毙。", author: "《左传》" },
+                { text: "皮之不存，毛将焉附？", author: "《左传》" },
+                { text: "辅车相依，唇亡齿寒。", author: "《左传》" },
+                { text: "一鼓作气，再而衰，三而竭。", author: "《左传》" },
+                { text: "流水不腐，户枢不蠹。", author: "《吕氏春秋》" },
+                { text: "察己则可以知人。", author: "《吕氏春秋》" },
+                { text: "胜人者有力，自胜者强。", author: "老子" },
+                { text: "大直若屈，大巧若拙。", author: "老子" },
+                { text: "祸兮福之所倚，福兮祸之所伏。", author: "老子" },
+                { text: "合抱之木，生于毫末。", author: "老子" },
+                { text: "上善若水，水善利万物而不争。", author: "老子" },
+                { text: "知人者智，自知者明。", author: "老子" },
+                { text: "天下难事，必作于易。", author: "老子" },
+                { text: "慎终如始，则无败事。", author: "老子" },
+                { text: "相濡以沫，不如相忘于江湖。", author: "庄子" },
+                { text: "夏虫不可语冰。", author: "庄子" },
+                { text: "人生天地之间，若白驹过隙。", author: "庄子" },
+                { text: "君子之交淡若水。", author: "庄子" },
+                { text: "天地与我并生。", author: "庄子" },
+                { text: "至人无己，神人无功。", author: "庄子" },
+                { text: "临渊羡鱼，不如退而结网。", author: "《汉书》" },
+                { text: "绳锯木断，水滴石穿。", author: "《汉书》" },
+                { text: "水至清则无鱼。", author: "《汉书》" },
+                { text: "前车之覆，后车之鉴。", author: "《汉书》" },
+                { text: "百闻不如一见。", author: "《汉书》" },
+                { text: "失之毫厘，谬以千里。", author: "《汉书》" },
+                { text: "不入虎穴，焉得虎子。", author: "《汉书》" },
+                { text: "天下熙熙，皆为利来。", author: "《史记》" },
+                { text: "桃李不言，下自成蹊。", author: "《史记》" },
+                { text: "智者千虑，必有一失。", author: "《史记》" },
+                { text: "项庄舞剑，意在沛公。", author: "《史记》" },
+                { text: "人为刀俎，我为鱼肉。", author: "《史记》" },
+                { text: "运筹帷幄之中，决胜千里之外。", author: "《史记》" },
+                { text: "忠言逆耳利于行。", author: "《史记》" },
+                { text: "山重水复疑无路，柳暗花明又一村。", author: "陆游" },
+                { text: "问渠那得清如许？为有源头活水来。", author: "朱熹" },
+                { text: "少年易老学难成，一寸光阴不可轻。", author: "朱熹" },
+                { text: "读书破万卷，下笔如有神。", author: "杜甫" },
+                { text: "会当凌绝顶，一览众山小。", author: "杜甫" },
+                { text: "星垂平野阔，月涌大江流。", author: "杜甫" },
+                { text: "无边落木萧萧下，不尽长江滚滚来。", author: "杜甫" },
+                { text: "白日放歌须纵酒，青春作伴好还乡。", author: "杜甫" },
+                { text: "两个黄鹂鸣翠柳，一行白鹭上青天。", author: "杜甫" },
+                { text: "春江潮水连海平，海上明月共潮生。", author: "张若虚" },
+                { text: "人生代代无穷已，江月年年只相似。", author: "张若虚" },
+                { text: "海内存知己，天涯若比邻。", author: "王勃" },
+                { text: "落霞与孤鹜齐飞，秋水共长天一色。", author: "王勃" },
+                { text: "欲穷千里目，更上一层楼。", author: "王之涣" },
+                { text: "羌笛何须怨杨柳，春风不度玉门关。", author: "王之涣" },
+                { text: "采菊东篱下，悠然见南山。", author: "陶渊明" },
+                { text: "晨兴理荒秽，带月荷锄归。", author: "陶渊明" },
+                { text: "盛年不重来，一日难再晨。", author: "陶渊明" },
+                { text: "大江东去，浪淘尽，千古风流人物。", author: "苏轼" },
+                { text: "但愿人长久，千里共婵娟。", author: "苏轼" },
+                { text: "不识庐山真面目，只缘身在此山中。", author: "苏轼" },
+                { text: "竹外桃花三两枝，春江水暖鸭先知。", author: "苏轼" },
+                { text: "横看成岭侧成峰，远近高低各不同。", author: "苏轼" },
+                { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+                { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
+                { text: "Stay foolish, stay hungry.", author: "Steve Jobs" },
+                { text: "Life is what happens when you're busy making other plans.", author: "John Lennon" },
+                { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+                { text: "It is during our darkest moments that we must focus to see the light.", author: "Aristotle" }
+            ]
+        };
+
+        // 加载配置（从localStorage或默认，并合并缺失字段）
+        function loadConfig() {
+            const saved = localStorage.getItem('siteConfig');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                // 合并默认配置，确保所有字段都存在
+                return {
+                    apps: parsed.apps || DEFAULT_CONFIG.apps,
+                    favorites: parsed.favorites || DEFAULT_CONFIG.favorites,
+                    music: parsed.music || DEFAULT_CONFIG.music,
+                    quotes: parsed.quotes || DEFAULT_CONFIG.quotes
+                };
+            }
+            return JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+        }
+
+        // 保存配置
+        function saveConfig(config) {
+            localStorage.setItem('siteConfig', JSON.stringify(config));
+        }
+
+        // 当前配置
+        let config = loadConfig();
+
+        // 重置配置
+        function resetConfig() {
+            config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+            saveConfig(config);
+            location.reload();
+        }
+
+        // 渲染应用导航
+        function renderApps() {
+            const appsGrid = document.querySelector('.apps-grid');
+            appsGrid.innerHTML = config.apps.map(app => {
+                const iconContent = app.iconUrl 
+                    ? `<img src="${app.iconUrl}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.textContent='📱'">` 
+                    : (app.icon || '📱');
+                return `
+                    <a href="${app.url}" class="app-item" target="_blank">
+                        <div class="app-icon">${iconContent}</div>
+                        <div class="app-name">${app.name}</div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        // 渲染底部收藏
+        function renderFavorites() {
+            const bottomFavorites = document.querySelector('.bottom-favorites');
+            bottomFavorites.innerHTML = config.favorites.map(fav => {
+                const iconContent = fav.iconUrl 
+                    ? `<img src="${fav.iconUrl}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" onerror="this.parentElement.textContent='🔗'">` 
+                    : (fav.icon || '🔗');
+                return `
+                    <a href="${fav.url}" class="bottom-favorite-item" target="_blank" data-name="${fav.name}">
+                        <div class="bottom-favorite-icon">${iconContent}</div>
+                        <span>${fav.name}</span>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        // ==================== 登录和管理功能 ====================
+        
+        // 检查登录状态
+        checkLoginStatus();
+        
+        // 登录按钮事件
+        document.getElementById('login-btn').addEventListener('click', () => {
+            if (currentUser) {
+                // 已登录，点击登出
+                if (confirm(`确定要登出 ${currentUser} 吗？`)) {
+                    logout();
+                }
+            } else {
+                // 未登录，显示登录弹窗
+                document.getElementById('login-modal').classList.add('show');
+                document.getElementById('username').focus();
+            }
+        });
+        
+        // 关闭登录弹窗
+        document.getElementById('close-login').addEventListener('click', () => {
+            document.getElementById('login-modal').classList.remove('show');
+            document.getElementById('login-error').classList.remove('show');
+        });
+        
+        // 登录表单提交
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (login(username, password)) {
+                document.getElementById('login-modal').classList.remove('show');
+                document.getElementById('login-error').classList.remove('show');
+                document.getElementById('login-form').reset();
+            } else {
+                document.getElementById('login-error').classList.add('show');
+            }
+        });
+        
+        // 点击弹窗外部关闭
+        document.getElementById('login-modal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                document.getElementById('login-modal').classList.remove('show');
+            }
+        });
+        
+        // ==================== 管理面板功能 ====================
+        
+        // 打开管理面板
+        document.getElementById('admin-btn').addEventListener('click', () => {
+            if (currentRole !== 'admin') {
+                alert('只有管理员可以访问管理面板');
+                return;
+            }
+            openAdminPanel();
+        });
+        
+        // 关闭管理面板
+        document.getElementById('close-admin').addEventListener('click', closeAdminPanel);
+        document.getElementById('cancel-admin').addEventListener('click', closeAdminPanel);
+        
+        // 点击弹窗外部关闭
+        document.getElementById('admin-modal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                closeAdminPanel();
+            }
+        });
+        
+        // 打开管理面板
+        function openAdminPanel() {
+            document.getElementById('admin-modal').classList.add('show');
+            renderAdminEditors();
+            
+            // 检查当前标签页，应用导航和网址导航不需要保存按钮
+            const activeTab = document.querySelector('.admin-tab.active');
+            if (activeTab) {
+                const currentTab = activeTab.dataset.tab;
+                const resetBtn = document.getElementById('reset-admin');
+                const saveBtn = document.getElementById('save-admin');
+                if (currentTab === 'apps' || currentTab === 'favorites') {
+                    resetBtn.style.display = 'none';
+                    saveBtn.style.display = 'none';
+                } else {
+                    resetBtn.style.display = 'inline-block';
+                    saveBtn.style.display = 'inline-block';
+                }
+            }
+        }
+        
+        // 关闭管理面板
+        function closeAdminPanel() {
+            document.getElementById('admin-modal').classList.remove('show');
+        }
+        
+        // 渲染管理编辑器
+        function renderAdminEditors() {
+            // 确保配置数组存在
+            if (!config.apps) config.apps = [];
+            if (!config.favorites) config.favorites = [];
+            if (!config.music) config.music = [];
+            if (!config.quotes) config.quotes = [];
+            
+            // 渲染应用导航编辑器（简化版）
+            const appsEditor = document.getElementById('apps-editor');
+            appsEditor.innerHTML = config.apps.map((app, index) => `
+                <div class="nav-item-row" data-index="${index}" data-type="app">
+                    <div class="nav-icon-box">
+                        <div class="nav-icon-display" id="app-icon-${index}">${app.icon || (app.iconUrl ? `<img src="${app.iconUrl}">` : '📱')}</div>
+                        <button class="icon-action-btn" onclick="changeIcon('app', ${index})" title="从图标库选择">🎨</button>
+                        <button class="icon-action-btn upload" onclick="uploadIcon('app', ${index})" title="上传自定义图标">⬆️</button>
+                    </div>
+                    <input type="text" class="nav-name" value="${app.name || ''}" placeholder="应用名称" onchange="saveNavItem('app', ${index}, 'name', this.value)">
+                    <input type="text" class="nav-url" value="${app.url || ''}" placeholder="http://localhost:3000" onchange="saveNavItem('app', ${index}, 'url', this.value)">
+                    <button class="delete-btn" onclick="deleteApp(${index})">🗑️</button>
+                </div>
+            `).join('');
+            
+            // 渲染底部导航编辑器（简化版）
+            const favoritesEditor = document.getElementById('favorites-editor');
+            favoritesEditor.innerHTML = config.favorites.map((fav, index) => `
+                <div class="nav-item-row" data-index="${index}" data-type="favorite">
+                    <div class="nav-icon-box">
+                        <div class="nav-icon-display" id="fav-icon-${index}">${fav.icon || (fav.iconUrl ? `<img src="${fav.iconUrl}">` : '🔗')}</div>
+                        <button class="icon-action-btn" onclick="changeIcon('favorite', ${index})" title="从图标库选择">🎨</button>
+                        <button class="icon-action-btn upload" onclick="uploadIcon('favorite', ${index})" title="上传自定义图标">⬆️</button>
+                    </div>
+                    <input type="text" class="nav-name" value="${fav.name || ''}" placeholder="网站名称" onchange="saveNavItem('favorite', ${index}, 'name', this.value)">
+                    <input type="text" class="nav-url" value="${fav.url || ''}" placeholder="https://example.com" onchange="saveNavItem('favorite', ${index}, 'url', this.value)">
+                    <button class="delete-btn" onclick="deleteFavorite(${index})">🗑️</button>
+                </div>
+            `).join('');
+            
+            // 渲染音乐列表
+            renderMusicList();
+            
+            // 渲染每日一言列表
+            renderQuoteList();
+        }
+
+        // 图标库数据 - 包含著名公司和常见软件图标
+        const ICON_CATEGORIES = {
+            '常用': ['📱', '💻', '🖥️', '📊', '📈', '📉', '📁', '📂', '🗂️', '📄', '📝', '📋', '✅', '❌', '⚠️', '❓', '❗', '💡', '🔔', '🔕'],
+            '媒体': ['🎵', '🎶', '🎬', '🎮', '🎯', '🎲', '🎰', '🎳', '🎸', '🎺', '🎻', '🎹', '🎤', '🎧', '🎨', '🎭', '🎪', '🎫', '🎟️', '🎗️'],
+            '社交媒体': ['💬', '📢', '📣', '📤', '📥', '📨', '📩', '📮', '📯', '📰', '🗞️', '📑', '📃', '📜', '📄', '📊', '📈', '📉', '📆', '📅'],
+            '工具': ['🔧', '🔨', '⚒️', '🛠️', '⛏️', '🔩', '⚙️', '🗜️', '⚗️', '⚖️', '🔗', '⛓️', '🧰', '🧲', '🧪', '🧫', '🧬', '🔬', '🔭', '📡'],
+            '云服务': ['☁️', '⚡', '🔥', '💧', '❄️', '🌊', '🌀', '🌈', '☀️', '🌤️', '⛅', '🌥️', '☁️', '🌦️', '🌧️', '⛈️', '🌩️', '🌨️', '❄️', '☃️'],
+            '开发': ['⚡', '🔌', '💻', '🖥️', '🖨️', '⌨️', '🖱️', '🖲️', '💽', '💾', '💿', '📀', '🧮', '🎥', '🎦', '📽️', '🎬', '📺', '📷', '📸'],
+            '科技公司': ['🍎', '🤖', '🪟', '🔍', '📘', '🐦', '💼', '📷', '🎬', '🎮', '🛒', '📦', '🚗', '🚀', '🧬', '🔬', '🌐', '📡', '🛰️', '⚛️'],
+            '软件应用': ['🎨', '📸', '🎬', '🎵', '📝', '📊', '📈', '🔒', '🗝️', '💾', '📂', '📅', '✉️', '📧', '📞', '📱', '💬', '🎮', '🎯', '🎲'],
+            '云服务': ['☁️', '🌩️', '⛈️', '🌧️', '☀️', '🌤️', '⛅', '🌥️', '🌦️', '🌨️', '❄️', '☃️', '⛄', '🌀', '🌈', '☔', '💧', '💦', '🌊', '🌫️']
+        };
+
+        // 渲染图标库
+        function renderIconLibrary(filter = '') {
+            const content = document.getElementById('icon-library-content');
+            let html = '';
+            
+            for (const [category, icons] of Object.entries(ICON_CATEGORIES)) {
+                const filteredIcons = filter 
+                    ? icons.filter(icon => icon.includes(filter))
+                    : icons;
+                
+                if (filteredIcons.length === 0) continue;
+                
+                html += `
+                    <div class="icon-category">
+                        <div class="icon-category-title">${category}</div>
+                        <div class="icon-grid">
+                            ${filteredIcons.map(icon => `
+                                <div class="icon-option" onclick="selectIconFromLibrary('', '${icon}')">
+                                    <span class="icon-option-emoji">${icon}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            content.innerHTML = html || '<div style="text-align: center; padding: 40px; color: rgba(255,255,255,0.5);">没有找到匹配的图标</div>';
+        }
+
+        // 过滤图标
+        function filterIcons(query) {
+            renderIconLibrary(query);
+        }
+
+        // 关闭图标库
+        function closeIconLibrary() {
+            document.getElementById('icon-library-modal').classList.remove('show');
+            document.getElementById('icon-search-input').value = '';
+            currentIconEditType = null;
+            currentIconEditIndex = null;
+        }
+
+        // 更换图标
+        window.changeIcon = function(type, index) {
+            currentIconEditType = type;
+            currentIconEditIndex = index;
+            document.getElementById('icon-library-modal').classList.add('show');
+            renderIconLibrary();
+        }
+
+        // 上传图标
+        window.uploadIcon = function(type, index) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                if (!file.type.startsWith('image/')) {
+                    alert('请选择图片文件');
+                    return;
+                }
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('图片不能超过2MB');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const dataUrl = event.target.result;
+                    if (type === 'app') {
+                        config.apps[index].icon = '';
+                        config.apps[index].iconUrl = dataUrl;
+                        document.getElementById(`app-icon-${index}`).innerHTML = `<img src="${dataUrl}">`;
+                        saveConfig(config);
+                        renderApps();
+                    } else {
+                        config.favorites[index].icon = '';
+                        config.favorites[index].iconUrl = dataUrl;
+                        document.getElementById(`fav-icon-${index}`).innerHTML = `<img src="${dataUrl}">`;
+                        saveConfig(config);
+                        renderFavorites();
+                    }
+                };
+                reader.readAsDataURL(file);
+            };
+            input.click();
+        }
+
+        // 从图标库选择
+        window.selectIconFromLibrary = function(iconId, iconEmoji) {
+            if (currentIconEditType === null || currentIconEditIndex === null) return;
+            
+            if (currentIconEditType === 'app') {
+                config.apps[currentIconEditIndex].icon = iconEmoji;
+                config.apps[currentIconEditIndex].iconUrl = '';
+                document.getElementById(`app-icon-${currentIconEditIndex}`).textContent = iconEmoji;
+                saveConfig(config);
+                renderApps();
+            } else {
+                config.favorites[currentIconEditIndex].icon = iconEmoji;
+                config.favorites[currentIconEditIndex].iconUrl = '';
+                document.getElementById(`fav-icon-${currentIconEditIndex}`).textContent = iconEmoji;
+                saveConfig(config);
+                renderFavorites();
+            }
+            
+            closeIconLibrary();
+        }
+        
+        // 渲染音乐列表
+        function renderMusicList() {
+            const musicEditor = document.getElementById('music-list-editor');
+            let html = '';
+            
+            // 添加标题
+            html += '<h4 style="margin-bottom: 15px; color: rgba(255,255,255,0.8);">🎶 播放列表</h4>';
+            
+            if (!config.music || config.music.length === 0) {
+                html += '<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 30px; background: rgba(255,255,255,0.03); border-radius: 10px;">暂无音乐，请上传音乐文件</div>';
+            } else {
+                html += config.music.map((music, index) => {
+                    const filename = music.split('/').pop();
+                    const ext = filename.substring(filename.lastIndexOf('.')).toLowerCase();
+                    const icon = ext === '.mp3' ? '🎵' : ext === '.wav' ? '🔊' : ext === '.flac' ? '🎼' : '🎶';
+                    return `
+                        <div class="music-list-item" data-index="${index}">
+                            <span class="music-icon">${icon}</span>
+                            <span class="music-name">${filename}</span>
+                            <span class="music-status uploaded">已添加</span>
+                            <button class="delete-btn" onclick="deleteMusic(${index})" title="删除这首音乐">🗑️</button>
+                        </div>
+                    `;
+                }).join('');
+                
+                html += `<div style="margin-top: 15px; text-align: center; color: rgba(255,255,255,0.4); font-size: 13px;">共 ${config.music.length} 首音乐</div>`;
+            }
+            
+            musicEditor.innerHTML = html;
+        }
+        
+        // 渲染名言列表
+        function renderQuoteList() {
+            const quoteEditor = document.getElementById('quote-list-editor');
+            if (!config.quotes || config.quotes.length === 0) {
+                quoteEditor.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 20px;">暂无名言，请添加或从文件加载</div>';
+                return;
+            }
+            
+            quoteEditor.innerHTML = config.quotes.map((quote, index) => `
+                <div class="quote-item-row" data-index="${index}">
+                    <input type="text" class="quote-text-input" value="${quote.text || ''}" placeholder="名言内容">
+                    <input type="text" class="quote-author-input" value="${quote.author || ''}" placeholder="作者">
+                    <button class="quote-delete-btn" onclick="deleteQuote(${index})">🗑️</button>
+                </div>
+            `).join('');
+        }
+        
+        // 删除应用
+        window.deleteApp = function(index) {
+            if (confirm('确定要删除这个应用吗？')) {
+                config.apps.splice(index, 1);
+                saveConfig(config);
+                renderAdminEditors();
+                renderApps();
+            }
+        };
+        
+        // 删除收藏
+        window.deleteFavorite = function(index) {
+            if (confirm('确定要删除这个网址吗？')) {
+                config.favorites.splice(index, 1);
+                saveConfig(config);
+                renderAdminEditors();
+                renderFavorites();
+            }
+        };
+        
+        // 删除音乐
+        window.deleteMusic = function(index) {
+            config.music.splice(index, 1);
+            renderAdminEditors();
+        };
+        
+        // 添加应用
+        document.getElementById('add-app').addEventListener('click', () => {
+            config.apps.push({ icon: '📱', name: '新应用', desc: '描述', url: 'http://' });
+            renderAdminEditors();
+        });
+        
+        // 添加收藏
+        document.getElementById('add-favorite').addEventListener('click', () => {
+            config.favorites.push({ icon: '🔗', name: '新网址', url: 'https://' });
+            renderAdminEditors();
+        });
+        
+        // 音乐文件上传功能
+        const musicFileInput = document.getElementById('music-file-input');
+        const musicUploadArea = document.getElementById('music-upload-area');
+        const uploadProgress = document.getElementById('upload-progress');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        const selectedFilesText = document.getElementById('selected-files-text');
+        const uploadConfirmBtn = document.getElementById('upload-confirm-btn');
+        const clearFilesBtn = document.getElementById('clear-files-btn');
+        const pendingFilesList = document.getElementById('pending-files-list');
+        const pendingFilesContainer = document.getElementById('pending-files-container');
+        
+        // 暂存选中的文件
+        let pendingMusicFiles = [];
+        const MAX_FILES = 20;
+        
+        // 支持的音频格式
+        const ALLOWED_AUDIO_TYPES = [
+            'audio/mpeg',      // MP3
+            'audio/wav',       // WAV
+            'audio/ogg',       // OGG
+            'audio/x-m4a',     // M4A
+            'audio/mp4',       // M4A/MP4
+            'audio/flac',      // FLAC
+            'audio/x-flac'     // FLAC
+        ];
+        const ALLOWED_EXTENSIONS = ['.mp3', '.wav', '.ogg', '.m4a', '.flac', '.aac'];
+        
+        // 验证文件是否为音乐文件
+        function isAudioFile(file) {
+            if (ALLOWED_AUDIO_TYPES.includes(file.type)) {
+                return true;
+            }
+            const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+            if (ALLOWED_EXTENSIONS.includes(ext)) {
+                return true;
+            }
+            return false;
+        }
+        
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+        
+        // 更新选择文件显示
+        function updateSelectedFilesDisplay() {
+            if (pendingMusicFiles.length === 0) {
+                selectedFilesText.textContent = '未选择文件（最多20个）';
+                uploadConfirmBtn.disabled = true;
+                clearFilesBtn.style.display = 'none';
+                pendingFilesList.style.display = 'none';
+            } else {
+                const validCount = pendingMusicFiles.filter(f => f.isValid).length;
+                const invalidCount = pendingMusicFiles.length - validCount;
+                selectedFilesText.textContent = `已选择 ${pendingMusicFiles.length}/20 个文件（${validCount} 个有效）`;
+                uploadConfirmBtn.disabled = validCount === 0;
+                clearFilesBtn.style.display = 'inline-block';
+                pendingFilesList.style.display = 'block';
+                renderPendingFilesList();
+            }
+        }
+        
+        // 渲染待上传文件列表
+        function renderPendingFilesList() {
+            pendingFilesContainer.innerHTML = pendingMusicFiles.map((fileInfo, index) => {
+                const icon = fileInfo.isValid ? '🎵' : '❌';
+                const statusClass = fileInfo.isValid ? 'valid' : 'invalid';
+                const statusText = fileInfo.isValid ? '有效' : '无效';
+                const nameClass = fileInfo.isValid ? '' : 'invalid';
+                return `
+                    <div class="pending-file-item ${fileInfo.isValid ? '' : 'invalid'}">
+                        <span class="pending-file-icon">${icon}</span>
+                        <span class="pending-file-name ${nameClass}" title="${fileInfo.name}">${fileInfo.name}</span>
+                        <span class="pending-file-size">${formatFileSize(fileInfo.size)}</span>
+                        <span class="pending-file-status ${statusClass}">${statusText}</span>
+                        <button class="pending-file-remove" onclick="removePendingFile(${index})" title="移除">×</button>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // 移除待上传文件
+        window.removePendingFile = function(index) {
+            pendingMusicFiles.splice(index, 1);
+            updateSelectedFilesDisplay();
+        };
+        
+        // 清空所有待上传文件
+        function clearAllPendingFiles() {
+            if (pendingMusicFiles.length === 0) return;
+            if (confirm(`确定要清空所有 ${pendingMusicFiles.length} 个待添加文件吗？`)) {
+                pendingMusicFiles = [];
+                updateSelectedFilesDisplay();
+                musicFileInput.value = '';
+            }
+        }
+        
+        // 处理文件选择（仅暂存，不上传）
+        function handleFileSelection(files) {
+            // 检查是否超过最大限制
+            const remainingSlots = MAX_FILES - pendingMusicFiles.length;
+            if (remainingSlots <= 0) {
+                alert(`已达到最大限制（${MAX_FILES}个文件），请先添加或清空当前列表`);
+                return;
+            }
+            
+            let filesToProcess = Array.from(files);
+            if (filesToProcess.length > remainingSlots) {
+                alert(`只能选择 ${remainingSlots} 个文件（已达到${MAX_FILES}个限制）`);
+                filesToProcess = filesToProcess.slice(0, remainingSlots);
+            }
+            
+            const newFiles = filesToProcess.map(file => ({
+                file: file,
+                isValid: isAudioFile(file),
+                name: file.name,
+                size: file.size
+            }));
+            
+            // 过滤掉重复文件
+            const existingNames = new Set(pendingMusicFiles.map(f => f.name));
+            const uniqueFiles = newFiles.filter(f => !existingNames.has(f.name));
+            
+            if (uniqueFiles.length < newFiles.length) {
+                const duplicates = newFiles.filter(f => existingNames.has(f.name)).map(f => f.name);
+                alert(`以下文件已在列表中，已跳过：\n${duplicates.join('\n')}`);
+            }
+            
+            pendingMusicFiles = pendingMusicFiles.concat(uniqueFiles);
+            updateSelectedFilesDisplay();
+        }
+        
+        // 执行上传（添加到列表）
+        function executeUpload() {
+            const validFiles = pendingMusicFiles.filter(f => f.isValid);
+            
+            if (validFiles.length === 0) {
+                alert('没有有效的音乐文件可添加');
+                return;
+            }
+            
+            // 显示上传进度
+            uploadProgress.style.display = 'block';
+            pendingFilesList.style.display = 'none';
+            progressFill.style.width = '0%';
+            progressText.textContent = `准备添加 ${validFiles.length} 个文件...`;
+            
+            let currentIndex = 0;
+            const totalFiles = validFiles.length;
+            
+            function addNext() {
+                if (currentIndex >= totalFiles) {
+                    // 添加完成
+                    setTimeout(() => {
+                        uploadProgress.style.display = 'none';
+                        progressFill.style.width = '0%';
+                        pendingMusicFiles = [];
+                        updateSelectedFilesDisplay();
+                        musicFileInput.value = '';
+                        renderMusicList();
+                        alert(`成功添加 ${totalFiles} 首音乐到播放列表！`);
+                    }, 500);
+                    return;
+                }
+                
+                const fileInfo = validFiles[currentIndex];
+                const progress = ((currentIndex + 1) / totalFiles) * 100;
+                
+                progressFill.style.width = progress + '%';
+                progressText.textContent = `正在添加: ${fileInfo.name} (${currentIndex + 1}/${totalFiles})`;
+                
+                // 添加到配置
+                config.music.push(`music/${fileInfo.name}`);
+                
+                currentIndex++;
+                setTimeout(addNext, 150);
+            }
+            
+            addNext();
+        }
+        
+        // 文件选择事件
+        musicFileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files.length > 0) {
+                handleFileSelection(e.target.files);
+                e.target.value = ''; // 清空选择，允许重复选择
+            }
+        });
+        
+        // 上传按钮事件
+        uploadConfirmBtn.addEventListener('click', executeUpload);
+        
+        // 清空按钮事件
+        clearFilesBtn.addEventListener('click', clearAllPendingFiles);
+        
+        // 拖拽事件
+        musicUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            musicUploadArea.style.borderColor = '#007AFF';
+        });
+        
+        musicUploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            musicUploadArea.style.borderColor = 'rgba(0, 122, 255, 0.15)';
+        });
+        
+        musicUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            musicUploadArea.style.borderColor = 'rgba(0, 122, 255, 0.15)';
+            
+            const files = Array.from(e.dataTransfer.files);
+            if (files.length > 0) {
+                handleFileSelection(files);
+            }
+        });
+        
+        // 从文件加载名言
+        document.getElementById('load-quotes-file').addEventListener('click', async () => {
+            try {
+                const response = await fetch('quotes.txt');
+                if (!response.ok) {
+                    throw new Error('无法加载文件');
+                }
+                const text = await response.text();
+                const lines = text.trim().split('\n').filter(line => line.trim());
+                
+                config.quotes = lines.map(line => {
+                    const parts = line.split('|');
+                    return {
+                        text: (parts[0] || '').trim(),
+                        author: (parts[1] || '佚名').trim()
+                    };
+                }).filter(q => q.text);
+                
+                renderQuoteList();
+                alert(`已从 quotes.txt 加载 ${config.quotes.length} 条名言`);
+            } catch (error) {
+                alert('加载文件失败: ' + error.message);
+            }
+        });
+        
+        // 添加新名言
+        document.getElementById('add-quote-line').addEventListener('click', () => {
+            config.quotes.push({ text: '', author: '' });
+            renderQuoteList();
+            // 滚动到底部
+            const editor = document.getElementById('quote-list-editor');
+            editor.scrollTop = editor.scrollHeight;
+        });
+        
+        // 删除名言
+        window.deleteQuote = function(index) {
+            config.quotes.splice(index, 1);
+            renderQuoteList();
+        };
+        
+        // 管理标签切换
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+                
+                // 应用导航和网址导航即时生效，不需要保存按钮
+                const currentTab = tab.dataset.tab;
+                const resetBtn = document.getElementById('reset-admin');
+                const saveBtn = document.getElementById('save-admin');
+                if (currentTab === 'apps' || currentTab === 'favorites') {
+                    resetBtn.style.display = 'none';
+                    saveBtn.style.display = 'none';
+                } else {
+                    resetBtn.style.display = 'inline-block';
+                    saveBtn.style.display = 'inline-block';
+                }
+            });
+        });
+        
+        // 恢复默认配置
+        document.getElementById('reset-admin').addEventListener('click', () => {
+            if (confirm('确定要恢复默认配置吗？这将删除所有自定义设置。')) {
+                localStorage.removeItem('siteConfig');
+                alert('已恢复默认配置，页面将刷新。');
+                location.reload();
+            }
+        });
+
+        // 自动保存单个导航项
+        window.saveNavItem = function(type, index, field, value) {
+            if (type === 'app') {
+                config.apps[index][field] = value;
+            } else {
+                config.favorites[index][field] = value;
+            }
+            saveConfig(config);
+            if (type === 'app') {
+                renderApps();
+            } else {
+                renderFavorites();
+            }
+        }
+        
+        // 保存配置（其他标签页使用）
+        document.getElementById('save-admin').addEventListener('click', () => {
+            // 收集应用导航数据（新格式）
+            const appItems = document.querySelectorAll('#apps-editor .nav-item-row');
+            config.apps = Array.from(appItems).map(item => {
+                const index = item.dataset.index;
+                const iconEl = document.getElementById(`app-icon-${index}`);
+                const iconImg = iconEl.querySelector('img');
+                return {
+                    name: item.querySelector('.nav-name').value,
+                    icon: iconImg ? '' : iconEl.textContent,
+                    iconUrl: iconImg ? iconImg.src : '',
+                    url: item.querySelector('.nav-url').value
+                };
+            });
+            
+            // 收集底部导航数据（新格式）
+            const favItems = document.querySelectorAll('#favorites-editor .nav-item-row');
+            config.favorites = Array.from(favItems).map(item => {
+                const index = item.dataset.index;
+                const iconEl = document.getElementById(`fav-icon-${index}`);
+                const iconImg = iconEl.querySelector('img');
+                return {
+                    name: item.querySelector('.nav-name').value,
+                    icon: iconImg ? '' : iconEl.textContent,
+                    iconUrl: iconImg ? iconImg.src : '',
+                    url: item.querySelector('.nav-url').value
+                };
+            });
+            
+            // 音乐列表已经在添加/删除时更新到config.music
+            
+            // 收集每日一言数据
+            const quoteRows = document.querySelectorAll('#quote-list-editor .quote-item-row');
+            config.quotes = Array.from(quoteRows).map(row => ({
+                text: row.querySelector('.quote-text-input').value,
+                author: row.querySelector('.quote-author-input').value
+            })).filter(q => q.text.trim());
+            
+            // 保存到localStorage
+            saveConfig(config);
+            
+            // 重新渲染页面
+            renderApps();
+            renderFavorites();
+            
+            // 更新音乐列表 - 直接替换数组引用
+            window.musicList = config.music || DEFAULT_CONFIG.music;
+            
+            // 更新名言列表
+            quotes.length = 0;
+            quotes.push(...config.quotes);
+            
+            alert('配置已保存！');
+            closeAdminPanel();
+        });
+
+        // 初始化渲染
+        renderApps();
+        renderFavorites();
+
+        // 更新时间
+        function updateDateTime() {
+            const now = new Date();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            
+            document.getElementById('current-date').textContent = `${month}/${day}`;
+            document.getElementById('current-time').textContent = `${hours}:${minutes}`;
+        }
+        
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // 天气
+        async function getWeather() {
+            try {
+                const response = await fetch('https://wttr.in/?format=%C|%t', { mode: 'cors' });
+                if (response.ok) {
+                    const data = await response.text();
+                    const [desc, temp] = data.split('|');
+                    document.getElementById('weather-info').textContent = `${temp || '--°C'}`;
+                }
+            } catch (e) {
+                document.getElementById('weather-info').textContent = '点击刷新';
+            }
+        }
+        
+        document.getElementById('weather-item').addEventListener('click', getWeather);
+        getWeather();
+
+        // 名言随机显示 - 从quotes.txt文件加载
+        let quotes = [];
+        let quoteInterval = null;
+        const QUOTE_SWITCH_INTERVAL = 8000; // 8秒切换一次
+
+        // 字体风格配置（10种中文字体）
+        const FONT_STYLES = ['style-1', 'style-2', 'style-3', 'style-4', 'style-5', 'style-6', 'style-7', 'style-8', 'style-9', 'style-10'];
+        
+        // 颜色配置（10种亮色系，确保与黑色背景反差大）
+        const COLORS = ['color-1', 'color-2', 'color-3', 'color-4', 'color-5', 'color-6', 'color-7', 'color-8', 'color-9', 'color-10'];
+
+        // 从配置或文本文件加载名言
+        async function loadQuotes() {
+            // 优先使用管理员配置的名言
+            if (config.quotes && config.quotes.length > 0) {
+                quotes = config.quotes;
+                showRandomQuote();
+                startQuoteRotation();
+                return;
+            }
+            
+            try {
+                const response = await fetch('quotes.txt');
+                if (!response.ok) {
+                    throw new Error('无法加载名言文件');
+                }
+                const text = await response.text();
+                // 解析每行：名言内容|作者名
+                quotes = text.trim().split('\n').map(line => {
+                    const parts = line.split('|');
+                    return {
+                        text: parts[0].trim(),
+                        author: parts[1] ? parts[1].trim() : '佚名'
+                    };
+                }).filter(q => q.text);
+                
+                // 加载完成后初始化
+                showRandomQuote();
+                startQuoteRotation();
+            } catch (error) {
+                console.error('加载名言失败:', error);
+                // 使用默认名言作为备用
+                quotes = DEFAULT_CONFIG.quotes;
+                showRandomQuote();
+                startQuoteRotation();
+            }
+        }
+
+        // 获取随机字体风格
+        function getRandomFontStyle() {
+            return FONT_STYLES[Math.floor(Math.random() * FONT_STYLES.length)];
+        }
+
+        // 获取随机颜色
+        function getRandomColor() {
+            return COLORS[Math.floor(Math.random() * COLORS.length)];
+        }
+
+        // 显示随机名言
+        function showRandomQuote() {
+            if (quotes.length === 0) return;
+            
+            const quoteText = document.getElementById('quote-text');
+            const quoteAuthor = document.getElementById('quote-author');
+            
+            // 随机选择一个名言
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            const quote = quotes[randomIndex];
+            const fontStyle = getRandomFontStyle();
+            const color = getRandomColor();
+            
+            // 移除所有字体风格类和颜色类
+            FONT_STYLES.forEach(style => quoteText.classList.remove(style));
+            COLORS.forEach(c => quoteText.classList.remove(c));
+            
+            // 淡出动画
+            quoteText.style.opacity = '0';
+            quoteText.style.transform = 'translateY(20px) scale(0.95)';
+            quoteAuthor.style.opacity = '0';
+            quoteAuthor.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                // 更新内容
+                quoteText.textContent = quote.text;
+                quoteAuthor.textContent = `— ${quote.author}`;
+                
+                // 添加随机字体风格和颜色
+                quoteText.classList.add(fontStyle);
+                quoteText.classList.add(color);
+                
+                // 淡入动画
+                quoteText.style.opacity = '1';
+                quoteText.style.transform = 'translateY(0) scale(1)';
+                quoteAuthor.style.opacity = '1';
+                quoteAuthor.style.transform = 'translateY(0)';
+            }, 400);
+        }
+
+        // 启动名言轮换
+        function startQuoteRotation() {
+            if (quoteInterval) {
+                clearInterval(quoteInterval);
+            }
+            quoteInterval = setInterval(() => {
+                if (!document.hidden) {
+                    showRandomQuote();
+                }
+            }, QUOTE_SWITCH_INTERVAL);
+        }
+
+        // 停止名言轮换
+        function stopQuoteRotation() {
+            if (quoteInterval) {
+                clearInterval(quoteInterval);
+                quoteInterval = null;
+            }
+        }
+
+        // 点击名言区域立即切换
+        document.querySelector('.quote-container').addEventListener('click', () => {
+            showRandomQuote();
+        });
+
+        // 页面可见性变化时控制轮换
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopQuoteRotation();
+            } else {
+                startQuoteRotation();
+            }
+        });
+
+        // 加载名言并初始化
+        loadQuotes();
+
+        // 摄影作品 - 使用示例图片
+        const galleryImages = {
+            landscape: [
+                { url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=750&fit=crop', title: '阿尔卑斯山', desc: '壮丽的雪山日出' },
+                { url: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=600&h=750&fit=crop', title: '瀑布森林', desc: '隐秘的自然奇观' },
+                { url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=750&fit=crop', title: '迷雾山谷', desc: '清晨的宁静时刻' },
+                { url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=750&fit=crop', title: '日出山峰', desc: '金色的光芒' },
+                { url: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=600&h=750&fit=crop', title: '森林小径', desc: '阳光透过树叶' },
+                { url: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&h=750&fit=crop', title: '海岸风光', desc: '碧海蓝天' },
+                { url: 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&h=750&fit=crop', title: '山脉倒影', desc: '湖光山色' },
+                { url: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&h=750&fit=crop', title: '草原风光', desc: '广阔无垠' },
+                { url: 'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=600&h=750&fit=crop', title: '云海日出', desc: '壮观的景象' }
+            ],
+            portrait: [
+                { url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&h=750&fit=crop', title: '光影肖像', desc: '自然光下的优雅' },
+                { url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=750&fit=crop', title: '城市女孩', desc: '都市时尚风格' },
+                { url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=750&fit=crop', title: '阳光少年', desc: '青春的笑容' },
+                { url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=750&fit=crop', title: '微笑女孩', desc: '温暖的笑容' },
+                { url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=750&fit=crop', title: '成熟男士', desc: '自信的眼神' },
+                { url: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=750&fit=crop', title: '文艺青年', desc: '知性的气质' },
+                { url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=750&fit=crop', title: '街头肖像', desc: '城市的面孔' },
+                { url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&h=750&fit=crop', title: '黑白色调', desc: '经典的魅力' },
+                { url: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&h=750&fit=crop', title: '时尚模特', desc: '潮流的风向' }
+            ],
+            humanity: [
+                { url: 'https://images.unsplash.com/photo-1516826957135-700dedea698c?w=600&h=750&fit=crop', title: '老街巷弄', desc: '岁月的故事' },
+                { url: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=600&h=750&fit=crop', title: '市集热闹', desc: '生活的烟火气' },
+                { url: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=750&fit=crop', title: '工匠手艺', desc: '传统的传承' },
+                { url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&h=750&fit=crop', title: '家庭时光', desc: '温馨的时刻' },
+                { url: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=600&h=750&fit=crop', title: '街头艺人', desc: '才华的展示' },
+                { url: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=600&h=750&fit=crop', title: '节庆活动', desc: '欢乐的气氛' },
+                { url: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=600&h=750&fit=crop', title: '工作场景', desc: '忙碌的身影' },
+                { url: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=600&h=750&fit=crop', title: '儿童嬉戏', desc: '天真的笑容' },
+                { url: 'https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=600&h=750&fit=crop', title: '友谊时刻', desc: '真挚的情谊' }
+            ],
+            other: [
+                { url: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=600&h=750&fit=crop', title: '霓虹都市', desc: '赛博朋克之夜' },
+                { url: 'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=600&h=750&fit=crop', title: '极简建筑', desc: '线条与光影' },
+                { url: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=600&h=750&fit=crop', title: '抽象色彩', desc: '艺术的碰撞' },
+                { url: 'https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?w=600&h=750&fit=crop', title: '微距世界', desc: '细节的奥秘' },
+                { url: 'https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?w=600&h=750&fit=crop', title: '几何图形', desc: '数学之美' },
+                { url: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=600&h=750&fit=crop', title: '美食摄影', desc: '视觉的盛宴' },
+                { url: 'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=600&h=750&fit=crop', title: '动物世界', desc: '自然的生灵' },
+                { url: 'https://images.unsplash.com/photo-1518173946687-a4c036bc3c95?w=600&h=750&fit=crop', title: '夜景摄影', desc: '城市的灯火' },
+                { url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=750&fit=crop', title: '水下世界', desc: '深蓝的神秘' }
+            ]
+        };
+
+        let currentGalleryCategory = 'landscape';
+        let galleryRefreshInterval = null;
+        let currentGalleryImages = [];
+
+        // 从数组中随机选取3个不重复的元素
+        function getRandomImages(images, count = 3) {
+            const shuffled = [...images].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        // 预加载图片
+        function preloadImage(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(url);
+                img.onerror = reject;
+                img.src = url;
+            });
+        }
+
+        // 平滑更新画廊（带淡入淡出效果）
+        async function updateGallerySmooth(category) {
+            const grid = document.getElementById('gallery-grid');
+            const items = grid.querySelectorAll('.gallery-item');
+            const newImages = getRandomImages(galleryImages[category]);
+            
+            // 预加载所有新图片
+            await Promise.all(newImages.map(img => preloadImage(img.url)));
+            
+            // 淡出当前图片
+            items.forEach(item => {
+                const img = item.querySelector('img');
+                if (img) {
+                    img.classList.add('fade-out');
+                    img.classList.remove('fade-in');
+                }
+            });
+            
+            // 等待淡出完成
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
+            // 更新图片和文字
+            items.forEach((item, index) => {
+                const img = item.querySelector('img');
+                const title = item.querySelector('.gallery-title');
+                const desc = item.querySelector('.gallery-desc');
+                
+                if (newImages[index]) {
+                    if (img) {
+                        img.src = newImages[index].url;
+                        img.alt = newImages[index].title;
+                        img.classList.remove('fade-out');
+                        img.classList.add('fade-in');
+                    }
+                    if (title) title.textContent = newImages[index].title;
+                    if (desc) desc.textContent = newImages[index].desc;
+                }
+            });
+            
+            currentGalleryImages = newImages;
+        }
+
+        function renderGallery(category) {
+            const grid = document.getElementById('gallery-grid');
+            const images = getRandomImages(galleryImages[category]);
+            currentGalleryImages = images;
+            
+            grid.innerHTML = images.map((img, index) => `
+                <div class="gallery-item" style="animation: fadeInUp 0.6s ease ${index * 0.15}s both;">
+                    <img src="${img.url}" alt="${img.title}" loading="lazy" class="fade-in">
+                    <div class="gallery-overlay">
+                        <div class="gallery-title">${img.title}</div>
+                        <div class="gallery-desc">${img.desc}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 启动自动刷新
+        function startGalleryAutoRefresh() {
+            if (galleryRefreshInterval) {
+                clearInterval(galleryRefreshInterval);
+            }
+            galleryRefreshInterval = setInterval(() => {
+                if (!document.hidden) {
+                    updateGallerySmooth(currentGalleryCategory);
+                }
+            }, 10000);
+        }
+
+        // 停止自动刷新
+        function stopGalleryAutoRefresh() {
+            if (galleryRefreshInterval) {
+                clearInterval(galleryRefreshInterval);
+                galleryRefreshInterval = null;
+            }
+        }
+
+        document.querySelectorAll('.gallery-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.gallery-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentGalleryCategory = tab.dataset.category;
+                renderGallery(currentGalleryCategory);
+                startGalleryAutoRefresh();
+            });
+        });
+
+        // 页面可见性变化时控制刷新
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopGalleryAutoRefresh();
+            } else {
+                startGalleryAutoRefresh();
+            }
+        });
+
+        // 滚动提示点击事件
+        document.querySelector('.scroll-hint').addEventListener('click', () => {
+            document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // 音乐播放器
+        let musicList = config.music || DEFAULT_CONFIG.music;
+        
+        let currentMusicIndex = -1;
+        let audio = null;
+        let isPlaying = false;
+        
+        function getRandomMusic() {
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * musicList.length);
+            } while (newIndex === currentMusicIndex && musicList.length > 1);
+            currentMusicIndex = newIndex;
+            return musicList[newIndex];
+        }
+        
+        function initMusicPlayer() {
+            audio = new Audio();
+            audio.volume = 0.5;
+            
+            audio.addEventListener('ended', () => {
+                playRandomMusic();
+            });
+            
+            audio.addEventListener('error', (e) => {
+                console.error('音乐播放错误:', e);
+                setTimeout(() => playRandomMusic(), 1000);
+            });
+        }
+        
+        function playRandomMusic() {
+            if (!audio) initMusicPlayer();
+            
+            const musicSrc = getRandomMusic();
+            audio.src = musicSrc;
+            audio.play().then(() => {
+                isPlaying = true;
+                updateMusicControlUI();
+                console.log('正在播放:', musicSrc);
+            }).catch(error => {
+                console.error('播放失败:', error);
+                isPlaying = false;
+                updateMusicControlUI();
+            });
+        }
+        
+        function toggleMusic() {
+            if (!audio) initMusicPlayer();
+            
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+            } else {
+                if (!audio.src || audio.ended) {
+                    playRandomMusic();
+                } else {
+                    audio.play().then(() => {
+                        isPlaying = true;
+                    }).catch(error => {
+                        console.error('播放失败:', error);
+                        playRandomMusic();
+                    });
+                }
+            }
+            updateMusicControlUI();
+        }
+        
+        function updateMusicControlUI() {
+            const control = document.getElementById('music-control');
+            if (isPlaying) {
+                control.classList.add('playing');
+                control.setAttribute('data-state', 'on');
+                control.innerHTML = '🔊';
+            } else {
+                control.classList.remove('playing');
+                control.setAttribute('data-state', 'off');
+                control.innerHTML = '🔇';
+            }
+        }
+        
+        // 绑定音乐控制按钮
+        document.getElementById('music-control').addEventListener('click', toggleMusic);
+        
+        // 初始化播放器（不自动播放，等待用户点击）
+        initMusicPlayer();
+        updateMusicControlUI();
+
+        // 初始化
+        renderGallery('landscape');
+        startGalleryAutoRefresh();
+    </script>
+</body>
+</html>
