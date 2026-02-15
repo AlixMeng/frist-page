@@ -13,8 +13,11 @@
 - 📷 **摄影作品** - 图片画廊，支持多分类展示
 - <img width="1278" height="733" alt="image" src="https://github.com/user-attachments/assets/1995d341-386e-406d-b404-685486497abe" />
 - 📱 **应用导航** - 可自定义的应用图标网格
+- <img width="1303" height="469" alt="image" src="https://github.com/user-attachments/assets/30d8d022-0127-4a75-a542-e4205bf49338" />
 - 🖥️ **主机导航** - 服务器状态监控，绿/灰灯显示在线状态
+- <img width="1215" height="373" alt="image" src="https://github.com/user-attachments/assets/d24ac5de-8792-40a9-b650-6fccb01af374" />
 - ⭐ **底部导航** - 常用网址快捷入口
+- <img width="553" height="96" alt="image" src="https://github.com/user-attachments/assets/84af7e2b-204a-4ad0-8c0e-b06054811c03" />
 
 ### 管理功能
 - 🔐 **用户认证** - 登录系统，支持管理员/普通用户
@@ -36,37 +39,12 @@
 ## 预览
 
 ```
-┌─────────────────────────────────────┐
-│ 📅 02/15  ⏰ 14:30  🌤️ 北京 15°C   │
-├─────────────────────────────────────┤
-│                                     │
-│         💬 Alix Go 💬               │
-│    "代码是写给人看的..."            │
-│           — Donald Knuth            │
-│                                     │
-├─────────────────────────────────────┤
-│  [风景] [人像] [人文] [其他]        │
-│  ┌─────┐ ┌─────┐ ┌─────┐          │
-│  │     │ │     │ │     │          │
-│  │  ⛰  │ │  👤  │ │  🏙  │          │
-│  │     │ │     │ │     │          │
-│  └─────┘ └─────┘ └─────┘          │
-│                                     │
-├─────────────────────────────────────┤
-│        应用导航                      │
-│  ┌────┐ ┌────┐ ┌────┐ ┌────┐     │
-│  │Graf│ │Port│ │Jell│ │AList│    │
-│  └────┘ └────┘ └────┘ └────┘     │
-│                                     │
-├─────────────────────────────────────┤
-│        主机导航                      │
-│  🟢 Grafana  🔴 Portainer         │
-│  🟢 Jellyfin  🔴 AList            │
-│                                     │
-└─────────────────────────────────────┘
-      [GitHub] [Google] [B站] ...
+<img width="445" height="538" alt="image" src="https://github.com/user-attachments/assets/1f9369d8-9e68-45e7-94db-6f97739321db" />
 ```
-
+<img width="381" height="106" alt="image" src="https://github.com/user-attachments/assets/673308bf-c000-45a7-8a07-12adffd5d9e7" />
+```
+<img width="820" height="732" alt="image" src="https://github.com/user-attachments/assets/815f8a20-6e58-4f6a-b4bf-8c81d6ebd554" />
+```
 ## 技术栈
 
 - **前端**: HTML5, CSS3, Vanilla JavaScript
