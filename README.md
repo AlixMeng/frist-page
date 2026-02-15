@@ -9,6 +9,7 @@
 
 ### 核心功能
 - 💬 **每日一言** - 名言轮播展示，支持自定义名言库
+- <img width="1888" height="820" alt="image" src="https://github.com/user-attachments/assets/4debd6bc-167b-4552-88dc-bce6313ec9fd" />
 - 📷 **摄影作品** - 图片画廊，支持多分类展示
 - 📱 **应用导航** - 可自定义的应用图标网格
 - 🖥️ **主机导航** - 服务器状态监控，绿/灰灯显示在线状态
