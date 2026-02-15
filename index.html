@@ -3274,6 +3274,468 @@
             color: rgba(255, 255, 255, 0.4);
             font-size: 14px;
         }
+
+        /* ==================== 响应式优化 ==================== */
+        /* 平板适配 */
+        @media (max-width: 1024px) {
+            .section-full {
+                padding: 100px 30px 60px;
+            }
+            
+            .section-title {
+                font-size: 22px;
+            }
+            
+            .servers-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+            
+            .apps-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+
+        /* 大手机适配 */
+        @media (max-width: 768px) {
+            body {
+                padding-bottom: 120px;
+            }
+            
+            .section-full {
+                padding: 90px 20px 50px;
+                min-height: auto;
+                height: auto;
+            }
+            
+            .section-title {
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+            
+            /* 状态栏 */
+            .top-status-bar {
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                padding: 8px 12px;
+                gap: 8px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .top-status-item {
+                padding: 4px 8px;
+                font-size: 12px;
+            }
+            
+            .top-status-icon {
+                width: 24px;
+                height: 24px;
+                font-size: 12px;
+            }
+            
+            /* 登录/管理按钮 */
+            .login-btn, .admin-btn {
+                top: 10px;
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            
+            .admin-btn {
+                right: 10px;
+            }
+            
+            /* 名言区域 */
+            .quote-section {
+                padding: 40px 15px 0;
+            }
+            
+            .quote-container {
+                padding: 30px 20px;
+                border-radius: 24px;
+            }
+            
+            .site-name {
+                font-size: 28px;
+                margin-bottom: 20px;
+            }
+            
+            .quote-text {
+                font-size: 16px;
+            }
+            
+            .quote-author {
+                font-size: 13px;
+            }
+            
+            /* 画廊 */
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            
+            .gallery-tabs {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .gallery-tab {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            /* 应用导航 */
+            .apps-grid {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+                gap: 12px;
+            }
+            
+            .app-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+            
+            .app-name {
+                font-size: 11px;
+            }
+            
+            /* 主机导航 */
+            .servers-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .server-item {
+                padding: 12px;
+            }
+            
+            .server-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            
+            /* 底部导航 */
+            .bottom-favorites {
+                bottom: 10px;
+                padding: 8px 12px;
+                gap: 8px;
+                overflow-x: auto;
+                max-width: calc(100% - 20px);
+            }
+            
+            .bottom-favorite-item {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+            
+            /* 管理面板 */
+            .admin-panel {
+                width: 95%;
+                max-height: 90vh;
+                padding: 20px;
+            }
+            
+            .admin-tabs {
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            
+            .admin-tab {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            
+            .admin-section h3 {
+                font-size: 16px;
+            }
+            
+            /* 主题设置 */
+            .preset-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .color-settings {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* 小手机适配 */
+        @media (max-width: 480px) {
+            .section-full {
+                padding: 80px 15px 40px;
+            }
+            
+            .section-title {
+                font-size: 18px;
+            }
+            
+            .site-name {
+                font-size: 24px;
+                letter-spacing: 2px;
+            }
+            
+            .quote-text {
+                font-size: 14px;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .apps-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            
+            .app-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+                border-radius: 8px;
+            }
+            
+            .app-name {
+                font-size: 10px;
+            }
+            
+            .app-desc {
+                display: none;
+            }
+            
+            /* 状态栏单列 */
+            .top-status-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            
+            /* 主题预设 */
+            .preset-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .preset-preview {
+                width: 60px;
+                height: 45px;
+            }
+            
+            /* 显示设置 */
+            .visibility-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            
+            .visibility-info {
+                flex-wrap: wrap;
+            }
+            
+            .visibility-desc {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        /* ==================== 加载状态 ==================== */
+        .loading-skeleton {
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0.05) 25%, 
+                rgba(255,255,255,0.1) 50%, 
+                rgba(255,255,255,0.05) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .loading-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ==================== 错误状态 ==================== */
+        .error-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(255, 59, 48, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            z-index: 10000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .error-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .success-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(52, 199, 89, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            z-index: 10000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .success-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* ==================== 空状态 ==================== */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state-hint {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        /* ==================== 无障碍优化 ==================== */
+        /* 焦点样式 */
+        *:focus {
+            outline: 2px solid var(--primary-blue);
+            outline-offset: 2px;
+        }
+
+        *:focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        *:focus-visible {
+            outline: 2px solid var(--primary-blue);
+            outline-offset: 2px;
+        }
+
+        /* 键盘导航高亮 */
+        .keyboard-nav *:focus {
+            outline: 3px solid var(--primary-blue);
+            outline-offset: 2px;
+        }
+
+        /* 屏幕阅读器专用 */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* 降低动画偏好 */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* 高对比度模式 */
+        @media (prefers-contrast: high) {
+            :root {
+                --glass-border: rgba(255, 255, 255, 0.3);
+            }
+            
+            .app-item, .gallery-item, .quote-container {
+                border-width: 2px;
+            }
+        }
+
+        /* 触摸友好 */
+        @media (hover: none) and (pointer: coarse) {
+            .app-item:hover,
+            .gallery-item:hover,
+            .quote-container:hover {
+                transform: none;
+            }
+            
+            .app-item:active,
+            .gallery-item:active {
+                transform: scale(0.98);
+            }
+            
+            .admin-photo-delete {
+                opacity: 1;
+            }
+        }
+
+        /* 性能优化 */
+        .will-change-transform {
+            will-change: transform;
+        }
+
+        .gpu-accelerated {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
     </style>
 </head>
 <body>
@@ -3309,6 +3771,15 @@
             }
         })();
     </script>
+
+    <!-- 加载状态 -->
+    <div class="loading-overlay" id="loading-overlay" role="status" aria-live="polite">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- 提示消息 -->
+    <div class="error-toast" id="error-toast" role="alert" aria-live="assertive"></div>
+    <div class="success-toast" id="success-toast" role="status" aria-live="polite"></div>
 
     <div class="bg-gradient"></div>
     
@@ -6624,6 +7095,55 @@
                     initVisibilitySettings();
                 }
             });
+        });
+
+        // ==================== 工具函数 ====================
+        // 显示加载状态
+        function showLoading() {
+            document.getElementById('loading-overlay').classList.add('show');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading-overlay').classList.remove('show');
+        }
+
+        // 显示错误提示
+        function showError(message, duration = 3000) {
+            const toast = document.getElementById('error-toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
+        // 显示成功提示
+        function showSuccess(message, duration = 2000) {
+            const toast = document.getElementById('success-toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
+        // 页面加载完成后隐藏加载动画
+        window.addEventListener('load', () => {
+            hideLoading();
+        });
+
+        // 页面加载时显示加载动画
+        showLoading();
+
+        // 错误处理
+        window.addEventListener('error', (e) => {
+            console.error('页面错误:', e.message);
+            hideLoading();
+        });
+
+        window.addEventListener('unhandledrejection', (e) => {
+            console.error('未处理的Promise错误:', e.reason);
+            hideLoading();
         });
 
         // 初始化显示设置
